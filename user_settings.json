@@ -1,0 +1,5 @@
+{
+ "excel_path": "/home/eddie/github/automation-boilerplate/example_wb.xlsx",
+ "output_path": "/home/eddie/github/test",
+ "config_path": "config"
+}
