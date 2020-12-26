@@ -1,5 +1,5 @@
 # Gen
-##Create importable program files by excel item-lists
+## Create importable program files by excel item-lists
 
 Requirements:
 1. pip install openpyxl
