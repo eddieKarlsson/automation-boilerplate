@@ -188,7 +188,7 @@ class GenObjFunc:
         return inst_data
 
     @staticmethod
-    def result(list_with_dicts, type='lol'):
+    def result(list_with_dicts, type='undefined'):
         """Check all result dicts and sum them, then print info to user"""
         rOkCnt = 0
         rBadCnt = 0
@@ -207,11 +207,14 @@ class GenObjFunc:
                 msg = f"\t ERROR: {dict['badResultMsg']}"
                 bad_results.append(msg)
                 rBadCnt += 1
-
-        print(f"\t Succesfully processed {rOkCnt} objects: {good_results}")
+        if rOkCnt > 0:
+            print(f"\t Succesfully processed {rOkCnt} objects: {good_results}")
 
         if rBadCnt > 0:
             print("\n")
             print(f"\t {rBadCnt} resulted with error:")
             for r in bad_results:
                 print('\t', r)
+
+        if rOkCnt == 0 and rBadCnt == 0:
+            print("\t Nothing processed")

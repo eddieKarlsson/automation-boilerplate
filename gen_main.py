@@ -4,6 +4,7 @@ import openpyxl as xl
 from settings import Settings
 from obj_lib.valve import Valve
 from obj_lib.motor import Motor
+import json
 
 
 class GenMain:
@@ -220,6 +221,14 @@ class GenMain:
             if not os.path.exists(newdir):
                 os.makedirs(newdir)
 
+    def get_config_from_config_path(self):
+        """Load config from .json file"""
+        json_file = os.path.join(self.config_path, 'config_type.json')
+        with open(json_file, 'r') as (f):
+            json_var = json.load(f)
+            self.config_type = json_var['type']
+            print(f'Config Type={self.config_type}')
+
     def generate(self):
         print('Version', self.s.version)
 
@@ -230,6 +239,7 @@ class GenMain:
                 for obj in dict:
                     print(obj)
 
+        self.get_config_from_config_path()
         self.create_subdirs()
 
         if self.s.VALVE_DISABLE:
@@ -237,9 +247,11 @@ class GenMain:
         else:
             #  self.valve = Valve(self, self.output_path, self.valve_dict,
             #                   self.config_path)
-            Valve(self, self.output_path, self.valve_dict, self.config_path)
+            Valve(self, self.output_path, self.valve_dict, self.config_path,
+                  config_type=self.config_type)
 
         if self.s.MOTOR_DISABLE:
             print('Motor not generated, disabled in settings file')
         else:
-            Motor(self, self.output_path, self.motor_dict, self.config_path)
+            Motor(self, self.output_path, self.motor_dict, self.config_path,
+                  config_type=self.config_type)
