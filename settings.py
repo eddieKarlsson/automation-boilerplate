@@ -7,7 +7,7 @@ class Settings:
 
     def __init__(self):
         self.version = 2.0
-        self.debug_level = 0
+        self.debug_level = 999
 
         """Settings"""
         self.HEADER_ROW = 3  # Excel header

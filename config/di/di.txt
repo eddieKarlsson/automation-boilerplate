@@ -1,0 +1,68 @@
+<TIA_Code_Header>
+FUNCTION "All DI" : Void
+TITLE = All digital inputs
+{ S7_Optimized_Access := 'TRUE' }
+VERSION : 0.1
+//Call all DI, when replacing TEMP tags, FIND: #"I*REPLACE WITH:  "I*
+   VAR_TEMP
+</TIA_Code_Header>
+
+<TIA_Code_Var>
+      "I*@ID" : Bool;
+</TIA_Code_Var>
+
+<TIA_Code_Constant>
+   END_VAR
+
+   VAR CONSTANT
+      "Normal (NO)" : Bool := False;
+      "Negated (NC)" : Bool := True;
+   END_VAR
+
+
+BEGIN
+</TIA_Code_Constant>
+
+<TIA_Code_Body>
+NETWORK
+
+TITLE = @ID - @CMT
+      CALL "MC DI"
+      (  IN                          := #"I*@ID" ,
+         Config                      := #"@CFG" ,
+         DI                          := "DI".@ID ,
+      );
+</TIA_Code_Body>
+
+<TIA_Code_Footer>
+END_FUNCTION
+</TIA_Code_Footer>
+
+<TIA_DB_Header>
+DATA_BLOCK "DI"
+{ S7_Optimized_Access := 'FALSE' }
+VERSION : 0.1
+   STRUCT
+</TIA_DB_Header>
+
+<TIA_DB_Var>
+      @ID : "MC UDT DI";   // @CMT
+</TIA_DB_Var>
+
+<TIA_DB_Footer>
+   END_STRUCT;
+
+
+BEGIN
+
+END_DATA_BLOCK
+</TIA_DB_Footer>
+
+<TIA_Code_Var_Footer>
+   END_VAR
+
+</TIA_Code_Var_Footer>
+
+<TIA_Symbol>
+"I*@ID","%@INDEX.0","Bool","True","True","False","@CMT","","True"
+</TIA_Symbol>

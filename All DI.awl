@@ -1,0 +1,986 @@
+﻿FUNCTION "All DI" : Void
+TITLE = All digital inputs
+{ S7_Optimized_Access := 'TRUE' }
+VERSION : 0.1
+//Call all DI, when replacing TEMP tags, FIND: #"I*REPLACE WITH:  "I*
+   VAR_TEMP 
+      "I*INPUT_32" : Bool;
+      "I*INPUT_33" : Bool;
+      "I*INPUT_34" : Bool;
+      "I*INPUT_35" : Bool;
+      "I*INPUT_37" : Bool;
+      "I*INPUT_38" : Bool;
+      "I*INPUT_39" : Bool;
+      "I*INPUT_40" : Bool;
+      "I*INPUT_41" : Bool;
+      "I*INPUT_42" : Bool;
+      "I*INPUT_43" : Bool;
+      "I*INPUT_44" : Bool;
+      "I*INPUT_45" : Bool;
+      "I*INPUT_46" : Bool;
+      "I*INPUT_47" : Bool;
+      "I*INPUT_48" : Bool;
+      "I*INPUT_49" : Bool;
+      "I*INPUT_50" : Bool;
+      "I*INPUT_51" : Bool;
+      "I*INPUT_52" : Bool;
+      "I*INPUT_53" : Bool;
+      "I*INPUT_54" : Bool;
+      "I*INPUT_55" : Bool;
+      "I*INPUT_56" : Bool;
+      "I*INPUT_57" : Bool;
+      "I*INPUT_58" : Bool;
+      "I*INPUT_59" : Bool;
+      "I*INPUT_60" : Bool;
+      "I*INPUT_61" : Bool;
+      "I*INPUT_62" : Bool;
+      "I*INPUT_63" : Bool;
+      "I*INPUT_64" : Bool;
+      "I*INPUT_65" : Bool;
+      "I*INPUT_66" : Bool;
+      "I*INPUT_67" : Bool;
+      "I*INPUT_68" : Bool;
+      "I*INPUT_69" : Bool;
+      "I*INPUT_70" : Bool;
+      "I*INPUT_71" : Bool;
+      "I*INPUT_72" : Bool;
+      "I*INPUT_73" : Bool;
+      "I*INPUT_74" : Bool;
+      "I*INPUT_75" : Bool;
+      "I*INPUT_76" : Bool;
+      "I*INPUT_77" : Bool;
+      "I*INPUT_78" : Bool;
+      "I*INPUT_79" : Bool;
+      "I*INPUT_80" : Bool;
+      "I*INPUT_81" : Bool;
+      "I*INPUT_82" : Bool;
+      "I*INPUT_83" : Bool;
+      "I*INPUT_84" : Bool;
+      "I*INPUT_85" : Bool;
+      "I*INPUT_86" : Bool;
+      "I*INPUT_87" : Bool;
+      "I*INPUT_88" : Bool;
+      "I*INPUT_89" : Bool;
+      "I*INPUT_90" : Bool;
+      "I*INPUT_91" : Bool;
+      "I*INPUT_92" : Bool;
+      "I*INPUT_93" : Bool;
+      "I*INPUT_94" : Bool;
+      "I*INPUT_95" : Bool;
+      "I*INPUT_96" : Bool;
+      "I*INPUT_97" : Bool;
+      "I*INPUT_98" : Bool;
+      "I*INPUT_99" : Bool;
+      "I*Sista" : Bool;
+   END_VAR
+
+   VAR CONSTANT 
+      "Normal (NO)" : Bool := FALSE;
+      "Negated (NC)" : Bool := TRUE;
+   END_VAR
+
+
+BEGIN
+NETWORK
+TITLE = Safety_15SR1
+
+      CALL "MC DI"
+      (  IN                          := "I*Safety_15SR1" , 
+         Config                      := #"Negated (NC)" , 
+         DI                          := "DI".Safety_15SR1 , 
+         "DI:HMI"                    := "DI HMI".DI[1]
+      );
+NETWORK
+TITLE = Safety_16SR1
+
+      CALL "MC DI"
+      (  IN                          := "I*Safety_16SR1" , 
+         Config                      := #"Negated (NC)" , 
+         DI                          := "DI".Safety_16SR1 , 
+         "DI:HMI"                    := "DI HMI".DI[2]
+      );
+NETWORK
+TITLE = LSL210
+
+      CALL "MC DI"
+      (  IN                          := "I*LSL210" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".LSL210 , 
+         "DI:HMI"                    := "DI HMI".DI[3]
+      );
+NETWORK
+TITLE = LSH210
+
+      CALL "MC DI"
+      (  IN                          := "I*LSH210" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".LSH210 , 
+         "DI:HMI"                    := "DI HMI".DI[4]
+      );
+NETWORK
+TITLE = LSL211
+
+      CALL "MC DI"
+      (  IN                          := "I*LSL211" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".LSL211 , 
+         "DI:HMI"                    := "DI HMI".DI[5]
+      );
+NETWORK
+TITLE = LSH211
+
+      CALL "MC DI"
+      (  IN                          := "I*LSH211" , 
+         Config                      := #"Negated (NC)" , 
+         DI                          := "DI".LSH211 , 
+         "DI:HMI"                    := "DI HMI".DI[6]
+      );
+NETWORK
+TITLE = LIS216
+
+      CALL "MC DI"
+      (  IN                          := "I*LIS216" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".LIS216 , 
+         "DI:HMI"                    := "DI HMI".DI[7]
+      );
+NETWORK
+TITLE = FT007_P
+
+      CALL "MC DI"
+      (  IN                          := "I*FT007_P" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".FT007_P , 
+         "DI:HMI"                    := "DI HMI".DI[8]
+      );
+NETWORK
+TITLE = LIS200
+
+      CALL "MC DI"
+      (  IN                          := "I*LIS200" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".LIS200 , 
+         "DI:HMI"                    := "DI HMI".DI[9]
+      );
+NETWORK
+TITLE = LIS201
+
+      CALL "MC DI"
+      (  IN                          := "I*LIS201" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".LIS201 , 
+         "DI:HMI"                    := "DI HMI".DI[10]
+      );
+NETWORK
+TITLE = LIS202
+
+      CALL "MC DI"
+      (  IN                          := "I*LIS202" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".LIS202 , 
+         "DI:HMI"                    := "DI HMI".DI[11]
+      );
+NETWORK
+TITLE = LIS203
+
+      CALL "MC DI"
+      (  IN                          := "I*LIS203" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".LIS203 , 
+         "DI:HMI"                    := "DI HMI".DI[12]
+      );
+NETWORK
+TITLE = LIS204
+
+      CALL "MC DI"
+      (  IN                          := "I*LIS204" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".LIS204 , 
+         "DI:HMI"                    := "DI HMI".DI[13]
+      );
+NETWORK
+TITLE = LIS205
+
+      CALL "MC DI"
+      (  IN                          := "I*LIS205" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".LIS205 , 
+         "DI:HMI"                    := "DI HMI".DI[14]
+      );
+NETWORK
+TITLE = LIS206
+
+      CALL "MC DI"
+      (  IN                          := "I*LIS206" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".LIS206 , 
+         "DI:HMI"                    := "DI HMI".DI[15]
+      );
+NETWORK
+TITLE = LIS207
+
+      CALL "MC DI"
+      (  IN                          := "I*LIS207" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".LIS207 , 
+         "DI:HMI"                    := "DI HMI".DI[16]
+      );
+NETWORK
+TITLE = LIS208
+
+      CALL "MC DI"
+      (  IN                          := "I*LIS208" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".LIS208 , 
+         "DI:HMI"                    := "DI HMI".DI[17]
+      );
+NETWORK
+TITLE = LIS209
+
+      CALL "MC DI"
+      (  IN                          := "I*LIS209" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".LIS209 , 
+         "DI:HMI"                    := "DI HMI".DI[18]
+      );
+NETWORK
+TITLE = LIS210
+
+      CALL "MC DI"
+      (  IN                          := "I*LIS210" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".LIS210 , 
+         "DI:HMI"                    := "DI HMI".DI[19]
+      );
+NETWORK
+TITLE = LIS211
+
+      CALL "MC DI"
+      (  IN                          := "I*LIS211" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".LIS211 , 
+         "DI:HMI"                    := "DI HMI".DI[20]
+      );
+NETWORK
+TITLE = LIS212
+
+      CALL "MC DI"
+      (  IN                          := "I*LIS212" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".LIS212 , 
+         "DI:HMI"                    := "DI HMI".DI[21]
+      );
+NETWORK
+TITLE = LIS213
+
+      CALL "MC DI"
+      (  IN                          := "I*LIS213" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".LIS213 , 
+         "DI:HMI"                    := "DI HMI".DI[22]
+      );
+NETWORK
+TITLE = LIS214
+
+      CALL "MC DI"
+      (  IN                          := "I*LIS214" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".LIS214 , 
+         "DI:HMI"                    := "DI HMI".DI[23]
+      );
+NETWORK
+TITLE = LIS215
+
+      CALL "MC DI"
+      (  IN                          := "I*LIS215" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".LIS215 , 
+         "DI:HMI"                    := "DI HMI".DI[24]
+      );
+NETWORK
+TITLE = B1_39
+
+      CALL "MC DI"
+      (  IN                          := "I*B1_39" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".B1_39 , 
+         "DI:HMI"                    := "DI HMI".DI[25]
+      );
+NETWORK
+TITLE = B1_38
+
+      CALL "MC DI"
+      (  IN                          := "I*B1_38" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".B1_38 , 
+         "DI:HMI"                    := "DI HMI".DI[26]
+      );
+NETWORK
+TITLE = B1_37
+
+      CALL "MC DI"
+      (  IN                          := "I*B1_37" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".B1_37 , 
+         "DI:HMI"                    := "DI HMI".DI[27]
+      );
+NETWORK
+TITLE = B1_36
+
+      CALL "MC DI"
+      (  IN                          := "I*B1_36" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".B1_36 , 
+         "DI:HMI"                    := "DI HMI".DI[28]
+      );
+NETWORK
+TITLE = M201
+
+      CALL "MC DI"
+      (  IN                          := "I*M201" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".M201 , 
+         "DI:HMI"                    := "DI HMI".DI[29]
+      );
+NETWORK
+TITLE = LSL110
+
+      CALL "MC DI"
+      (  IN                          := "I*LSL110" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".LSL110 , 
+         "DI:HMI"                    := "DI HMI".DI[30]
+      );
+NETWORK
+TITLE = LSH110
+
+      CALL "MC DI"
+      (  IN                          := "I*LSH110" , 
+         Config                      := #"Negated (NC)" , 
+         DI                          := "DI".LSH110 , 
+         "DI:HMI"                    := "DI HMI".DI[31]
+      );
+NETWORK
+TITLE = * Borttaget
+
+      CALL "MC DI"
+      (  IN                          := #"I*INPUT_32" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".LS236 , 
+         "DI:HMI"                    := "DI HMI".DI[32]
+      );
+NETWORK
+TITLE = * Borttaget
+
+      CALL "MC DI"
+      (  IN                          := #"I*INPUT_33" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".LS237 , 
+         "DI:HMI"                    := "DI HMI".DI[33]
+      );
+NETWORK
+TITLE = * Borttaget
+
+      CALL "MC DI"
+      (  IN                          := #"I*INPUT_34" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".LS238 , 
+         "DI:HMI"                    := "DI HMI".DI[34]
+      );
+NETWORK
+TITLE = * Borttaget
+
+      CALL "MC DI"
+      (  IN                          := #"I*INPUT_35" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".LS239 , 
+         "DI:HMI"                    := "DI HMI".DI[35]
+      );
+NETWORK
+TITLE = FT217
+
+      CALL "MC DI"
+      (  IN                          := "I*FT217:P" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI"."FT217:P" , 
+         "DI:HMI"                    := "DI HMI".DI[36]
+      );
+NETWORK
+TITLE = M203_FB
+
+      CALL "MC DI"
+      (  IN                          := "I*M203_FB" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".M203_FB , 
+         "DI:HMI"                    := "DI HMI".DI[37]
+      );
+NETWORK
+TITLE = M203_Vrid
+
+      CALL "MC DI"
+      (  IN                          := "I*M203_Vrid" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".M203_Vrid , 
+         "DI:HMI"                    := "DI HMI".DI[38]
+      );
+NETWORK
+TITLE = Hotfill Ready
+
+
+      CALL "MC DI"
+      (  IN                          := "I*HotfillRdy" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI"."Hotfill Rdy" , 
+         "DI:HMI"                    := "DI HMI".DI[39]
+      );
+NETWORK
+TITLE = PremixBTD_LSL
+
+      CALL "MC DI"
+      (  IN                          := "I*PremixBTD_LSL" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI"."Premix BTD LSL" , 
+         "DI:HMI"                    := "DI HMI".DI[40]
+      );
+NETWORK
+TITLE = Premix Ready
+
+      CALL "MC DI"
+      (  IN                          := "I*PremixRdy" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI"."Premix Rdy" , 
+         "DI:HMI"                    := "DI HMI".DI[41]
+      );
+NETWORK
+TITLE = CIP Filler Ready
+
+      CALL "MC DI"
+      (  IN                          := "I*CIP_FILLER_READY" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI"."CIP Filler Ready" , 
+         "DI:HMI"                    := "DI HMI".DI[42]
+      );
+NETWORK
+TITLE = CIP Emptying Finish
+
+      CALL "MC DI"
+      (  IN                          := "I*CIP_EMPTYING_FINISH" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI"."CIP Filler Empty Finish" , 
+         "DI:HMI"                    := "DI HMI".DI[43]
+      );
+NETWORK
+TITLE = LSM210
+
+      CALL "MC DI"
+      (  IN                          := "I*LSM210" , 
+         Config                      := #"Negated (NC)" , 
+         DI                          := "DI".LSM210 , 
+         "DI:HMI"                    := "DI HMI".DI[44]
+      );
+NETWORK
+TITLE = INPUT_45
+
+      CALL "MC DI"
+      (  IN                          := #"I*INPUT_45" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".INPUT_45 , 
+         "DI:HMI"                    := "DI HMI".DI[45]
+      );
+NETWORK
+TITLE = INPUT_46
+
+      CALL "MC DI"
+      (  IN                          := #"I*INPUT_46" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".INPUT_46 , 
+         "DI:HMI"                    := "DI HMI".DI[46]
+      );
+NETWORK
+TITLE = INPUT_47
+
+      CALL "MC DI"
+      (  IN                          := #"I*INPUT_47" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".INPUT_47 , 
+         "DI:HMI"                    := "DI HMI".DI[47]
+      );
+NETWORK
+TITLE = INPUT_48
+
+      CALL "MC DI"
+      (  IN                          := #"I*INPUT_48" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".INPUT_48 , 
+         "DI:HMI"                    := "DI HMI".DI[48]
+      );
+NETWORK
+TITLE = INPUT_49
+
+      CALL "MC DI"
+      (  IN                          := #"I*INPUT_49" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".INPUT_49 , 
+         "DI:HMI"                    := "DI HMI".DI[49]
+      );
+NETWORK
+TITLE = INPUT_50
+
+      CALL "MC DI"
+      (  IN                          := #"I*INPUT_50" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".INPUT_50 , 
+         "DI:HMI"                    := "DI HMI".DI[50]
+      );
+NETWORK
+TITLE = INPUT_51
+
+      CALL "MC DI"
+      (  IN                          := #"I*INPUT_51" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".INPUT_51 , 
+         "DI:HMI"                    := "DI HMI".DI[51]
+      );
+NETWORK
+TITLE = INPUT_52
+
+      CALL "MC DI"
+      (  IN                          := #"I*INPUT_52" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".INPUT_52 , 
+         "DI:HMI"                    := "DI HMI".DI[52]
+      );
+NETWORK
+TITLE = INPUT_53
+
+      CALL "MC DI"
+      (  IN                          := #"I*INPUT_53" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".INPUT_53 , 
+         "DI:HMI"                    := "DI HMI".DI[53]
+      );
+NETWORK
+TITLE = INPUT_54
+
+      CALL "MC DI"
+      (  IN                          := #"I*INPUT_54" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".INPUT_54 , 
+         "DI:HMI"                    := "DI HMI".DI[54]
+      );
+NETWORK
+TITLE = INPUT_55
+
+      CALL "MC DI"
+      (  IN                          := #"I*INPUT_55" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".INPUT_55 , 
+         "DI:HMI"                    := "DI HMI".DI[55]
+      );
+NETWORK
+TITLE = INPUT_56
+
+      CALL "MC DI"
+      (  IN                          := #"I*INPUT_56" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".INPUT_56 , 
+         "DI:HMI"                    := "DI HMI".DI[56]
+      );
+NETWORK
+TITLE = INPUT_57
+
+      CALL "MC DI"
+      (  IN                          := #"I*INPUT_57" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".INPUT_57 , 
+         "DI:HMI"                    := "DI HMI".DI[57]
+      );
+NETWORK
+TITLE = INPUT_58
+
+      CALL "MC DI"
+      (  IN                          := #"I*INPUT_58" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".INPUT_58 , 
+         "DI:HMI"                    := "DI HMI".DI[58]
+      );
+NETWORK
+TITLE = INPUT_59
+
+      CALL "MC DI"
+      (  IN                          := #"I*INPUT_59" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".INPUT_59 , 
+         "DI:HMI"                    := "DI HMI".DI[59]
+      );
+NETWORK
+TITLE = INPUT_60
+
+      CALL "MC DI"
+      (  IN                          := #"I*INPUT_60" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".INPUT_60 , 
+         "DI:HMI"                    := "DI HMI".DI[60]
+      );
+NETWORK
+TITLE = INPUT_61
+
+      CALL "MC DI"
+      (  IN                          := #"I*INPUT_61" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".INPUT_61 , 
+         "DI:HMI"                    := "DI HMI".DI[61]
+      );
+NETWORK
+TITLE = INPUT_62
+
+      CALL "MC DI"
+      (  IN                          := #"I*INPUT_62" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".INPUT_62 , 
+         "DI:HMI"                    := "DI HMI".DI[62]
+      );
+NETWORK
+TITLE = INPUT_63
+
+      CALL "MC DI"
+      (  IN                          := #"I*INPUT_63" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".INPUT_63 , 
+         "DI:HMI"                    := "DI HMI".DI[63]
+      );
+NETWORK
+TITLE = INPUT_64
+
+      CALL "MC DI"
+      (  IN                          := #"I*INPUT_64" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".INPUT_64 , 
+         "DI:HMI"                    := "DI HMI".DI[64]
+      );
+NETWORK
+TITLE = INPUT_65
+
+      CALL "MC DI"
+      (  IN                          := #"I*INPUT_65" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".INPUT_65 , 
+         "DI:HMI"                    := "DI HMI".DI[65]
+      );
+NETWORK
+TITLE = INPUT_66
+
+      CALL "MC DI"
+      (  IN                          := #"I*INPUT_66" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".INPUT_66 , 
+         "DI:HMI"                    := "DI HMI".DI[66]
+      );
+NETWORK
+TITLE = INPUT_67
+
+      CALL "MC DI"
+      (  IN                          := #"I*INPUT_67" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".INPUT_67 , 
+         "DI:HMI"                    := "DI HMI".DI[67]
+      );
+NETWORK
+TITLE = INPUT_68
+
+      CALL "MC DI"
+      (  IN                          := #"I*INPUT_68" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".INPUT_68 , 
+         "DI:HMI"                    := "DI HMI".DI[68]
+      );
+NETWORK
+TITLE = INPUT_69
+
+      CALL "MC DI"
+      (  IN                          := #"I*INPUT_69" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".INPUT_69 , 
+         "DI:HMI"                    := "DI HMI".DI[69]
+      );
+NETWORK
+TITLE = INPUT_70
+
+      CALL "MC DI"
+      (  IN                          := #"I*INPUT_70" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".INPUT_70 , 
+         "DI:HMI"                    := "DI HMI".DI[70]
+      );
+NETWORK
+TITLE = INPUT_71
+
+      CALL "MC DI"
+      (  IN                          := #"I*INPUT_71" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".INPUT_71 , 
+         "DI:HMI"                    := "DI HMI".DI[71]
+      );
+NETWORK
+TITLE = INPUT_72
+
+      CALL "MC DI"
+      (  IN                          := #"I*INPUT_72" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".INPUT_72 , 
+         "DI:HMI"                    := "DI HMI".DI[72]
+      );
+NETWORK
+TITLE = INPUT_73
+
+      CALL "MC DI"
+      (  IN                          := #"I*INPUT_73" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".INPUT_73 , 
+         "DI:HMI"                    := "DI HMI".DI[73]
+      );
+NETWORK
+TITLE = INPUT_74
+
+      CALL "MC DI"
+      (  IN                          := #"I*INPUT_74" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".INPUT_74 , 
+         "DI:HMI"                    := "DI HMI".DI[74]
+      );
+NETWORK
+TITLE = INPUT_75
+
+      CALL "MC DI"
+      (  IN                          := #"I*INPUT_75" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".INPUT_75 , 
+         "DI:HMI"                    := "DI HMI".DI[75]
+      );
+NETWORK
+TITLE = INPUT_76
+
+      CALL "MC DI"
+      (  IN                          := #"I*INPUT_76" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".INPUT_76 , 
+         "DI:HMI"                    := "DI HMI".DI[76]
+      );
+NETWORK
+TITLE = INPUT_77
+
+      CALL "MC DI"
+      (  IN                          := #"I*INPUT_77" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".INPUT_77 , 
+         "DI:HMI"                    := "DI HMI".DI[77]
+      );
+NETWORK
+TITLE = INPUT_78
+
+      CALL "MC DI"
+      (  IN                          := #"I*INPUT_78" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".INPUT_78 , 
+         "DI:HMI"                    := "DI HMI".DI[78]
+      );
+NETWORK
+TITLE = INPUT_79
+
+      CALL "MC DI"
+      (  IN                          := #"I*INPUT_79" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".INPUT_79 , 
+         "DI:HMI"                    := "DI HMI".DI[79]
+      );
+NETWORK
+TITLE = INPUT_80
+
+      CALL "MC DI"
+      (  IN                          := #"I*INPUT_80" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".INPUT_80 , 
+         "DI:HMI"                    := "DI HMI".DI[80]
+      );
+NETWORK
+TITLE = INPUT_81
+
+      CALL "MC DI"
+      (  IN                          := #"I*INPUT_81" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".INPUT_81 , 
+         "DI:HMI"                    := "DI HMI".DI[81]
+      );
+NETWORK
+TITLE = INPUT_82
+
+      CALL "MC DI"
+      (  IN                          := #"I*INPUT_82" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".INPUT_82 , 
+         "DI:HMI"                    := "DI HMI".DI[82]
+      );
+NETWORK
+TITLE = INPUT_83
+
+      CALL "MC DI"
+      (  IN                          := #"I*INPUT_83" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".INPUT_83 , 
+         "DI:HMI"                    := "DI HMI".DI[83]
+      );
+NETWORK
+TITLE = INPUT_84
+
+      CALL "MC DI"
+      (  IN                          := #"I*INPUT_84" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".INPUT_84 , 
+         "DI:HMI"                    := "DI HMI".DI[84]
+      );
+NETWORK
+TITLE = INPUT_85
+
+      CALL "MC DI"
+      (  IN                          := #"I*INPUT_85" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".INPUT_85 , 
+         "DI:HMI"                    := "DI HMI".DI[85]
+      );
+NETWORK
+TITLE = INPUT_86
+
+      CALL "MC DI"
+      (  IN                          := #"I*INPUT_86" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".INPUT_86 , 
+         "DI:HMI"                    := "DI HMI".DI[86]
+      );
+NETWORK
+TITLE = INPUT_87
+
+      CALL "MC DI"
+      (  IN                          := #"I*INPUT_87" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".INPUT_87 , 
+         "DI:HMI"                    := "DI HMI".DI[87]
+      );
+NETWORK
+TITLE = INPUT_88
+
+      CALL "MC DI"
+      (  IN                          := #"I*INPUT_88" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".INPUT_88 , 
+         "DI:HMI"                    := "DI HMI".DI[88]
+      );
+NETWORK
+TITLE = INPUT_89
+
+      CALL "MC DI"
+      (  IN                          := #"I*INPUT_89" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".INPUT_89 , 
+         "DI:HMI"                    := "DI HMI".DI[89]
+      );
+NETWORK
+TITLE = INPUT_90
+
+      CALL "MC DI"
+      (  IN                          := #"I*INPUT_90" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".INPUT_90 , 
+         "DI:HMI"                    := "DI HMI".DI[90]
+      );
+NETWORK
+TITLE = INPUT_91
+
+      CALL "MC DI"
+      (  IN                          := #"I*INPUT_91" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".INPUT_91 , 
+         "DI:HMI"                    := "DI HMI".DI[91]
+      );
+NETWORK
+TITLE = INPUT_92
+
+      CALL "MC DI"
+      (  IN                          := #"I*INPUT_92" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".INPUT_92 , 
+         "DI:HMI"                    := "DI HMI".DI[92]
+      );
+NETWORK
+TITLE = INPUT_93
+
+      CALL "MC DI"
+      (  IN                          := #"I*INPUT_93" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".INPUT_93 , 
+         "DI:HMI"                    := "DI HMI".DI[93]
+      );
+NETWORK
+TITLE = INPUT_94
+
+      CALL "MC DI"
+      (  IN                          := #"I*INPUT_94" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".INPUT_94 , 
+         "DI:HMI"                    := "DI HMI".DI[94]
+      );
+NETWORK
+TITLE = INPUT_95
+
+      CALL "MC DI"
+      (  IN                          := #"I*INPUT_95" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".INPUT_95 , 
+         "DI:HMI"                    := "DI HMI".DI[95]
+      );
+NETWORK
+TITLE = INPUT_96
+
+      CALL "MC DI"
+      (  IN                          := #"I*INPUT_96" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".INPUT_96 , 
+         "DI:HMI"                    := "DI HMI".DI[96]
+      );
+NETWORK
+TITLE = INPUT_97
+
+      CALL "MC DI"
+      (  IN                          := #"I*INPUT_97" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".INPUT_97 , 
+         "DI:HMI"                    := "DI HMI".DI[97]
+      );
+NETWORK
+TITLE = INPUT_98
+
+      CALL "MC DI"
+      (  IN                          := #"I*INPUT_98" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".INPUT_98 , 
+         "DI:HMI"                    := "DI HMI".DI[98]
+      );
+NETWORK
+TITLE = INPUT_99
+
+      CALL "MC DI"
+      (  IN                          := #"I*INPUT_99" , 
+         Config                      := #"Normal (NO)" , 
+         DI                          := "DI".INPUT_99 , 
+         "DI:HMI"                    := "DI HMI".DI[99]
+      );
+NETWORK
+TITLE = Sista
+
+      CALL "MC DI"
+      (  IN                          := #"I*Sista" , 
+         Config                      := #"Negated (NC)" , 
+         DI                          := "DI".Sista , 
+         "DI:HMI"                    := "DI HMI".DI[100]
+      );
+END_FUNCTION
+

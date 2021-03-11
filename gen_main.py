@@ -1,10 +1,11 @@
 import sys
 import os
+import json
 import openpyxl as xl
 from settings import Settings
 from obj_lib.valve import Valve
 from obj_lib.motor import Motor
-import json
+from obj_lib.di import DI
 
 
 class GenMain:
@@ -38,7 +39,8 @@ class GenMain:
         # Create all dictionaries, if enabled in settings
         if not self.s.DI_DISABLE:
             self.di_dict = self._obj_data_to_dict(
-                        self.s.DI_SHEETNAME, self.s.DI_START_INDEX, 'di')
+                        self.s.DI_SHEETNAME, self.s.DI_START_INDEX, 'di',
+                        config=True)
             self.dict_list.append(self.di_dict)
         if not self.s.DO_DISABLE:
             self.do_dict = self._obj_data_to_dict(
@@ -245,8 +247,6 @@ class GenMain:
         if self.s.VALVE_DISABLE:
             print('Valve not generated, disabled in settings file')
         else:
-            #  self.valve = Valve(self, self.output_path, self.valve_dict,
-            #                   self.config_path)
             Valve(self, self.output_path, self.valve_dict, self.config_path,
                   config_type=self.config_type)
 
@@ -255,3 +255,9 @@ class GenMain:
         else:
             Motor(self, self.output_path, self.motor_dict, self.config_path,
                   config_type=self.config_type)
+
+        if self.s.DI_DISABLE:
+            print('DI not generated, disabled in settings file')
+        else:
+            DI(self, self.output_path, self.di_dict, self.config_path,
+                config_type=self.config_type)
