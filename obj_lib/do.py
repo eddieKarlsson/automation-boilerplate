@@ -1,73 +1,79 @@
-    def td_gen_do(self):
-        """Create and concetenate all text lines to different files"""
-        # setup variables
-        config_file = os.path.join(s.CONFIG_PATH, 'Config_DO.txt')
-        sheet = 'DO'
+import os
+import os.path
+from gen_obj_func import GenObjFunc as genfunc
 
-        # Check what output path to use, if 'None' create in current directory, otherwise as specified
-        if self.output_path is None:
-            file_path = 'Generated DO'
-        elif self.output_path == OUTPUT_PATH_START_VALUE:
-            file_path = 'Generated DO'
-        else:
-            file_path = os.path.join(self.output_path, 'Generated DO')
-        # Create sub-directory if it doesn't exist
-        if not os.path.exists(file_path):
-            os.makedirs(file_path)
 
-        # PLC function, concatenate data
-        header_data = self.td_single(config_file, 'header')
-        var_data = self.td_multiple(config_file, 'var', sheet)
-        func_header_data = self.td_single(config_file, 'funcHeader')
-        codebody_data = self.td_multiple(config_file, 'codebody', sheet)
-        footer_data = self.td_single(config_file, 'footer')
+class DO:
+    """Object specifik code to concetenate text lines and create files"""
 
-        # Create file and put it inside path created above
-        filename = 'PLC_' + sheet + '.awl'
-        file_and_path = os.path.join(file_path, filename)
-        with open(file_and_path, 'w', encoding='cp1252') as functionFile:
-            data = header_data
-            data += var_data
-            data += func_header_data
-            data += codebody_data
-            data += footer_data
-            functionFile.write(data)
-            print(filename, 'created')
-            logging.info(filename + ' created')
+    def __init__(self, gen_main, output_path, obj_list, config_path,
+                 config_type='mc'):
+        self.s = gen_main.s  # Instanciate settings
 
-        # PLC Datablock, if all elements exists concatenate data and create file
-        db_header_data = self.td_single(config_file, 'db_header')
-        db_var_data = self.td_multiple(config_file, 'db_var', sheet)
-        db_footer_data = self.td_single(config_file, 'db_footer')
-        if db_header_data != '' and db_var_data != '' and db_footer_data != '':
-            filename = 'PLC_' + sheet + '_DB.db'
-            file_and_path = os.path.join(file_path, filename)
-            with open(file_and_path, 'w', encoding='cp1252') as dbFile:
-                data = db_header_data
-                data += db_var_data
-                data += db_footer_data
-                dbFile.write(data)
-                print(filename, 'created')
-                logging.info(filename + ' created')
+        self.type = 'do'
+        self.config_type = config_type
 
-        # PLC symbol table
-        symbol_data = self.td_multiple(config_file, 'symbol', sheet)
-        if symbol_data != '':
-            filename = 'PLC_' + sheet + '_Symbol.sdf'
-            file_and_path = os.path.join(file_path, filename)
-            with open(file_and_path, 'w', encoding='cp1252') as symbolFile:
-                symbolFile.write(symbol_data)
-                print(filename, 'created')
-                logging.info(filename + ' created')
+        self.cp = os.path.join(config_path, self.type)  # Config folder path
+        self.cf = os.path.join(self.cp, self.type + '.txt')  # base config file
 
-        # Intouch
-        it_data = self.td_multiple(config_file, 'Intouch', sheet, start_index=s.DO_START_INDEX)
-        if it_data != '':
-            filename = 'IT_' + sheet + '.csv'
-            file_and_path = os.path.join(file_path, filename)
-            with open(file_and_path, 'w', encoding='cp1252') as itFile:
-                itFile.write(it_data)
-                print(filename, 'created')
-                logging.info(filename + ' created')
-        print('Generated files put in...', file_path)
-        logging.info('Generated DO files put in ' + file_path)
+        self.output_path = output_path
+        self.tia_path = os.path.join(self.output_path, self.s.TIA_DIR)
+        self.it_path = os.path.join(self.output_path, self.s.INTOUCH_DIR)
+
+        self.ol = obj_list
+
+        self.gen = genfunc(gen_main)
+
+        self.rl = []  # Create empty list "result list"
+
+        self.generate()
+
+    def _tia_db(self):
+        data = self.gen.single(self.cf, self.rl, 'TIA_DB_Header')
+        data += self.gen.multiple(self.ol, self.cf, self.rl, 'TIA_DB_Var')
+        data += self.gen.single(self.cf, self.rl, 'TIA_DB_Footer')
+
+        fname = self.type + '_db.db'
+        path = os.path.join(self.tia_path, fname)
+        with open(path, 'w', encoding='cp1252') as f:
+            f.write(data)
+
+    def _tia_symbol(self):
+        data = self.gen.multiple(self.ol, self.cf, self.rl,
+                                 'TIA_Symbol')
+
+        fname = self.type + '_symbols.sdf'
+        path = os.path.join(self.tia_path, fname)
+        with open(path, 'w', encoding='cp1252') as f:
+            f.write(data)
+
+    def _tia_code(self):
+        data = self.gen.single(self.cf, self.rl, 'TIA_Code_Header')
+        data += self.gen.multiple(self.ol, self.cf, self.rl, 'TIA_Code_Var')
+        data += self.gen.single(self.cf, self.rl, 'TIA_Code_Constant')
+        data += self.gen.multiple(self.ol, self.cf, self.rl,
+                                  'TIA_Code_Body')
+        data += self.gen.single(self.cf, self.rl, 'TIA_Code_Footer')
+
+        fname = self.type + '_code.awl'
+        path = os.path.join(self.tia_path, fname)
+        with open(path, 'w', encoding='cp1252') as f:
+            f.write(data)
+
+    def _intouch(self):
+        data = self.gen.single(self.cf, self.rl, 'Intouch_Header')
+        data += self.gen.multiple(self.ol, self.cf, self.rl, 'Intouch_Tag')
+
+        fname = self.type + '_it.csv'
+        path = os.path.join(self.it_path, fname)
+        with open(path, 'w', encoding='cp1252') as f:
+            f.write(data)
+
+    def generate(self):
+        """Callup"""
+        self._tia_db()
+        self._tia_symbol()
+        self._tia_code()
+        #  self._intouch() TODO not finished
+
+        self.gen.result(self.rl, type=self.type.upper())

@@ -1,5 +1,5 @@
 {
- "excel_path": "C:/Users/EddieKarlsson/Project/Python/automation-boilerplate/example_wb.xlsx",
- "output_path": "C:/Users/EddieKarlsson/Project/test/output_test",
+ "excel_path": "P:/Wellnox/200150 - Past\u00f6r 2 varmfyllning/01 Document/210150 TD V1.4.xlsx",
+ "output_path": "P:/Wellnox/200150 - Past\u00f6r 2 varmfyllning/02 PLC_HMI/src/generated",
  "config_path": "config"
 }

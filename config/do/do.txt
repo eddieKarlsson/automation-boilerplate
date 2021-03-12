@@ -1,14 +1,14 @@
 <TIA_Code_Header>
-FUNCTION "All DI" : Void
-TITLE = All digital inputs
+FUNCTION "All DO" : Void
+TITLE = All digital outputs
 { S7_Optimized_Access := 'TRUE' }
 VERSION : 0.1
-//Call all DI, when replacing TEMP tags, FIND: #"I*REPLACE WITH:  "I*
+//Call all DO, when replacing TEMP tags, FIND: #"Q*REPLACE WITH:  "Q*
    VAR_TEMP
 </TIA_Code_Header>
 
 <TIA_Code_Var>
-      "I*@ID" : Bool;
+      "Q*@ID" : Bool;
 </TIA_Code_Var>
 
 <TIA_Code_Constant>
@@ -28,12 +28,12 @@ NETWORK
 
 TITLE = @ID
 //@CMT
-      CALL "MC DI"
-      (  IN                          := #"I*@ID" ,
-         Config                      := #"@CFG" ,
-         DI                          := "DI".@ID ,
-         "DI:HMI"                    := "DI HMI".DI[@INDEX]
 
+      CALL "MC DO"
+      (  Config                      := #"@CFG" ,
+         OUT                         := #"Q*@ID" ,
+         DO                          := "DO".@ID ,
+         "DO:HMI"                    := "DO HMI".DO[@INDEX]
       );
 </TIA_Code_Body>
 
@@ -42,14 +42,14 @@ END_FUNCTION
 </TIA_Code_Footer>
 
 <TIA_DB_Header>
-DATA_BLOCK "DI"
+DATA_BLOCK "DO"
 { S7_Optimized_Access := 'FALSE' }
 VERSION : 0.1
    STRUCT
 </TIA_DB_Header>
 
 <TIA_DB_Var>
-      @ID : "MC UDT DI";   // @CMT
+      @ID : "MC UDT DO";   // @CMT
 </TIA_DB_Var>
 
 <TIA_DB_Footer>
@@ -67,5 +67,5 @@ END_DATA_BLOCK
 </TIA_Code_Var_Footer>
 
 <TIA_Symbol>
-"I*@ID","%@INDEX.0","Bool","True","True","False","@CMT","","True"
+"Q*@ID","%@INDEX.0","Bool","True","True","False","@CMT","","True"
 </TIA_Symbol>

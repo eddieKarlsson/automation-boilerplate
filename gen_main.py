@@ -6,6 +6,7 @@ from settings import Settings
 from obj_lib.valve import Valve
 from obj_lib.motor import Motor
 from obj_lib.di import DI
+from obj_lib.do import DO
 
 
 class GenMain:
@@ -44,7 +45,8 @@ class GenMain:
             self.dict_list.append(self.di_dict)
         if not self.s.DO_DISABLE:
             self.do_dict = self._obj_data_to_dict(
-                        self.s.DO_SHEETNAME, self.s.DO_START_INDEX, 'do')
+                        self.s.DO_SHEETNAME, self.s.DO_START_INDEX, 'do',
+                        config=True)
             self.dict_list.append(self.do_dict)
         if not self.s.VALVE_DISABLE:
             self.valve_dict = self._obj_data_to_dict(
@@ -260,4 +262,10 @@ class GenMain:
             print('DI not generated, disabled in settings file')
         else:
             DI(self, self.output_path, self.di_dict, self.config_path,
+                config_type=self.config_type)
+
+        if self.s.DO_DISABLE:
+            print('DO not generated, disabled in settings file')
+        else:
+            DO(self, self.output_path, self.do_dict, self.config_path,
                 config_type=self.config_type)
