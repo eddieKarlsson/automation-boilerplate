@@ -12,6 +12,6 @@ root = tk.Tk()
 ui_app = GenUI(master=root)
 ui_app.mainloop()
 
-# when app exits save user Settings
+# When app exits save user settings
 user_settings = ui_app.get_user_settings()
 s.store_user_settings(user_settings)

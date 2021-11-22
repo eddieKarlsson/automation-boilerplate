@@ -4,7 +4,7 @@ from gen_obj_func import GenObjFunc as genfunc
 
 
 class DI:
-    """Object specifik code to concetenate text lines and create files"""
+    """Object specific code to concatenate text lines and create files"""
 
     def __init__(self, gen_main, output_path, obj_list, config_path,
                  config_type='mc'):
@@ -33,8 +33,8 @@ class DI:
         data += self.gen.multiple(self.ol, self.cf, self.rl, 'TIA_DB_Var')
         data += self.gen.single(self.cf, self.rl, 'TIA_DB_Footer')
 
-        fname = self.type + '_db.db'
-        path = os.path.join(self.tia_path, fname)
+        filename = self.type + '_db.db'
+        path = os.path.join(self.tia_path, filename)
         with open(path, 'w', encoding='cp1252') as f:
             f.write(data)
 
@@ -42,8 +42,8 @@ class DI:
         data = self.gen.multiple(self.ol, self.cf, self.rl,
                                  'TIA_Symbol')
 
-        fname = self.type + '_symbols.sdf'
-        path = os.path.join(self.tia_path, fname)
+        filename = self.type + '_symbols.sdf'
+        path = os.path.join(self.tia_path, filename)
         with open(path, 'w', encoding='cp1252') as f:
             f.write(data)
 
@@ -55,8 +55,8 @@ class DI:
                                   'TIA_Code_Body')
         data += self.gen.single(self.cf, self.rl, 'TIA_Code_Footer')
 
-        fname = self.type + '_code.awl'
-        path = os.path.join(self.tia_path, fname)
+        filename = self.type + '_code.awl'
+        path = os.path.join(self.tia_path, filename)
         with open(path, 'w', encoding='cp1252') as f:
             f.write(data)
 
@@ -64,8 +64,8 @@ class DI:
         data = self.gen.single(self.cf, self.rl, 'Intouch_Header')
         data += self.gen.multiple(self.ol, self.cf, self.rl, 'Intouch_Tag')
 
-        fname = self.type + '_it.csv'
-        path = os.path.join(self.it_path, fname)
+        filename = self.type + '_it.csv'
+        path = os.path.join(self.it_path, filename)
         with open(path, 'w', encoding='cp1252') as f:
             f.write(data)
 
@@ -74,6 +74,6 @@ class DI:
         self._tia_db()
         self._tia_symbol()
         self._tia_code()
-        #  self._intouch() TODO not finished
+        self._intouch()
 
         self.gen.result(self.rl, type=self.type.upper())

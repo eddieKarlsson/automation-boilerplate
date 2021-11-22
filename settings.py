@@ -1,5 +1,6 @@
 import json
 import os
+import sys
 
 
 class Settings:
@@ -7,7 +8,6 @@ class Settings:
 
     def __init__(self):
         self.version = 2.0
-        self.debug_level = 0
 
         """Settings"""
         self.HEADER_ROW = 3  # Excel header
@@ -78,6 +78,12 @@ class Settings:
         # internal var, used below in functions
         self.json_file = 'user_settings.json'
         self.indent = 1
+
+        # If terminal argument supplied, set debug level
+        if len(sys.argv) > 1:
+            self.debug_level = int(sys.argv[1])
+        else:
+            self.debug_level = 0
 
     def _create_user_settings(self):
         """Create dict which contains all user data"""

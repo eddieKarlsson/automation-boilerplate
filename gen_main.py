@@ -233,6 +233,10 @@ class GenMain:
             self.config_type = json_var['type']
             print(f'Config Type={self.config_type}')
 
+    @staticmethod
+    def _print_disabled_in_settings(prefix):
+        print(f"{prefix} not generated, disabled in settings file")
+
     def generate(self):
         print('Version', self.s.version)
 
@@ -247,25 +251,25 @@ class GenMain:
         self.create_subdirs()
 
         if self.s.VALVE_DISABLE:
-            print('Valve not generated, disabled in settings file')
+            self._print_disabled_in_settings('Valve')
         else:
             Valve(self, self.output_path, self.valve_dict, self.config_path,
                   config_type=self.config_type)
 
         if self.s.MOTOR_DISABLE:
-            print('Motor not generated, disabled in settings file')
+            self._print_disabled_in_settings('Motor')
         else:
             Motor(self, self.output_path, self.motor_dict, self.config_path,
                   config_type=self.config_type)
 
         if self.s.DI_DISABLE:
-            print('DI not generated, disabled in settings file')
+            self._print_disabled_in_settings('DI')
         else:
             DI(self, self.output_path, self.di_dict, self.config_path,
                 config_type=self.config_type)
 
         if self.s.DO_DISABLE:
-            print('DO not generated, disabled in settings file')
+            self._print_disabled_in_settings('DO')
         else:
             DO(self, self.output_path, self.do_dict, self.config_path,
                 config_type=self.config_type)

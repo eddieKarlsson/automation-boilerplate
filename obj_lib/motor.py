@@ -4,7 +4,7 @@ from gen_obj_func import GenObjFunc as genfunc
 
 
 class Motor:
-    """Object specifik code to concetenate text lines and create files"""
+    """Object specific code to concatenate text lines and create files"""
 
     def __init__(self, gen_main, output_path, obj_list, config_path,
                  config_type='mc'):
@@ -12,7 +12,7 @@ class Motor:
 
         self.type = 'motor'
         self.config_type = config_type
-        
+
         self.cp = os.path.join(config_path, self.type)  # Config folder path
         self.cf = os.path.join(self.cp, self.type + '.txt')  # base config file
 
@@ -33,8 +33,8 @@ class Motor:
         data += self.gen.multiple(self.ol, self.cf, self.rl, 'TIA_DB_Var')
         data += self.gen.single(self.cf, self.rl, 'TIA_DB_Footer')
 
-        fname = self.type + '_db.db'
-        path = os.path.join(self.tia_path, fname)
+        filename = self.type + '_db.db'
+        path = os.path.join(self.tia_path, filename)
         with open(path, 'w', encoding='cp1252') as f:
             f.write(data)
 
@@ -42,8 +42,8 @@ class Motor:
         data = self.gen.multiple_config(self.ol, self.cp, self.rl,
                                         'TIA_Symbol')
 
-        fname = self.type + '_symbols.sdf'
-        path = os.path.join(self.tia_path, fname)
+        filename = self.type + '_symbols.sdf'
+        path = os.path.join(self.tia_path, filename)
         with open(path, 'w', encoding='cp1252') as f:
             f.write(data)
 
@@ -55,8 +55,8 @@ class Motor:
                                          'TIA_Code_Body')
         data += self.gen.single(self.cf, self.rl, 'TIA_Code_Footer')
 
-        fname = self.type + '_code.awl'
-        path = os.path.join(self.tia_path, fname)
+        filename = self.type + '_code.awl'
+        path = os.path.join(self.tia_path, filename)
         with open(path, 'w', encoding='cp1252') as f:
             f.write(data)
 
@@ -64,8 +64,8 @@ class Motor:
         data = self.gen.single(self.cf, self.rl, 'Intouch_Header')
         data += self.gen.multiple(self.ol, self.cf, self.rl, 'Intouch_Tag')
 
-        fname = self.type + '_it.csv'
-        path = os.path.join(self.it_path, fname)
+        filename = self.type + '_it.csv'
+        path = os.path.join(self.it_path, filename)
         with open(path, 'w', encoding='cp1252') as f:
             f.write(data)
 

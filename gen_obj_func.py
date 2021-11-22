@@ -78,17 +78,17 @@ class GenObjFunc:
                     exists_in_config = True
                     section_found = True
         if not exists_in_config:
-            resultOk = False
+            result_ok = False
             resultMsg = f"'{ref_txt}' not found in config file"
         else:
-            resultOk = True
+            result_ok = True
             resultMsg = None
 
         # Return a dictionary with the result
         result = {
             'ref_txt': ref_txt,
             'type': None,
-            'resultOk': resultOk,
+            'result_ok': result_ok,
             'badResultMsg': resultMsg
         }
 
@@ -123,17 +123,17 @@ class GenObjFunc:
                     # will be last item processed but doesn't matter
                     type = obj['type']
             if not exists_in_config:
-                resultOk = False
+                result_ok = False
                 resultMsg = f"'{ref_txt}' not found in config file"
             else:
-                resultOk = True
+                result_ok = True
                 resultMsg = None
 
             # Return a dictionary with the result
             result = {
                 'ref_txt': ref_txt,
                 'type': type,
-                'resultOk': resultOk,
+                'result_ok': result_ok,
                 'badResultMsg': resultMsg
             }
 
@@ -171,17 +171,17 @@ class GenObjFunc:
                     # will be last item processed but doesn't matter
                     type = obj['type']
             if not exists_in_config:
-                resultOk = False
+                result_ok = False
                 resultMsg = f"'{ref_txt}' not found in config file"
             else:
-                resultOk = True
+                result_ok = True
                 resultMsg = None
 
             # Return a dictionary with the result
             result = {
                 'ref_txt': ref_txt,
                 'type': type,
-                'resultOk': resultOk,
+                'result_ok': result_ok,
                 'badResultMsg': resultMsg
             }
         list_result.append(result)
@@ -199,7 +199,7 @@ class GenObjFunc:
         bad_results = []  # Empty list
 
         for dict in list_with_dicts:
-            if dict['resultOk']:
+            if dict['result_ok']:
                 good_results.append(dict['ref_txt'])
                 rOkCnt += 1
             else:
