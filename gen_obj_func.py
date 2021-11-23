@@ -109,7 +109,7 @@ class GenObjFunc:
 
             for obj in obj_list:
                 config.seek(0, 0)  # Seek to beginning of file
-                for lineIndex, line in enumerate(config, start=1):
+                for line_index, line in enumerate(config, start=1):
                     if end in str(line):
                         section_found = False
                     if section_found:
@@ -157,7 +157,7 @@ class GenObjFunc:
             file_and_path = os.path.join(sub_dir, filename)
 
             with open(file_and_path, 'r') as config:
-                for lineIndex, line in enumerate(config, start=1):
+                for line_index, line in enumerate(config, start=1):
                     if end in str(line):
                         section_found = False
                     if section_found:

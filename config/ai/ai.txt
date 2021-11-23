@@ -39,6 +39,11 @@ code header
 "I*@ID" : Bool;
 </TIA_Code_Var>
 
+<TIA_Code_Var_Footer>
+var end
+</TIA_Code_Var_Footer>
+
+
 <TIA_Code_Body>
 this is codebody AI
 # ID              @ID
@@ -54,9 +59,6 @@ this is codebody AI
 code footer
 </TIA_Code_Footer>
 
-<TIA_Code_Var_Footer>
-var end
-</TIA_Code_Var_Footer>
 
 <TIA_Symbol>
 TODO - swap to real source txt for AI

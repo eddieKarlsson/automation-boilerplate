@@ -7,6 +7,7 @@ from obj_lib.valve import Valve
 from obj_lib.motor import Motor
 from obj_lib.di import DI
 from obj_lib.do import DO
+from obj_lib.ai import AI
 
 
 class GenMain:
@@ -227,4 +228,10 @@ class GenMain:
             self._print_disabled_in_settings('DO')
         else:
             DO(self, self.output_path, self.do_dict, self.config_path,
+                config_type=self.config_type)
+
+        if self.s.AI_DISABLE:
+            self._print_disabled_in_settings('AI')
+        else:
+            AI(self, self.output_path, self.ai_dict, self.config_path,
                 config_type=self.config_type)
