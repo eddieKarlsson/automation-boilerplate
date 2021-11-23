@@ -71,9 +71,9 @@ class DO:
 
     def generate(self):
         """Callup"""
-        self._tia_db()
-        self._tia_symbol()
-        self._tia_code()
-        self._intouch()
-
-        self.gen.result(self.rl, type=self.type.upper())
+        if self.config_type == 'mc':
+            self._tia_db()
+            self._tia_symbol()
+            self._tia_code()
+            self._intouch()
+            self.gen.result(self.rl, type=self.type.upper())

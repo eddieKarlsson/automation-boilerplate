@@ -79,17 +79,17 @@ class GenObjFunc:
                     section_found = True
         if not exists_in_config:
             result_ok = False
-            resultMsg = f"'{ref_txt}' not found in config file"
+            result_msg = f"'{ref_txt}' not found in config file"
         else:
             result_ok = True
-            resultMsg = None
+            result_msg = None
 
         # Return a dictionary with the result
         result = {
             'ref_txt': ref_txt,
             'type': None,
             'result_ok': result_ok,
-            'badResultMsg': resultMsg
+            'bad_result_msg': result_msg
         }
 
         list_result.append(result)
@@ -124,17 +124,17 @@ class GenObjFunc:
                     type = obj['type']
             if not exists_in_config:
                 result_ok = False
-                resultMsg = f"'{ref_txt}' not found in config file"
+                result_msg = f"'{ref_txt}' not found in config file"
             else:
                 result_ok = True
-                resultMsg = None
+                result_msg = None
 
             # Return a dictionary with the result
             result = {
                 'ref_txt': ref_txt,
                 'type': type,
                 'result_ok': result_ok,
-                'badResultMsg': resultMsg
+                'bad_result_msg': result_msg
             }
 
         list_result.append(result)
@@ -172,17 +172,17 @@ class GenObjFunc:
                     type = obj['type']
             if not exists_in_config:
                 result_ok = False
-                resultMsg = f"'{ref_txt}' not found in config file"
+                result_msg = f"'{ref_txt}' not found in config file"
             else:
                 result_ok = True
-                resultMsg = None
+                result_msg = None
 
             # Return a dictionary with the result
             result = {
                 'ref_txt': ref_txt,
                 'type': type,
                 'result_ok': result_ok,
-                'badResultMsg': resultMsg
+                'bad_result_msg': result_msg
             }
         list_result.append(result)
         return inst_data
@@ -190,8 +190,8 @@ class GenObjFunc:
     @staticmethod
     def result(list_with_dicts, type='undefined'):
         """Check all result dicts and sum them, then print info to user"""
-        rOkCnt = 0
-        rBadCnt = 0
+        result_ok_cnt = 0
+        result_bad_cnt = 0
         print('\n')
         print(type)
 
@@ -201,20 +201,20 @@ class GenObjFunc:
         for dict in list_with_dicts:
             if dict['result_ok']:
                 good_results.append(dict['ref_txt'])
-                rOkCnt += 1
+                result_ok_cnt += 1
             else:
-                #  print(f"\t ERROR: {dict['badResultMsg']}")
-                msg = f"\t ERROR: {dict['badResultMsg']}"
+                msg = f"\t ERROR: {dict['bad_result_msg']}"
                 bad_results.append(msg)
-                rBadCnt += 1
-        if rOkCnt > 0:
-            print(f"\t Succesfully processed {rOkCnt} objects: {good_results}")
+                result_bad_cnt += 1
+        if result_ok_cnt > 0:
+            tmp_text = "Succesfully processed"
+            print(f"\t {tmp_text} {result_ok_cnt} objects: {good_results}")
 
-        if rBadCnt > 0:
+        if result_bad_cnt > 0:
             print("\n")
-            print(f"\t {rBadCnt} resulted with error:")
+            print(f"\t {result_bad_cnt} resulted with error:")
             for r in bad_results:
                 print('\t', r)
 
-        if rOkCnt == 0 and rBadCnt == 0:
+        if result_ok_cnt == 0 and result_bad_cnt == 0:
             print("\t Nothing processed")
