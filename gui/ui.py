@@ -17,7 +17,7 @@ class GenUI(tk.Frame):
 
         # Constants
         self.height = 275
-        self.width = 600
+        self.width = 750
         self.frameColor = "#2b2b2b"
         self.buttonWidth = 0.23
         self.buttonHeight = 0.09
@@ -38,7 +38,7 @@ class GenUI(tk.Frame):
     def create_window(self):
         """Create window"""
         # Title and program-icon
-        self.master.title('Generate it')
+        self.master.title('automation-boilerplate')
         #  self.master.iconbitmap('icon.ico')
         self.master.call('wm', 'iconphoto', self.master._w,
                          tk.PhotoImage(file='gui/icon.png'))

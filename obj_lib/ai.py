@@ -39,8 +39,8 @@ class AI:
             f.write(data)
 
     def _tia_symbol(self):
-        data = self.gen.multiple_config(self.ol, self.cp, self.rl,
-                                        'TIA_Symbol')
+        data = self.gen.multiple(self.ol, self.cf, self.rl,
+                                 'TIA_Symbol')
 
         filename = self.type + '_symbols.sdf'
         path = os.path.join(self.tia_path, filename)

@@ -47,13 +47,13 @@ class GenObjFunc:
 
         if obj.get('eng_min') is not None:
             line = str(line.replace(self.s.ENG_MIN_REPLACE,
-                                    obj['eng_min']))
+                                    str(obj['eng_min'])))
         else:
             line = line.replace(self.s.ENG_MIN_REPLACE, '0')
 
         if obj.get('eng_max') is not None:
             line = str(line.replace(self.s.ENG_MAX_REPLACE,
-                                    obj['eng_max']))
+                                    str(obj['eng_max'])))
         else:
             line = line.replace(self.s.ENG_MAX_REPLACE, '100')
 
