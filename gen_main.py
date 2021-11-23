@@ -28,7 +28,7 @@ class GenMain:
             wb = xl.load_workbook(self.excel_path, data_only=True)
         except FileNotFoundError as e:
             print(e)
-            print('Error! Excel file not found, program will exit')
+            print('ERROR! Excel file not found, program will exit')
             sys.exit()
         else:
             self.wb = wb
@@ -43,26 +43,31 @@ class GenMain:
                         self.s.DI_SHEETNAME, self.s.DI_START_INDEX, 'di',
                         config=True)
             self.dict_list.append(self.di_dict)
+
         if not self.s.DO_DISABLE:
             self.do_dict = self._obj_data_to_dict(
                         self.s.DO_SHEETNAME, self.s.DO_START_INDEX, 'do',
                         config=True)
             self.dict_list.append(self.do_dict)
+
         if not self.s.VALVE_DISABLE:
             self.valve_dict = self._obj_data_to_dict(
                 self.s.VALVE_SHEETNAME, self.s.VALVE_START_INDEX, 'valve',
                 config=True)
             self.dict_list.append(self.valve_dict)
+
         if not self.s.MOTOR_DISABLE:
             self.motor_dict = self._obj_data_to_dict(
                             self.s.MOTOR_SHEETNAME, self.s.MOTOR_START_INDEX,
                             'motor', config=True)
             self.dict_list.append(self.motor_dict)
+
         if not self.s.AI_DISABLE:
             self.ai_dict = self._obj_data_to_dict(
                 self.s.AI_SHEETNAME, self.s.AI_START_INDEX, 'ai',
                 eng_var=True)
             self.dict_list.append(self.ai_dict)
+
         if not self.s.AO_DISABLE:
             self.ao_dict = self._obj_data_to_dict(
                     self.s.AO_SHEETNAME, self.s.AO_START_INDEX, 'ao',
@@ -77,7 +82,7 @@ class GenMain:
         try:
             ws = self.wb[sheet]
         except KeyError:
-            msg = f'Error! {sheet} sheet does not exist, prog will exit'
+            msg = f'ERROR! {sheet} sheet does not exist, prog will exit'
             print(msg)
             sys.exit()
 
@@ -89,7 +94,7 @@ class GenMain:
                 cell = ws.cell(row=self.s.HEADER_ROW, column=i)
                 cellval = str(cell.value)
 
-                # If cell is empty (NoneType) skip it
+                # If cell is empty (NoneType) - skip it
                 if cellval is None:
                     continue
 
@@ -166,56 +171,6 @@ class GenMain:
             idx += 1
 
         return obj_list
-
-    def _replace_keywords(self, line, obj, data_size, data_offset):
-        """Take in a line and convert all the identifiers to obj data"""
-
-        # Replace the keywords that always exists
-        line = line.replace(self.s.ID_REPLACE, obj['id'])
-
-        # check if comment exists, if not insert empty string
-        if obj['comment'] is None:
-            line = line.replace(self.s.COMMENT_REPLACE, '')
-        else:
-            line = line.replace(self.s.COMMENT_REPLACE,
-                                obj['comment'])
-
-        # Replace index
-        line = line.replace(self.s.INDEX_REPLACE, obj['index'])
-
-        # calculate address by offset & datatype data_size
-        adress = (obj['index'] * data_size) + data_offset
-        # Replace '@ADR'
-        line = line.replace(self.s.ADR_REPLACE, str(adress))
-
-        # Replace PLC
-        line = line.replace(self.s.PLC_REPLACE,
-                            self.s.PLC_NAME)
-
-        # Replace the keywords that are optional (check if they exist)
-
-        if obj.get('config') is not None:
-            line = line.replace(self.s.CONFIG_REPLACE, obj['config'])
-
-        if obj.get('eng_unit') is not None:
-            line = line.replace(self.s.ENG_UNIT_REPLACE,
-                                obj['eng_unit'])
-        else:
-            line = line.replace(self.s.ENG_UNIT_REPLACE, '')
-
-        if obj.get('eng_min') is not None:
-            line = line.replace(self.s.ENG_MIN_REPLACE,
-                                obj['eng_min'])
-        else:
-            line = line.replace(self.s.ENG_MIN_REPLACE, '0')
-
-        if obj.get('eng_max') is not None:
-            line = line.replace(self.s.ENG_MAX_REPLACE,
-                                obj['eng_max'])
-        else:
-            line = line.replace(self.s.ENG_MAX_REPLACE, '100')
-
-        return line
 
     def create_subdirs(self):
         """Create all subdirectiories beyond output path"""

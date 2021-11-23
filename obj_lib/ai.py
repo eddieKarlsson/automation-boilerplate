@@ -10,7 +10,7 @@ class AI:
                  config_type='mc'):
         self.s = gen_main.s  # Instanciate settings
 
-        self.type = 'AI'
+        self.type = 'ai'
         self.config_type = config_type
 
         self.cp = os.path.join(config_path, self.type)  # Config folder path
