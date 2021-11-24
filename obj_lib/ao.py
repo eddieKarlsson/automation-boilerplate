@@ -1,64 +1,79 @@
-    def td_gen_ao(self):
-        """Create and concetenate all text lines to different files"""
-        # setup variables
-        config_file = os.path.join(s.CONFIG_PATH, 'Config_AO.txt')
-        sheet = 'AO'
-
-        # Check what output path to use, if 'None' create in current directory, otherwise as specified
-        if self.output_path is None:
-            file_path = 'Generated AO'
-        elif self.output_path == OUTPUT_PATH_START_VALUE:
-            file_path = 'Generated AO'
-        else:
-            file_path = os.path.join(self.output_path, 'Generated AO')
-        # Create sub-directory if it doesn't exist
-        if not os.path.exists(file_path):
-            os.makedirs(file_path)
-
-        """PLC"""
-        # PLC Datablock, if all elements exists concatenate data and create file
-        db_header_data = self.td_single(config_file, 'db_header')
-        db_var_data = self.td_multiple(config_file, 'db_var', sheet)
-        db_footer_data = self.td_single(config_file, 'db_footer')
-        if db_header_data != '' and db_var_data != '' and db_footer_data != '':
-            filename = 'PLC_' + sheet + '_DB.db'
-            file_and_path = os.path.join(file_path, filename)
-            with open(file_and_path, 'w', encoding='cp1252') as dbFile:
-                data = db_header_data
-                data += db_var_data
-                data += db_footer_data
-                dbFile.write(data)
-                print(filename, 'created')
-                logging.info(filename + ' created')
+import os
+import os.path
+from gen_obj_func import GenObjFunc as genfunc
 
 
-        """Intouch IO:Int"""
-        IT_IOInt_header = self.td_single(config_file, 'IT_IOInt_Header')
-        IT_IOInt_data = self.td_multiple(config_file, 'IT_IOInt_Tag', sheet, udt_size=24, udt_offset=0,
-                                         start_index=s.AO_START_INDEX)
-        """Intouch Memory:Int"""
-        IT_MemInt_header = self.td_single(config_file, 'IT_MemInt_Header')
-        IT_MemInt_data = self.td_multiple(config_file, 'IT_MemInt_Tag', sheet, start_index=s.AO_START_INDEX)
+class AO:
+    """Object specific code to concatenate text lines and create files"""
 
-        """Intouch IO:Real"""
-        IT_IOReal_header = self.td_single(config_file, 'IT_IOReal_Header')
-        IT_IOReal_data = self.td_multiple(config_file, 'IT_IOReal_Tag', sheet, udt_size=24, udt_offset=18,
-                                          start_index=s.AO_START_INDEX)
+    def __init__(self, gen_main, output_path, obj_list, config_path,
+                 config_type='mc'):
+        self.s = gen_main.s  # Instanciate settings
 
-        if IT_IOInt_data != '' and IT_IOInt_header != '' and IT_MemInt_header != '' and IT_MemInt_data != '' \
-                and IT_IOReal_data != '' and IT_IOReal_header != '':
-            filename = 'IT_' + sheet + '.csv'
-            file_and_path = os.path.join(file_path, filename)
-            self.all_it_files.append(file_and_path)  # Append full path to list, will be used in another function
-            with open(file_and_path, 'w', encoding='cp1252') as itFile:
-                data = IT_IOInt_header
-                data += IT_IOInt_data
-                data += IT_MemInt_header
-                data += IT_MemInt_data
-                data += IT_IOReal_header
-                data += IT_IOReal_data
-                itFile.write(data)
-                print(filename, 'created')
-                logging.info(filename + ' created')
-        print('Generated files put in...', file_path)
-        logging.info('Generated AO files put in ' + file_path)
+        self.type = 'ao'
+        self.config_type = config_type
+
+        self.cp = os.path.join(config_path, self.type)  # Config folder path
+        self.cf = os.path.join(self.cp, self.type + '.txt')  # base config file
+
+        self.output_path = output_path
+        self.tia_path = os.path.join(self.output_path, self.s.TIA_DIR)
+        self.it_path = os.path.join(self.output_path, self.s.INTOUCH_DIR)
+
+        self.ol = obj_list
+
+        self.gen = genfunc(gen_main)
+
+        self.rl = []  # Create empty list "result list"
+
+        self.generate()
+
+    def _tia_db(self):
+        data = self.gen.single(self.cf, self.rl, 'TIA_DB_Header')
+        data += self.gen.multiple(self.ol, self.cf, self.rl, 'TIA_DB_Var')
+        data += self.gen.single(self.cf, self.rl, 'TIA_DB_Footer')
+
+        filename = self.type + '_db.db'
+        path = os.path.join(self.tia_path, filename)
+        with open(path, 'w', encoding='cp1252') as f:
+            f.write(data)
+
+    def _tia_symbol(self):
+        data = self.gen.multiple(self.ol, self.cf, self.rl,
+                                 'TIA_Symbol')
+
+        filename = self.type + '_symbols.sdf'
+        path = os.path.join(self.tia_path, filename)
+        with open(path, 'w', encoding='cp1252') as f:
+            f.write(data)
+
+    def _tia_code(self):
+        data = self.gen.single(self.cf, self.rl, 'TIA_Code_Header')
+        data += self.gen.multiple(self.ol, self.cf, self.rl, 'TIA_Code_Var')
+        data += self.gen.single(self.cf, self.rl, 'TIA_Code_Var_Footer')
+        data += self.gen.multiple(self.ol, self.cf, self.rl,
+                                  'TIA_Code_Body')
+        data += self.gen.single(self.cf, self.rl, 'TIA_Code_Footer')
+
+        filename = self.type + '_code.awl'
+        path = os.path.join(self.tia_path, filename)
+        with open(path, 'w', encoding='cp1252') as f:
+            f.write(data)
+
+    def _intouch(self):
+        data = self.gen.single(self.cf, self.rl, 'Intouch_Header')
+        data += self.gen.multiple(self.ol, self.cf, self.rl, 'Intouch_Tag')
+
+        filename = self.type + '_it.csv'
+        path = os.path.join(self.it_path, filename)
+        with open(path, 'w', encoding='cp1252') as f:
+            f.write(data)
+
+    def generate(self):
+        """Callup"""
+        if self.config_type == 'mc':
+            self._tia_db()
+            self._tia_symbol()
+            self._tia_code()
+            self._intouch()
+            self.gen.result(self.rl, type=self.type.upper())

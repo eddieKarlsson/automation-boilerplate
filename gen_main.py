@@ -1,5 +1,7 @@
 import sys
 import os
+from os import listdir
+from os.path import isfile, join
 import json
 import openpyxl as xl
 from settings import Settings
@@ -8,6 +10,7 @@ from obj_lib.motor import Motor
 from obj_lib.di import DI
 from obj_lib.do import DO
 from obj_lib.ai import AI
+from obj_lib.ao import AO
 
 
 class GenMain:
@@ -19,8 +22,8 @@ class GenMain:
         self.output_path = output_path
         self.config_path = config_path
         self.s = Settings()
-        self.all_it_files = []  # Create an empty list
         self.dict_list = []
+        self.it_path = os.path.join(self.output_path, self.s.INTOUCH_DIR)
 
         self.generate()
 
@@ -83,7 +86,7 @@ class GenMain:
         try:
             ws = self.wb[sheet]
         except KeyError:
-            msg = f'ERROR! {sheet} sheet does not exist, prog will exit'
+            msg = f'ERROR! {sheet} sheet does not exist, program will exit'
             print(msg)
             sys.exit()
 
@@ -139,7 +142,7 @@ class GenMain:
         # Loop through object list and add key-value pairs to object dict
         # then append each object-dict to list
         obj_list = []
-        idx = start_index
+        index = start_index
         for i in range(self.s.ROW, ws.max_row + 1):
             # Break if we get a blank ID cell
             cell_id = ws.cell(row=i, column=column_id)
@@ -152,7 +155,7 @@ class GenMain:
                 'type': type,
                 'id': cell_id.value,
                 'comment': cell_comment.value,
-                'index': idx,
+                'index': index,
             }
 
             # Add conditional key-value pairs
@@ -169,7 +172,7 @@ class GenMain:
                 obj['eng_max'] = cell_eng_max.value
 
             obj_list.append(obj)
-            idx += 1
+            index += 1
 
         return obj_list
 
@@ -192,6 +195,24 @@ class GenMain:
     @staticmethod
     def _print_disabled_in_settings(prefix):
         print(f"{prefix} not generated, disabled in settings file")
+
+    def _combine_it_files(self):
+        """
+        combines all it files in folder and chops off first lines
+        in files other than the first
+        """
+        file_list = [f for f in listdir(self.it_path)
+                     if isfile(join(self.it_path, f))]
+
+        outfile = os.path.join(self.it_path, "all_it.csv")
+        with open(outfile, 'w', encoding='cp1252') as wf:
+            for file_index, file in enumerate(file_list):
+                with open(os.path.join(self.it_path, file), 'r') as rf:
+                    for line_index, line in enumerate(rf):
+                        # Skip first line header if it's not the first file
+                        if file_index > 0 and line_index <= 0:
+                            continue
+                        wf.write(line)
 
     def generate(self):
         print('Version', self.s.version)
@@ -235,3 +256,11 @@ class GenMain:
         else:
             AI(self, self.output_path, self.ai_dict, self.config_path,
                 config_type=self.config_type)
+
+        if self.s.AO_DISABLE:
+            self._print_disabled_in_settings('AO')
+        else:
+            AO(self, self.output_path, self.ao_dict, self.config_path,
+                config_type=self.config_type)
+
+        self._combine_it_files()
