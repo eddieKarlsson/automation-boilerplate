@@ -40,8 +40,9 @@ class GenUI(tk.Frame):
         # Title and program-icon
         self.master.title('automation-boilerplate')
         #  self.master.iconbitmap('icon.ico')
+        icon_path = os.path.join('gui', 'icon.png')
         self.master.call('wm', 'iconphoto', self.master._w,
-                         tk.PhotoImage(file='gui/icon.png'))
+                         tk.PhotoImage(file=icon_path))
 
         self.canvas = tk.Canvas(self.master, height=self.height,
                                 width=self.width)
@@ -139,9 +140,9 @@ class GenUI(tk.Frame):
 
     def browse_excel(self):
         excelPath = filedialog.askopenfilename(
-                                            filetypes=(("Excel files",
-                                                        "*.xlsx"),
-                                                       ("all files", "*.*")))
+            filetypes=(("Excel files",
+                        "*.xlsx"),
+                       ("all files", "*.*")))
 
         # Write to user_data dictionary, to save it for later.
         self.user_data['excel_path'] = excelPath
