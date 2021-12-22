@@ -112,21 +112,22 @@ class GenUI(tk.Frame):
 
         y += self.buttonYSpacing
         # config path button
-        self.cfgpathButton = tk.Button(self.master, text="Config path...",
-                                       bg=self.button_bg, fg=self.button_fg,
-                                       command=self.config_path)
+        if self.s.SHOW_CONFIG_ROW:
+            self.cfgpathButton = tk.Button(self.master, text="Config path...",
+                                           bg=self.button_bg, fg=self.button_fg,
+                                           command=self.config_path)
 
-        self.cfgpathButton.place(relx=0.03, rely=y,
-                                 relheight=self.buttonHeight,
-                                 relwidth=self.buttonWidth)
+            self.cfgpathButton.place(relx=0.03, rely=y,
+                                     relheight=self.buttonHeight,
+                                     relwidth=self.buttonWidth)
 
-        # config path label
-        self.cfgpathLabel = tk.Label(self.frame, bg=self.button_bg,
-                                     fg=self.button_fg,
-                                     text=(self.user_data['config_path']))
+            # config path label
+            self.cfgpathLabel = tk.Label(self.frame, bg=self.button_bg,
+                                         fg=self.button_fg,
+                                         text=(self.user_data['config_path']))
 
-        self.cfgpathLabel.place(relx=0.27, rely=y,
-                                relheight=self.buttonHeight)
+            self.cfgpathLabel.place(relx=0.27, rely=y,
+                                    relheight=self.buttonHeight)
 
         y += self.buttonYSpacing
         y += self.buttonYSpacing

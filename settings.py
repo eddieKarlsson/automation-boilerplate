@@ -42,7 +42,7 @@ class Settings:
         self.COL_ENG_MAX_NAME = 'Eng. Max'
         self.COL_ENG_MAX = 15  # Excel column index of Config, 15 = O column
         self.ENG_MAX_REPLACE = '@ENGMAX'  # string to be replaced
-        
+
         self.COL_ALARM_GROUP_NAME = 'Alarm Group'
         self.COL_ALARM_GROUP = 4  # Excel column index of Config, 15 = O column
         self.ALARM_GROUP_REPLACE = '@AlarmGroup'  # string to be replaced
@@ -76,7 +76,7 @@ class Settings:
         self.AO_DISABLE = False
         self.AO_START_INDEX = 0
         self.AO_SHEETNAME = 'AO'
-        
+
         self.PID_DISABLE = False
         self.PID_START_INDEX = 0
         self.PID_SHEETNAME = 'PID'
@@ -88,6 +88,9 @@ class Settings:
         self.TIA_DIR = 'TIA'
         self.INTOUCH_DIR = 'InTouch'
         self.SQL_DIR = 'SQL'
+
+        # UI
+        self.SHOW_CONFIG_ROW = False
 
         # internal var, used below in functions
         self.json_file = 'user_settings.json'
