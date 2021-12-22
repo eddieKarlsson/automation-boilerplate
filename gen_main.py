@@ -11,6 +11,8 @@ from obj_lib.di import DI
 from obj_lib.do import DO
 from obj_lib.ai import AI
 from obj_lib.ao import AO
+from obj_lib.pid import PID
+from obj_lib.sum import SUM
 
 
 class GenMain:
@@ -24,6 +26,7 @@ class GenMain:
         self.s = Settings()
         self.dict_list = []
         self.it_path = os.path.join(self.output_path, self.s.INTOUCH_DIR)
+        self.sql_path = os.path.join(self.output_path, self.s.SQL_DIR)
 
         self.generate()
 
@@ -78,6 +81,18 @@ class GenMain:
                     eng_var=True)
             self.dict_list.append(self.ao_dict)
 
+        if not self.s.PID_DISABLE:
+            self.pid_dict = self._obj_data_to_dict(
+                    self.s.PID_SHEETNAME, self.s.PID_START_INDEX, 'pid',
+                    eng_var=True)
+            self.dict_list.append(self.pid_dict)
+
+        if not self.s.SUM_DISABLE:
+            self.sum_dict = self._obj_data_to_dict(
+                    self.s.SUM_SHEETNAME, self.s.SUM_START_INDEX, 'sum',
+                    eng_var=True)
+            self.dict_list.append(self.pid_dict)
+
     def _obj_data_to_dict(self, sheet, start_index, type,
                           config=False, eng_var=False):
         """Read all object data to dict"""
@@ -106,9 +121,13 @@ class GenMain:
                     column_id = i
                 if self.s.COL_COMMENT_NAME in cellval:
                     column_comment = i
+                if self.s.COL_ALARM_GROUP_NAME in cellval:
+                    column_alarmgroup = i
+                if self.s.COL_PLC_NAME == cellval:
+                    column_plc = i
 
                 if config:
-                    if self.s.COL_CONFIG_NAME in cellval:
+                    if self.s.COL_CONFIG_NAME == cellval:
                         column_config = i
 
                 if eng_var:
@@ -121,6 +140,9 @@ class GenMain:
         else:
             column_id = self.s.COL_ID
             column_comment = self.s.COL_COMMENT
+            column_alarmgroup = self.s.COL_ALARM_GROUP
+            column_plc = self.s.COL_PLC
+
             if config:
                 column_config = self.s.COL_CONFIG
             if eng_var:
@@ -132,6 +154,8 @@ class GenMain:
             print('SHEET:', sheet)
             print('\t', 'column_id:', column_id)
             print('\t', 'column_comment:', column_comment)
+            print('\t', 'column_alarmgroup:', column_alarmgroup)
+            print('\t', 'column_plc:', column_plc)
             if config:
                 print('\t', 'column_config:', column_config)
             if eng_var:
@@ -147,6 +171,9 @@ class GenMain:
             # Break if we get a blank ID cell
             cell_id = ws.cell(row=i, column=column_id)
             cell_comment = ws.cell(row=i, column=column_comment)
+            cell_alarmgroup = ws.cell(row=i, column=column_alarmgroup)
+            cell_plc = ws.cell(row=i, column=column_plc)
+
             if cell_id.value is None:
                 break
 
@@ -156,6 +183,8 @@ class GenMain:
                 'id': cell_id.value,
                 'comment': cell_comment.value,
                 'index': index,
+                'alarmgroup': cell_alarmgroup.value,
+                'plc': cell_plc.value,
             }
 
             # Add conditional key-value pairs
@@ -178,7 +207,7 @@ class GenMain:
 
     def create_subdirs(self):
         """Create all subdirectiories beyond output path"""
-        dirs = [self.s.TIA_DIR, self.s.INTOUCH_DIR]
+        dirs = [self.s.TIA_DIR, self.s.INTOUCH_DIR, self.s.SQL_DIR]
         for dir in dirs:
             newdir = os.path.join(self.output_path, dir)
             if not os.path.exists(newdir):
@@ -201,17 +230,42 @@ class GenMain:
         combines all it files in folder and chops off first lines
         in files other than the first
         """
+
+        outfile = os.path.join(self.it_path, "all_it.csv")
+
+        if os.path.exists(outfile):
+            os.remove(outfile)
+
         file_list = [f for f in listdir(self.it_path)
                      if isfile(join(self.it_path, f))]
 
-        outfile = os.path.join(self.it_path, "all_it.csv")
         with open(outfile, 'w', encoding='cp1252') as wf:
             for file_index, file in enumerate(file_list):
-                with open(os.path.join(self.it_path, file), 'r') as rf:
+                with open(os.path.join(self.it_path, file), 'r', encoding='cp1252') as rf:
                     for line_index, line in enumerate(rf):
                         # Skip first line header if it's not the first file
                         if file_index > 0 and line_index <= 0:
                             continue
+                        wf.write(line)
+
+    def _combine_sql_files(self):
+        """
+        combines all it files in folder and chops off first lines
+        in files other than the first
+        """
+
+        outfile = os.path.join(self.sql_path, "all_sql.csv")
+
+        if os.path.exists(outfile):
+            os.remove(outfile)
+
+        file_list = [f for f in listdir(self.sql_path)
+                     if isfile(join(self.sql_path, f))]
+
+        with open(outfile, 'w', encoding='cp1252') as wf:
+            for file_index, file in enumerate(file_list):
+                with open(os.path.join(self.sql_path, file), 'r', encoding='cp1252') as rf:
+                    for line_index, line in enumerate(rf):
                         wf.write(line)
 
     def generate(self):
@@ -263,4 +317,17 @@ class GenMain:
             AO(self, self.output_path, self.ao_dict, self.config_path,
                 config_type=self.config_type)
 
+        if self.s.PID_DISABLE:
+            self._print_disabled_in_settings('PID')
+        else:
+            PID(self, self.output_path, self.pid_dict, self.config_path,
+                config_type=self.config_type)
+
+        if self.s.SUM_DISABLE:
+            self._print_disabled_in_settings('SUM')
+        else:
+            SUM(self, self.output_path, self.sum_dict, self.config_path,
+                config_type=self.config_type)
+
         self._combine_it_files()
+        self._combine_sql_files()

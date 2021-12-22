@@ -3,14 +3,14 @@ import os.path
 from gen_obj_func import GenObjFunc as genfunc
 
 
-class AI:
+class PID:
     """Object specific code to concatenate text lines and create files"""
 
     def __init__(self, gen_main, output_path, obj_list, config_path,
                  config_type='mc'):
         self.s = gen_main.s  # Instanciate settings
 
-        self.type = 'ai'
+        self.type = 'pid'
         self.config_type = config_type
 
         self.cp = os.path.join(config_path, self.type)  # Config folder path
@@ -40,8 +40,8 @@ class AI:
             f.write(data)
 
     def _tia_symbol(self):
-        data = self.gen.multiple(self.ol, self.cf, self.rl,
-                                 'TIA_Symbol')
+        data = self.gen.multiple_config(self.ol, self.cp, self.rl,
+                                        'TIA_Symbol')
 
         filename = self.type + '_symbols.sdf'
         path = os.path.join(self.tia_path, filename)
@@ -52,8 +52,8 @@ class AI:
         data = self.gen.single(self.cf, self.rl, 'TIA_Code_Header')
         data += self.gen.multiple(self.ol, self.cf, self.rl, 'TIA_Code_Var')
         data += self.gen.single(self.cf, self.rl, 'TIA_Code_Var_Footer')
-        data += self.gen.multiple(self.ol, self.cf, self.rl,
-                                  'TIA_Code_Body')
+        data += self.gen.multiple_config(self.ol, self.cp, self.rl,
+                                         'TIA_Code_Body')
         data += self.gen.single(self.cf, self.rl, 'TIA_Code_Footer')
 
         filename = self.type + '_code.awl'
@@ -81,9 +81,9 @@ class AI:
     def generate(self):
         """Callup"""
         if self.config_type == 'mc':
-            self._tia_db()
-            self._tia_symbol()
-            self._tia_code()
+            #  self._tia_db()
+            #  self._tia_symbol()
+            #  self._tia_code()
             self._intouch()
             self._sql()
             self.gen.result(self.rl, type=self.type.upper())

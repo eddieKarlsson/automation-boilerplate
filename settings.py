@@ -42,10 +42,15 @@ class Settings:
         self.COL_ENG_MAX_NAME = 'Eng. Max'
         self.COL_ENG_MAX = 15  # Excel column index of Config, 15 = O column
         self.ENG_MAX_REPLACE = '@ENGMAX'  # string to be replaced
+        
+        self.COL_ALARM_GROUP_NAME = 'Alarm Group'
+        self.COL_ALARM_GROUP = 4  # Excel column index of Config, 15 = O column
+        self.ALARM_GROUP_REPLACE = '@AlarmGroup'  # string to be replaced
 
         self.ADR_REPLACE = '@ADR'  # string to be replaced in config file
 
-        self.PLC_NAME = 'PLC1'  # Used in Intouch
+        self.COL_PLC_NAME = 'PLC'  # Used in Intouch
+        self.COL_PLC = 5  # Excel column index of Config, 15 = O column
         self.PLC_REPLACE = '@PLC'  # string to be replaced in config file
 
         self.DI_DISABLE = False
@@ -71,9 +76,18 @@ class Settings:
         self.AO_DISABLE = False
         self.AO_START_INDEX = 0
         self.AO_SHEETNAME = 'AO'
+        
+        self.PID_DISABLE = False
+        self.PID_START_INDEX = 0
+        self.PID_SHEETNAME = 'PID'
+
+        self.SUM_DISABLE = False
+        self.SUM_START_INDEX = 0
+        self.SUM_SHEETNAME = 'Sum'
 
         self.TIA_DIR = 'TIA'
-        self.INTOUCH_DIR = 'Intouch'
+        self.INTOUCH_DIR = 'InTouch'
+        self.SQL_DIR = 'SQL'
 
         # internal var, used below in functions
         self.json_file = 'user_settings.json'

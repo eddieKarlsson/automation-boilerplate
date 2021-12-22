@@ -3,12 +3,15 @@
 </Intouch_Header>
 
 <Intouch_Tag>
-TODO - swap to real source txt for AO
 :IOInt,Group,Comment,Logged,EventLogged,EventLoggingPriority,RetentiveValue,RetentiveAlarmParameters,AlarmValueDeadband,AlarmDevDeadband,EngUnits,InitialValue,MinEU,MaxEU,Deadband,LogDeadband,LoLoAlarmState,LoLoAlarmValue,LoLoAlarmPri,LoAlarmState,LoAlarmValue,LoAlarmPri,HiAlarmState,HiAlarmValue,HiAlarmPri,HiHiAlarmState,HiHiAlarmValue,HiHiAlarmPri,MinorDevAlarmState,MinorDevAlarmValue,MinorDevAlarmPri,MajorDevAlarmState,MajorDevAlarmValue,MajorDevAlarmPri,DevTarget,ROCAlarmState,ROCAlarmValue,ROCAlarmPri,ROCTimeBase,MinRaw,MaxRaw,Conversion,AccessName,ItemUseTagname,ItemName,ReadOnly,AlarmComment,AlarmAckModel,LoLoAlarmDisable,LoAlarmDisable,HiAlarmDisable,HiHiAlarmDisable,MinDevAlarmDisable,MajDevAlarmDisable,RocAlarmDisable,LoLoAlarmInhibitor,LoAlarmInhibitor,HiAlarmInhibitor,HiHiAlarmInhibitor,MinDevAlarmInhibitor,MajDevAlarmInhibitor,RocAlarmInhibitor,SymbolicName
-"@ID_IND","$System","",No,No,0,No,No,0,0,"",0,-32767,32767,0,0,Off,0,1,Off,0,1,Off,0,1,Off,0,1,Off,0,1,Off,0,1,0,Off,0,1,Min,-32767,32767,Linear,"@PLC",No,"DB210,B@ADR",No,"",0,0,0,0,0,0,0,0,"","","","","","","",""
-:MemoryInt,Group,Comment,Logged,EventLogged,EventLoggingPriority,RetentiveValue,RetentiveAlarmParameters,AlarmValueDeadband,AlarmDevDeadband,EngUnits,InitialValue,MinValue,MaxValue,Deadband,LogDeadband,LoLoAlarmState,LoLoAlarmValue,LoLoAlarmPri,LoAlarmState,LoAlarmValue,LoAlarmPri,HiAlarmState,HiAlarmValue,HiAlarmPri,HiHiAlarmState,HiHiAlarmValue,HiHiAlarmPri,MinorDevAlarmState,MinorDevAlarmValue,MinorDevAlarmPri,MajorDevAlarmState,MajorDevAlarmValue,MajorDevAlarmPri,DevTarget,ROCAlarmState,ROCAlarmValue,ROCAlarmPri,ROCTimeBase,AlarmComment,AlarmAckModel,LoLoAlarmDisable,LoAlarmDisable,HiAlarmDisable,HiHiAlarmDisable,MinDevAlarmDisable,MajDevAlarmDisable,RocAlarmDisable,LoLoAlarmInhibitor,LoAlarmInhibitor,HiAlarmInhibitor,HiHiAlarmInhibitor,MinDevAlarmInhibitor,MajDevAlarmInhibitor,RocAlarmInhibitor,SymbolicName
-"@ID_PTR","$System","",No,No,0,No,No,0,0,"",@INDEX,-32768,32767,0,0,Off,0,1,Off,0,1,Off,0,1,Off,0,1,Off,0,1,Off,0,1,0,Off,0,1,Min,"",0,0,0,0,0,0,0,0,"","","","","","","",""
+"@ID_Status","@AlarmGroup","",No,No,0,No,No,0,0,"",0,-2147400000,2147400000,0,0,Off,0,1,Off,0,1,On,1073741823,250,Off,0,1,Off,0,1,Off,0,1,0,Off,0,1,Min,-2147400000,2147400000,Linear,"@PLC",No,"DB AO.@ID.Stat.UI_Stat",No,"@ID Fault",0,0,0,0,0,0,0,0
+:IOReal,Group,Comment,Logged,EventLogged,EventLoggingPriority,RetentiveValue,RetentiveAlarmParameters,AlarmValueDeadband,AlarmDevDeadband,EngUnits,InitialValue,MinEU,MaxEU,Deadband,LogDeadband,LoLoAlarmState,LoLoAlarmValue,LoLoAlarmPri,LoAlarmState,LoAlarmValue,LoAlarmPri,HiAlarmState,HiAlarmValue,HiAlarmPri,HiHiAlarmState,HiHiAlarmValue,HiHiAlarmPri,MinorDevAlarmState,MinorDevAlarmValue,MinorDevAlarmPri,MajorDevAlarmState,MajorDevAlarmValue,MajorDevAlarmPri,DevTarget,ROCAlarmState,ROCAlarmValue,ROCAlarmPri,ROCTimeBase,MinRaw,MaxRaw,Conversion,AccessName,ItemUseTagname,ItemName,ReadOnly,AlarmComment,AlarmAckModel,LoLoAlarmDisable,LoAlarmDisable,HiAlarmDisable,HiHiAlarmDisable,MinDevAlarmDisable,MajDevAlarmDisable,RocAlarmDisable,LoLoAlarmInhibitor,LoAlarmInhibitor,HiAlarmInhibitor,HiHiAlarmInhibitor,MinDevAlarmInhibitor,MajDevAlarmInhibitor,RocAlarmInhibitor,SymbolicName
+"@ID_EuValue","@AlarmGroup","",Yes,No,0,No,No,0,0,"@ENGUNIT",0,"@ENGMIN","@ENGMAX",0,0,Off,0,1,Off,0,1,Off,0,1,Off,0,1,Off,0,1,Off,0,1,0,Off,0,1,Min,"@ENGMIN","@ENGMAX",Linear,"@PLC",No,"DB AO.@ID.Stat.EuValue",No,"",0,0,0,0,0,0,0,0
 </Intouch_Tag>
+
+<SQLProcedure>
+EXEC [dbo].[GeneratorAddCM] N'@ID', N'@PLC', N'@Type'
+</SQLProcedure>
 
 TODO - swap to real source txt for AO, all TIA tags below
 <TIA_DB_Header>

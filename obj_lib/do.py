@@ -19,6 +19,7 @@ class DO:
         self.output_path = output_path
         self.tia_path = os.path.join(self.output_path, self.s.TIA_DIR)
         self.it_path = os.path.join(self.output_path, self.s.INTOUCH_DIR)
+        self.sql_path = os.path.join(self.output_path, self.s.SQL_DIR)
 
         self.ol = obj_list
 
@@ -69,6 +70,14 @@ class DO:
         with open(path, 'w', encoding='cp1252') as f:
             f.write(data)
 
+    def _sql(self):
+        data = self.gen.multiple(self.ol, self.cf, self.rl, 'SQLProcedure')
+
+        filename = self.type + '_sql.csv'
+        path = os.path.join(self.sql_path, filename)
+        with open(path, 'w', encoding='cp1252') as f:
+            f.write(data)
+
     def generate(self):
         """Callup"""
         if self.config_type == 'mc':
@@ -76,4 +85,5 @@ class DO:
             self._tia_symbol()
             self._tia_code()
             self._intouch()
+            self._sql()
             self.gen.result(self.rl, type=self.type.upper())

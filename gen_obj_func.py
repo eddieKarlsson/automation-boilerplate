@@ -14,6 +14,8 @@ class GenObjFunc:
 
         # Replace the keywords that always exists
         line = line.replace(self.s.ID_REPLACE, obj['id'])
+        line = line.replace(self.s.ALARM_GROUP_REPLACE, obj['alarmgroup'])
+        line = line.replace("@Type", obj['type'])
 
         # check if comment exists, if not insert empty string
         if obj['comment'] is None:
@@ -25,14 +27,12 @@ class GenObjFunc:
         # Replace index
         line = line.replace(self.s.INDEX_REPLACE, str(obj['index']))
 
-        # calculate address by offset & datatype data_size
-        adress = (obj['index'] * data_size) + data_offset
-        # Replace '@ADR'
-        line = line.replace(self.s.ADR_REPLACE, str(adress))
-
         # Replace PLC
-        line = line.replace(self.s.PLC_REPLACE,
-                            self.s.PLC_NAME)
+        if obj['plc'] is None:
+            line = line.replace(self.s.PLC_REPLACE, '')
+        else:
+            line = line.replace(self.s.PLC_REPLACE,
+                                obj['plc'])
 
         # Replace the keywords that are optional (check if they exist)
 
