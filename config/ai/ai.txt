@@ -1,3 +1,5 @@
+InTouch Configuration
+
 <Intouch_Header>
 :mode=update
 </Intouch_Header>
@@ -9,15 +11,25 @@
 "@ID_EuValue","@AlarmGroup","",Yes,No,0,No,No,0,0,"@ENGUNIT",0,"@ENGMIN","@ENGMAX",0,0,Off,0,1,Off,0,1,Off,0,1,Off,0,1,Off,0,1,Off,0,1,0,Off,0,1,Min,"@ENGMIN","@ENGMAX",Linear,"@PLC",No,"DB AI.@ID.Stat.EuValue",No,"",0,0,0,0,0,0,0,0
 </Intouch_Tag>
 
+
+
+
+SQL Configuration
+
 <SQLProcedure>
 EXEC [dbo].[GeneratorAddCM] N'@ID', N'@PLC', N'@Type'
 </SQLProcedure>
 
-TODO - swap to real source txt for AI, all TIA tags below
+
+
+
+TIA Portal DB Configuration
+
 <TIA_DB_Header>
-DATA_BLOCK "AI"
+DATA_BLOCK "DB AI"
 { S7_Optimized_Access := 'FALSE' }
 VERSION : 0.1
+//Put all analog Porocess Values in this DB201
    STRUCT
 </TIA_DB_Header>
 
@@ -25,14 +37,28 @@ VERSION : 0.1
       @ID : "MC UDT AI";   // @CMT
 </TIA_DB_Var>
 
-<TIA_DB_Footer>
+<TIA_DB_Begin>
    END_STRUCT;
 
 
 BEGIN
+</TIA_DB_Begin>
+
+<TIA_DB_Parameters>
+   @ID.Config.UI_Config := 0;
+   @ID.Par."Max EuValue" := @ENGMAX.0;
+   @ID.Par."Min EuValue" := @ENGMIN.0;
+</TIA_DB_Parameters>
+
+<TIA_DB_Footer>
 
 END_DATA_BLOCK
 </TIA_DB_Footer>
+
+
+
+
+TIA Portal Code Configuration
 
 <TIA_Code_Header>
 code header

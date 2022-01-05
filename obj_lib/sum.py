@@ -79,11 +79,10 @@ class SUM:
             f.write(data)
 
     def generate(self):
-        """Callup"""
-        if self.config_type == 'mc':
-            #  self._tia_db()
-            #  self._tia_symbol()
-            #  self._tia_code()
+        if self.ol:
+            self._tia_db()
+            #self._tia_symbol()
+            #self._tia_code()
             self._intouch()
             self._sql()
             self.gen.result(self.rl, type=self.type.upper())
