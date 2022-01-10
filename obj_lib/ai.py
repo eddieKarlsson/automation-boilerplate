@@ -27,7 +27,12 @@ class AI:
 
         self.rl = []  # Create empty list "result list"
 
-        self.generate()
+        # Check if list is empty, if it is print an error
+        if self.ol:
+            self.generate()
+        else:
+            print(f'\nWARNING: {self.type.upper()} not generated, no items found in TD')
+
 
     def _tia_db(self):
         data = self.gen.single(self.cf, self.rl, 'TIA_DB_Header')
