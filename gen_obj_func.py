@@ -9,7 +9,7 @@ class GenObjFunc:
     def __init__(self, gen_main):
         self.s = gen_main.s
 
-    def _replace_keywords(self, line, obj, data_size, data_offset):
+    def _replace_keywords(self, line, obj):
         """Take in a line and convert all the identifiers to obj data"""
 
         # Replace the keywords that always exists
@@ -95,8 +95,7 @@ class GenObjFunc:
         list_result.append(result)
         return inst_data
 
-    def multiple(self, obj_list, config_file, list_result, ref_txt,
-                 data_size=30, data_offset=14):
+    def multiple(self, obj_list, config_file, list_result, ref_txt):
         """Get text lines from config file and replace by data in excel for
             each item, then append the new lines to memory"""
 
@@ -113,8 +112,7 @@ class GenObjFunc:
                     if end in str(line):
                         section_found = False
                     if section_found:
-                        line = self._replace_keywords(line, obj,
-                                                      data_size, data_offset)
+                        line = self._replace_keywords(line, obj)
                         inst_data += line
                     if begin in str(line):
                         exists_in_config = True
@@ -132,7 +130,7 @@ class GenObjFunc:
             # Return a dictionary with the result
             result = {
                 'ref_txt': ref_txt,
-                'type': type,
+                'type': None,
                 'result_ok': result_ok,
                 'bad_result_msg': result_msg
             }
@@ -180,7 +178,7 @@ class GenObjFunc:
             # Return a dictionary with the result
             result = {
                 'ref_txt': ref_txt,
-                'type': type,
+                'type': None,
                 'result_ok': result_ok,
                 'bad_result_msg': result_msg
             }
