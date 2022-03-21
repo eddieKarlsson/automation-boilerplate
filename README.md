@@ -1,7 +1,7 @@
 # Automation-boilerplate
 ## Creates importable text files from boilerplate code. Purpose is to speed up automation projects by generating repetetive code for each specified item in item-list.
 
-Run the program from terminal by invoking main.py or run the main.exe if you're in Windows.
+Run the program from terminal by invoking main.py or run the main.exe if you're on Windows.
 
 Requirements:
 1. pip install openpyxl
