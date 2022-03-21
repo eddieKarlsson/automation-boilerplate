@@ -10,3 +10,4 @@ Create executable using https://www.pyinstaller.org/:
 1. pip install pyinstaller
 2. cd to github folder
 3. pyinstaller main.py --onefile
+4. Move dist\main.exe to main folder, then relative path will work
