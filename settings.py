@@ -90,7 +90,7 @@ class Settings:
         self.SQL_DIR = 'SQL'
 
         # UI
-        self.SHOW_CONFIG_ROW = True
+        self.SHOW_CONFIG_ROW = False
 
         # internal var, used below in functions
         self.json_file = 'user_settings.json'

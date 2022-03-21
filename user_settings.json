@@ -1,5 +1,5 @@
 {
  "excel_path": "C:/Users/EddieKarlsson/Project/github/automation-boilerplate/example_td.xlsx",
  "output_path": "C:/Users/EddieKarlsson/Project/github/ab-output",
- "config_path": "C:/Users/EddieKarlsson/Project/github/automation-boilerplate/config"
+ "config_path": "config"
 }
