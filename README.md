@@ -1,10 +1,11 @@
-# Gen
-## Create importable program files by excel item-lists
+# Automation-boilerplate
+## Creates importable text files from boilerplate code. Purpose is to speed up automation projects by generating repetetive code for each specified item in item-list.
+
+Run the program from terminal by invoking main.py or run the main.exe if you're in Windows.
 
 Requirements:
 1. pip install openpyxl
-2. Worbook with layout like example_wb.xlsx
-
+2. Item-list with layout like example_td.xlsx
 
 Create executable using https://www.pyinstaller.org/:
 1. pip install pyinstaller
