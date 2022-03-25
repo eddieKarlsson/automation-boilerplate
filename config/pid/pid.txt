@@ -1,3 +1,5 @@
+InTouch Configuration
+
 <Intouch_Header>
 :mode=update
 </Intouch_Header>
@@ -10,6 +12,11 @@
 "@ID_PV","@AlarmGroup","",Yes,No,0,No,No,0,0,"@ENGUNIT",0,"@ENGMIN","@ENGMAX",0,0,Off,0,1,Off,0,1,Off,0,1,Off,0,1,Off,0,1,Off,0,1,0,Off,0,1,Min,"@ENGMIN","@ENGMAX",Linear,"@PLC",No,"DB PID.@ID.Stat.PV",No,"",0,0,0,0,0,0,0,0
 "@ID_SP","@AlarmGroup","",Yes,No,0,No,No,0,0,"@ENGUNIT",0,"@ENGMIN","@ENGMAX",0,0,Off,0,1,Off,0,1,Off,0,1,Off,0,1,Off,0,1,Off,0,1,0,Off,0,1,Min,"@ENGMIN","@ENGMAX",Linear,"@PLC",No,"DB PID.@ID.Stat.SP",No,"",0,0,0,0,0,0,0,0
 </Intouch_Tag>
+
+
+
+
+SQL Configuration
 
 <SQLProcedure>
 EXEC [dbo].[GeneratorAddCM] N'@ID', N'@PLC', N'@Type'

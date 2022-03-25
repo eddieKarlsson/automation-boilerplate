@@ -1,5 +1,5 @@
 {
- "excel_path": "C:/Users/Admin/Desktop/URS Metabogen.xlsx",
- "output_path": "C:/Generator/Output",
- "config_path": "C:/Generator/automation-boilerplate/config"
+ "excel_path": "C:/Users/Gustav/Documents/GitHub/automation-boilerplate/example_td.xlsx",
+ "output_path": "C:/Users/Gustav/Documents/GitHub/Output",
+ "config_path": "config"
 }

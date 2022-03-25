@@ -35,9 +35,8 @@ class GenObjFunc:
                                 obj['plc'])
 
         # Replace the keywords that are optional (check if they exist)
-
-        if obj.get('config') is not None:
-            line = line.replace(self.s.CONFIG_REPLACE, obj['config'])
+        if obj.get('volumeperpulse') is not None:
+            line = line.replace(self.s.VolumePerPulse_REPLACE, str(obj['volumeperpulse']))
 
         if obj.get('eng_unit') is not None:
             line = line.replace(self.s.ENG_UNIT_REPLACE,
@@ -159,8 +158,7 @@ class GenObjFunc:
                     if end in str(line):
                         section_found = False
                     if section_found:
-                        line = self._replace_keywords(line, obj,
-                                                      data_size, data_offset)
+                        line = self._replace_keywords(line, obj, data_size, data_offset)
                         inst_data += line
                     if begin in str(line):
                         exists_in_config = True
