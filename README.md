@@ -7,9 +7,9 @@ Requirements:
 1. pip install openpyxl
 2. Item-list with layout like example_td.xlsx
 
-Create executable using https://www.pyinstaller.org/
-by running "create-exec.ps1" or do the steps manually:
-  1. pip install pyinstaller
-  2. cd to github folder
-  3. pyinstaller main.py --onefile
-  4. Move dist\main.exe to main folder, then relative path will work
+Create exectubale with PyInstaller, either by invoking "create-exec.ps1 or do steps below."
+Manual steps:
+1. pip install pyinstaller
+2. cd to github folder
+3. pyinstaller main.py --onefile
+4. Move dist\main.exe to main folder, then relative path will work
