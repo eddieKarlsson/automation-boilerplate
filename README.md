@@ -8,8 +8,8 @@ Requirements:
 2. Item-list with layout like example_td.xlsx
 
 Create executable using https://www.pyinstaller.org/
-Run create-exec.ps1 or do the steps manually:
-1. pip install pyinstaller
-2. cd to github folder
-3. pyinstaller main.py --onefile
-4. Move dist\main.exe to main folder, then relative path will work
+  Run "create-exec.ps1" or do the steps manually:
+  1. pip install pyinstaller
+  2. cd to github folder
+  3. pyinstaller main.py --onefile
+  4. Move dist\main.exe to main folder, then relative path will work
