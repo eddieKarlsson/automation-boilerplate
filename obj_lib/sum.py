@@ -85,7 +85,7 @@ class SUM:
 
     def generate(self):
         if self.ol:
-            #self._tia_db()
+            self._tia_db()
             #self._tia_symbol()
             #self._tia_code()
             self._intouch()
