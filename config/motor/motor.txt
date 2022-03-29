@@ -1,3 +1,5 @@
+InTouch Configuration
+
 <Intouch_Header>
 :mode=update
 </Intouch_Header>
@@ -7,9 +9,19 @@
 "@ID_Status","@AlarmGroup","",No,No,0,No,No,0,0,"",0,-2147400000,2147400000,0,0,Off,0,1,Off,0,1,On,1073741823,250,Off,0,1,Off,0,1,Off,0,1,0,Off,0,1,Min,-2147400000,2147400000,Linear,"@PLC",No,"DB MOTOR.@ID.Stat.UI_Stat",No,"@ID Fault",0,0,0,0,0,0,0,0
 </Intouch_Tag>
 
+
+
+
+SQL Configuration
+
 <SQLProcedure>
 EXEC [dbo].[GeneratorAddCM] N'@ID', N'@PLC', N'@Type'
 </SQLProcedure>
+
+
+
+
+TIA Portal DB Configuration
 
 <TIA_DB_Header>
 DATA_BLOCK "DB Motor"
@@ -30,6 +42,11 @@ BEGIN
 
 END_DATA_BLOCK
 </TIA_DB_Footer>
+
+
+
+
+TIA Portal Code Configuration
 
 <TIA_Code_Header>
 code header

@@ -12,3 +12,31 @@
 <SQLProcedure>
 EXEC [dbo].[GeneratorAddCM] N'@ID', N'@PLC', N'@Type'
 </SQLProcedure>
+
+<TIA_DB_Header>
+DATA_BLOCK "DB SUM"
+{ S7_Optimized_Access := 'FALSE' }
+VERSION : 0.1
+//Put all analog Porocess Values in this DB517
+   STRUCT
+</TIA_DB_Header>
+
+<TIA_DB_Var>
+      @ID : "MC UDT SUM";   // @CMT
+</TIA_DB_Var>
+
+<TIA_DB_Begin>
+   END_STRUCT;
+
+
+BEGIN
+</TIA_DB_Begin>
+
+<TIA_DB_Parameters>
+   @ID.Par."VolumePerPulse" := @VolumePerPulse.0;
+</TIA_DB_Parameters>
+
+<TIA_DB_Footer>
+
+END_DATA_BLOCK
+</TIA_DB_Footer>

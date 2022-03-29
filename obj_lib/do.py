@@ -57,8 +57,7 @@ class DO:
         data = self.gen.single(self.cf, self.rl, 'TIA_Code_Header')
         data += self.gen.multiple(self.ol, self.cf, self.rl, 'TIA_Code_Var')
         data += self.gen.single(self.cf, self.rl, 'TIA_Code_Constant')
-        data += self.gen.multiple(self.ol, self.cf, self.rl,
-                                  'TIA_Code_Body')
+        data += self.gen.multiple(self.ol, self.cf, self.rl, 'TIA_Code_Body')
         data += self.gen.single(self.cf, self.rl, 'TIA_Code_Footer')
 
         filename = self.type + '_code.awl'

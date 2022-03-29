@@ -1,3 +1,5 @@
+InTouch Configuration
+
 <Intouch_Header>
 :mode=update
 </Intouch_Header>
@@ -7,9 +9,53 @@
 "@ID_Status","@AlarmGroup","",No,No,0,No,No,0,0,"",0,-2147400000,2147400000,0,0,Off,0,1,Off,0,1,Off,0,1,Off,0,1,Off,0,1,Off,0,1,0,Off,0,1,Min,-2147400000,2147400000,Linear,"@PLC",No,"DB DI.@ID.Stat.UI_Stat",No,"",0,0,0,0,0,0,0,0
 </Intouch_Tag>
 
+
+
+
+SQL Configuration
+
 <SQLProcedure>
 EXEC [dbo].[GeneratorAddCM] N'@ID', N'@PLC', N'@Type'
 </SQLProcedure>
+
+
+
+
+TIA Portal DB Configuration
+
+<TIA_DB_Header>
+DATA_BLOCK "DI"
+{ S7_Optimized_Access := 'FALSE' }
+VERSION : 0.1
+   STRUCT
+</TIA_DB_Header>
+
+<TIA_DB_Var>
+      @ID : "MC UDT DI";   // @CMT
+</TIA_DB_Var>
+
+<TIA_DB_Footer>
+   END_STRUCT;
+
+
+BEGIN
+
+END_DATA_BLOCK
+</TIA_DB_Footer>
+
+<TIA_Code_Var_Footer>
+   END_VAR
+
+</TIA_Code_Var_Footer>
+
+<TIA_Symbol>
+"I*@ID","%@INDEX.0","Bool","True","True","False","@CMT","","True"
+</TIA_Symbol>
+
+
+
+
+TIA Portal Code Configuration
 
 <TIA_Code_Header>
 FUNCTION "All DI" : Void
@@ -53,32 +99,3 @@ TITLE = @ID
 <TIA_Code_Footer>
 END_FUNCTION
 </TIA_Code_Footer>
-
-<TIA_DB_Header>
-DATA_BLOCK "DI"
-{ S7_Optimized_Access := 'FALSE' }
-VERSION : 0.1
-   STRUCT
-</TIA_DB_Header>
-
-<TIA_DB_Var>
-      @ID : "MC UDT DI";   // @CMT
-</TIA_DB_Var>
-
-<TIA_DB_Footer>
-   END_STRUCT;
-
-
-BEGIN
-
-END_DATA_BLOCK
-</TIA_DB_Footer>
-
-<TIA_Code_Var_Footer>
-   END_VAR
-
-</TIA_Code_Var_Footer>
-
-<TIA_Symbol>
-"I*@ID","%@INDEX.0","Bool","True","True","False","@CMT","","True"
-</TIA_Symbol>

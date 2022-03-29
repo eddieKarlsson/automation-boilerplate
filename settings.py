@@ -14,44 +14,32 @@ class Settings:
         self.ROW = 6  # Excel start row of data
         self.INDEX_REPLACE = '@INDEX'  # string to be replaced in config file
 
-        # If this variable is set to true, all variables COL_ with integer
-        # number will be ignored. the script will instead find the headers
-        # by looping through the header and search for the name _NAME.
-        self.FIND_HEADERS_AUTOMATICALLY = True
-
         self.COL_ID_NAME = 'ID'
-        self.COL_ID = 2  # Excel column index of ID, 2 = B column
         self.ID_REPLACE = '@ID'  # string to be replaced in config file
 
         self.COL_COMMENT_NAME = 'Description'
-        self.COL_COMMENT = 3  # Excel column index of Comment, 3 = C column
         self.COMMENT_REPLACE = '@CMT'  # string to be replaced in config file
 
         self.COL_CONFIG_NAME = 'Config'
-        self.COL_CONFIG = 7  # Excel column index of Config, 7 = G column
         self.CONFIG_REPLACE = '@CFG'  # string to be replaced in config file
 
         self.COL_ENG_UNIT_NAME = 'Eng. Unit'
-        self.COL_ENG_UNIT = 11  # Excel column index of Config, 11 = K column
         self.ENG_UNIT_REPLACE = '@ENGUNIT'  # string to be replaced
 
         self.COL_ENG_MIN_NAME = 'Eng. Min'
-        self.COL_ENG_MIN = 14  # Excel column index of Config, 14 = O column
         self.ENG_MIN_REPLACE = '@ENGMIN'  # string to be replaced
 
         self.COL_ENG_MAX_NAME = 'Eng. Max'
-        self.COL_ENG_MAX = 15  # Excel column index of Config, 15 = O column
         self.ENG_MAX_REPLACE = '@ENGMAX'  # string to be replaced
 
         self.COL_ALARM_GROUP_NAME = 'Alarm Group'
-        self.COL_ALARM_GROUP = 4  # Excel column index of Config, 15 = O column
         self.ALARM_GROUP_REPLACE = '@AlarmGroup'  # string to be replaced
 
-        self.ADR_REPLACE = '@ADR'  # string to be replaced in config file
-
         self.COL_PLC_NAME = 'PLC'  # Used in Intouch
-        self.COL_PLC = 5  # Excel column index of Config, 15 = O column
         self.PLC_REPLACE = '@PLC'  # string to be replaced in config file
+
+        self.COL_VolumePerPulse_Name = 'Volume Per Pulse'  # Used in Intouch
+        self.VolumePerPulse_REPLACE = '@VolumePerPulse'  # string to be replaced in config file
 
         self.DI_DISABLE = False
         self.DI_START_INDEX = 0  # Start-position index in datablock
