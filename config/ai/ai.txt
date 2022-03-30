@@ -34,7 +34,7 @@ VERSION : 0.1
 </TIA_DB_Header>
 
 <TIA_DB_Var>
-      @ID : "MC UDT AI";   // @CMT
+      "@ID" : "MC UDT AI";   // @CMT
 </TIA_DB_Var>
 
 <TIA_DB_Begin>

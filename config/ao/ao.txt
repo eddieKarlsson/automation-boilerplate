@@ -17,14 +17,14 @@ EXEC [dbo].[GeneratorAddCM] N'@ID', N'@PLC', N'@Type'
 
 TODO - swap to real source txt for AO, all TIA tags below
 <TIA_DB_Header>
-DATA_BLOCK "AO"
+DATA_BLOCK "DB AO"
 { S7_Optimized_Access := 'FALSE' }
 VERSION : 0.1
    STRUCT
 </TIA_DB_Header>
 
 <TIA_DB_Var>
-      @ID : "MC UDT AO";   // @CMT
+      "@ID" : "MC UDT AO";   // @CMT
 </TIA_DB_Var>
 
 <TIA_DB_Footer>

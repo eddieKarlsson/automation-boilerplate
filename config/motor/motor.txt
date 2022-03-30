@@ -31,7 +31,7 @@ VERSION : 0.1
 </TIA_DB_Header>
 
 <TIA_DB_Var>
-      @ID : "MC UDT motor";   // @CMT
+      "@ID" : "MC UDT motor";   // @CMT
 </TIA_DB_Var>
 
 <TIA_DB_Footer>

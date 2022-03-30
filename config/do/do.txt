@@ -24,14 +24,14 @@ EXEC [dbo].[GeneratorAddCM] N'@ID', N'@PLC', N'@Type'
 TIA Portal DB Configuration
 
 <TIA_DB_Header>
-DATA_BLOCK "DO"
+DATA_BLOCK "DB DO"
 { S7_Optimized_Access := 'FALSE' }
 VERSION : 0.1
    STRUCT
 </TIA_DB_Header>
 
 <TIA_DB_Var>
-      @ID : "MC UDT DO";   // @CMT
+      "@ID" : "MC UDT DO";   // @CMT
 </TIA_DB_Var>
 
 <TIA_DB_Footer>
