@@ -63,8 +63,6 @@ class GenUI(tk.Frame):
         # view submenu
         self.viewSubMenu = tk.Menu(self.menu, tearoff=0)
         self.menu.add_cascade(label="View", menu=self.viewSubMenu)
-        self.viewSubMenu.add_command(label="Settings file",
-                                     command=self.open_settings)
         self.viewSubMenu.add_command(label="Config path",
                                      command=self.open_config_path)
 
@@ -166,12 +164,6 @@ class GenUI(tk.Frame):
         self.user_data['config_path'] = config_path
         # Update label
         self.cfgpathLabel.config(text=config_path)
-
-    def open_settings(self):
-        os.system('settings.py')
-
-    def run_python_windows_command(self):
-        os.system('run.bat')
 
     def check_path_validity(self):
         if os.path.isfile(self.user_data['excel_path']):
