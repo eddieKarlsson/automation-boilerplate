@@ -35,6 +35,9 @@ class GenObjFunc:
                                 obj['plc'])
 
         # Replace the keywords that are optional (check if they exist)
+        if obj.get('config') is not None:
+            line = line.replace(self.s.CONFIG_REPLACE, str(obj['config']))
+
         if obj.get('volumeperpulse') is not None:
             line = line.replace(self.s.VolumePerPulse_REPLACE, str(obj['volumeperpulse']))
 

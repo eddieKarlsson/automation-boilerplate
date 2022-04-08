@@ -37,8 +37,18 @@ VERSION : 0.1
 <TIA_DB_Footer>
    END_STRUCT;
 
+<TIA_DB_Begin>
+   END_STRUCT;
+
 
 BEGIN
+</TIA_DB_Begin>
+
+<TIA_DB_Parameters>
+   @ID.Config.UI_Config := @CFG;
+</TIA_DB_Parameters>
+
+<TIA_DB_Footer>
 
 END_DATA_BLOCK
 </TIA_DB_Footer>
