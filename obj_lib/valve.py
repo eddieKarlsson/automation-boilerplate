@@ -36,6 +36,8 @@ class Valve:
     def _tia_db(self):
         data = self.gen.single(self.cf, self.rl, 'TIA_DB_Header')
         data += self.gen.multiple(self.ol, self.cf, self.rl, 'TIA_DB_Var')
+        data += self.gen.single(self.cf, self.rl, 'TIA_DB_Begin')
+        data += self.gen.multiple(self.ol, self.cf, self.rl, 'TIA_DB_Parameters')
         data += self.gen.single(self.cf, self.rl, 'TIA_DB_Footer')
 
         filename = self.type + '_db.db'

@@ -57,12 +57,12 @@ class GenMain:
 
         if not self.s.VALVE_DISABLE:
             self.valve_dict = self._obj_data_to_dict(
-                self.s.VALVE_SHEETNAME, self.s.VALVE_START_INDEX, 'valve')
+                self.s.VALVE_SHEETNAME, self.s.VALVE_START_INDEX, 'valve', config=True)
             self.dict_list.append(self.valve_dict)
 
         if not self.s.MOTOR_DISABLE:
             self.motor_dict = self._obj_data_to_dict(
-                self.s.MOTOR_SHEETNAME, self.s.MOTOR_START_INDEX, 'motor')
+                self.s.MOTOR_SHEETNAME, self.s.MOTOR_START_INDEX, 'motor', config=True)
             self.dict_list.append(self.motor_dict)
 
         if not self.s.AI_DISABLE:
@@ -85,7 +85,7 @@ class GenMain:
                     self.s.SUM_SHEETNAME, self.s.SUM_START_INDEX, 'sum', eng_var=True, volumeperpulse=True)
             self.dict_list.append(self.sum_dict)
 
-    def _obj_data_to_dict(self, sheet, start_index, type, eng_var=False, volumeperpulse=False):
+    def _obj_data_to_dict(self, sheet, start_index, type, config=False, eng_var=False, volumeperpulse=False):
         """Read all object data to dict"""
 
         # Open excel sheet
@@ -106,25 +106,29 @@ class GenMain:
             if cellval is None:
                 continue
 
-            if self.s.COL_ID_NAME in cellval:
+            if self.s.COL_ID_NAME == cellval:
                 column_id = i
-            if self.s.COL_COMMENT_NAME in cellval:
+            if self.s.COL_COMMENT_NAME == cellval:
                 column_comment = i
-            if self.s.COL_ALARM_GROUP_NAME in cellval:
+            if self.s.COL_ALARM_GROUP_NAME == cellval:
                 column_alarmgroup = i
             if self.s.COL_PLC_NAME == cellval:
                 column_plc = i
+
+            if config:
+                if self.s.COL_CONFIG_NAME == cellval:
+                    column_config = i
 
             if volumeperpulse:
                 if self.s.COL_VolumePerPulse_Name == cellval:
                     column_volumeperpulse = i
 
             if eng_var:
-                if self.s.COL_ENG_UNIT_NAME in cellval:
+                if self.s.COL_ENG_UNIT_NAME == cellval:
                     column_eng_unit = i
-                if self.s.COL_ENG_MIN_NAME in cellval:
+                if self.s.COL_ENG_MIN_NAME == cellval:
                     column_eng_min = i
-                if self.s.COL_ENG_MAX_NAME in cellval:
+                if self.s.COL_ENG_MAX_NAME == cellval:
                     column_eng_max = i
 
         if self.s.debug_level > 0:
@@ -133,6 +137,8 @@ class GenMain:
             print('\t', 'column_comment:', column_comment)
             print('\t', 'column_alarmgroup:', column_alarmgroup)
             print('\t', 'column_plc:', column_plc)
+            if config:
+                print('\t', 'column_config:', column_config)
             if volumeperpulse:
                 print('\t', 'column_volumeperpulse:', column_volumeperpulse)
             if eng_var:
@@ -165,6 +171,10 @@ class GenMain:
             }
 
             # Add conditional key-value pairs
+            if config:
+                cell_config = ws.cell(row=i, column=column_config)
+                obj['config'] = cell_config.value
+
             if volumeperpulse:
                 cell_volumeperpulse = ws.cell(row=i, column=column_volumeperpulse)
                 obj['volumeperpulse'] = cell_volumeperpulse.value

@@ -20,7 +20,7 @@ class Settings:
         self.COL_COMMENT_NAME = 'Description'
         self.COMMENT_REPLACE = '@CMT'  # string to be replaced in config file
 
-        self.COL_CONFIG_NAME = 'Config'
+        self.COL_CONFIG_NAME = 'Config ID'
         self.CONFIG_REPLACE = '@CFG'  # string to be replaced in config file
 
         self.COL_ENG_UNIT_NAME = 'Eng. Unit'
