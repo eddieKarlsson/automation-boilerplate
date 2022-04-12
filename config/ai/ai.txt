@@ -29,7 +29,6 @@ TIA Portal DB Configuration
 DATA_BLOCK "DB AI"
 { S7_Optimized_Access := 'FALSE' }
 VERSION : 0.1
-//Put all analog Porocess Values in this DB201
    STRUCT
 </TIA_DB_Header>
 
