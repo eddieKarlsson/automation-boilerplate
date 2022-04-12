@@ -24,7 +24,7 @@ EXEC [dbo].[GeneratorAddCM] N'@ID', N'@PLC', N'@Type'
 TIA Portal DB Configuration
 
 <TIA_DB_Header>
-DATA_BLOCK "DB Motor"
+DATA_BLOCK "DB MOTOR"
 { S7_Optimized_Access := 'FALSE' }
 VERSION : 0.1
    STRUCT
@@ -33,9 +33,6 @@ VERSION : 0.1
 <TIA_DB_Var>
       @ID : "MC UDT motor";   // @CMT
 </TIA_DB_Var>
-
-<TIA_DB_Footer>
-   END_STRUCT;
 
 <TIA_DB_Begin>
    END_STRUCT;
