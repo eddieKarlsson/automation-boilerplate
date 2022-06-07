@@ -13,6 +13,7 @@ from obj_lib.ai import AI
 from obj_lib.ao import AO
 from obj_lib.pid import PID
 from obj_lib.sum import SUM
+from obj_lib.alarm import Alarm
 
 
 class GenMain:
@@ -85,7 +86,13 @@ class GenMain:
                     self.s.SUM_SHEETNAME, self.s.SUM_START_INDEX, 'sum', eng_var=True, volumeperpulse=True)
             self.dict_list.append(self.sum_dict)
 
-    def _obj_data_to_dict(self, sheet, start_index, type, config=False, eng_var=False, volumeperpulse=False):
+        if not self.s.ALARM_DISABLE:
+            self.alarm_dict = self._obj_data_to_dict(
+                    self.s.ALARM_SHEETNAME, self.s.ALARM_START_INDEX, 'alarm', generic_alarm=True)
+            self.dict_list.append(self.alarm_dict)
+
+    def _obj_data_to_dict(self, sheet, start_index, type, config=False, eng_var=False, volumeperpulse=False,
+                          generic_alarm=False):
         """Read all object data to dict"""
 
         # Open excel sheet
@@ -131,6 +138,12 @@ class GenMain:
                 if self.s.COL_ENG_MAX_NAME == cellval:
                     column_eng_max = i
 
+            if generic_alarm:
+                if self.s.COL_ALARM_PRIO_NAME == cellval:
+                    column_alarm_prio = i
+                if self.s.COL_ALARM_TEXT_NAME == cellval:
+                    column_alarm_text = i
+
         if self.s.debug_level > 0:
             print('SHEET:', sheet)
             print('\t', 'column_id:', column_id)
@@ -145,6 +158,10 @@ class GenMain:
                 print('\t', 'column_eng_unit:', column_eng_unit)
                 print('\t', 'column_eng_min:', column_eng_min)
                 print('\t', 'column_eng_max:', column_eng_max)
+            if generic_alarm:
+                print('\t', 'column_alarm_prio:', column_alarm_prio)
+                print('\t', 'column_alarm_text:', column_alarm_text)
+
 
         # Loop through object list and add key-value pairs to object dict
         # then append each object-dict to list
@@ -187,6 +204,12 @@ class GenMain:
                 cell_eng_max = ws.cell(row=i, column=column_eng_max)
                 obj['eng_max'] = cell_eng_max.value
 
+            if generic_alarm:
+                cell_alarm_text = ws.cell(row=i, column=column_alarm_text)
+                obj['alarm_text'] = cell_alarm_text.value
+                cell_alarm_prio = ws.cell(row=i, column=column_alarm_prio)
+                obj['alarm_prio'] = cell_alarm_prio.value
+
             obj_list.append(obj)
             index += 1
 
@@ -218,7 +241,7 @@ class GenMain:
         in files other than the first
         """
 
-        outfile = os.path.join(self.it_path, "all_it.csv")
+        outfile = os.path.join(self.it_path, "ALL_IT.csv")
 
         if os.path.exists(outfile):
             os.remove(outfile)
@@ -241,7 +264,7 @@ class GenMain:
         in files other than the first
         """
 
-        outfile = os.path.join(self.sql_path, "all_sql.csv")
+        outfile = os.path.join(self.sql_path, "ALL_SQL.csv")
 
         if os.path.exists(outfile):
             os.remove(outfile)
@@ -314,6 +337,12 @@ class GenMain:
             self._print_disabled_in_settings('SUM')
         else:
             SUM(self, self.output_path, self.sum_dict, self.config_path,
+                config_type=self.config_type)
+
+        if self.s.ALARM_DISABLE:
+            self._print_disabled_in_settings('Alarm')
+        else:
+            Alarm(self, self.output_path, self.alarm_dict, self.config_path,
                 config_type=self.config_type)
 
         self._combine_it_files()

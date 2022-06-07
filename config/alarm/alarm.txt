@@ -1,0 +1,33 @@
+InTouch Configuration
+
+<Intouch_Header>
+:mode=update
+</Intouch_Header>
+
+<Intouch_Tag>
+:IODisc;Group;Comment;Logged;EventLogged;EventLoggingPriority;RetentiveValue;InitialDisc;OffMsg;OnMsg;AlarmState;AlarmPri;DConversion;AccessName;ItemUseTagname;ItemName;ReadOnly;AlarmComment;AlarmAckModel;DSCAlarmDisable;DSCAlarmInhibitor;SymbolicName
+"ALM_@ID";"@AlarmGroup";"";No;No;0;No;Off;"";"";On;@AlarmPrio;Direct;"@PLC";No;"Alarm DB.@ID.On";No;"@AlarmText";0;0;"";"";No
+</Intouch_Tag>
+
+
+TIA Portal DB Configuration
+
+<TIA_DB_Header>
+DATA_BLOCK "Alarm DB"
+{ S7_Optimized_Access := 'FALSE' }
+VERSION : 0.1
+   STRUCT
+</TIA_DB_Header>
+
+<TIA_DB_Var>
+      "@ID" : "MC UDT ALARM";   // @CMT
+</TIA_DB_Var>
+
+<TIA_DB_Footer>
+   END_STRUCT;
+
+
+BEGIN
+
+END_DATA_BLOCK
+</TIA_DB_Footer>

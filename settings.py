@@ -7,7 +7,7 @@ class Settings:
     """A class to store all settings, user-data in JSON format."""
 
     def __init__(self):
-        self.version = 2.1
+        self.version = 2.2
 
         """Settings"""
         self.HEADER_ROW = 3  # Excel header
@@ -34,6 +34,12 @@ class Settings:
 
         self.COL_ALARM_GROUP_NAME = 'Alarm Group'
         self.ALARM_GROUP_REPLACE = '@AlarmGroup'  # string to be replaced
+
+        self.COL_ALARM_PRIO_NAME = 'Alarm Prio ID'
+        self.ALARM_PRIO_REPLACE = '@AlarmPrio'  # string to be replaced
+
+        self.COL_ALARM_TEXT_NAME = 'Alarm Text'
+        self.ALARM_TEXT_REPLACE = '@AlarmText'  # string to be replaced
 
         self.COL_PLC_NAME = 'PLC'  # Used in Intouch
         self.PLC_REPLACE = '@PLC'  # string to be replaced in config file
@@ -72,6 +78,10 @@ class Settings:
         self.SUM_DISABLE = False
         self.SUM_START_INDEX = 0
         self.SUM_SHEETNAME = 'Sum'
+
+        self.ALARM_DISABLE = False
+        self.ALARM_START_INDEX = 0
+        self.ALARM_SHEETNAME = 'Alarm'
 
         self.TIA_DIR = 'TIA'
         self.INTOUCH_DIR = 'InTouch'

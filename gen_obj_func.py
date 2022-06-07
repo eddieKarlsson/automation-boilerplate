@@ -59,6 +59,12 @@ class GenObjFunc:
         else:
             line = line.replace(self.s.ENG_MAX_REPLACE, '100')
 
+        if obj.get('alarm_text') is not None:
+            line = line.replace(self.s.ALARM_TEXT_REPLACE, obj['alarm_text'])
+
+        if obj.get('alarm_prio') is not None:
+            line = line.replace(self.s.ALARM_PRIO_REPLACE, str(obj['alarm_prio']))
+
         return line
 
     @staticmethod
