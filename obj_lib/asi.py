@@ -50,20 +50,22 @@ class ASi:
     def _tia_code_multiple_plc(self):
         for plc in self.plc_set:
             for asmaster in self.asimaster_set:
-                for same in self.asmasterinplc_set:
-                    if (plc+':'+asmaster) == same:
-                        data = self.gen.single(self.cf, self.rl, 'TIA_FB_HEADER')
-                        data += self.gen.multiple_twochecks(self.ol, self.cf, self.rl, 'TIA_FB_INOUT', plc, asmaster)
-                        data += self.gen.single(self.cf, self.rl, 'TIA_FB_BEGIN')
-                        data += self.gen.single(self.cf, self.rl, 'TIA_FB_CODE1')
-                        data += self.gen.multiple_twochecks(self.ol, self.cf, self.rl, 'TIA_FB_CODE2', plc, asmaster)
-                        data += self.gen.single(self.cf, self.rl, 'TIA_FB_CODE3')
+                if asmaster:
+                    for same in self.asmasterinplc_set:
+                        if (plc+':'+asmaster) == same:
+                            data = self.gen.single(self.cf, self.rl, 'TIA_FB_HEADER')
+                            data += self.gen.multiple_twochecks(self.ol, self.cf, self.rl, 'TIA_FB_INOUT', plc, asmaster)
+                            data += self.gen.single(self.cf, self.rl, 'TIA_FB_BEGIN')
+                            data += self.gen.single(self.cf, self.rl, 'TIA_FB_CODE1')
+                            data += self.gen.multiple_twochecks(self.ol, self.cf, self.rl, 'TIA_FB_CODE2', plc, asmaster)
+                            data += self.gen.single(self.cf, self.rl, 'TIA_FB_CODE3')
 
-                        filename = plc + '_' + asmaster + '_' + self.type + '_code.scl'
-                        pathwithplc = path = os.path.join(self.tia_path, plc)
-                        path = os.path.join(pathwithplc, filename)
-                        with open(path, 'w', encoding='cp1252') as f:
-                            f.write(data)
+                            filename = plc + '_' + asmaster + '_' + self.type + '_code.scl'
+                            pathwithplc = path = os.path.join(self.tia_path, plc)
+                            path = os.path.join(pathwithplc, filename)
+                            with open(path, 'w', encoding='cp1252') as f:
+                                f.write(data)
+
 
     def _find_plcs(self):
         """find what plcs are in the object list"""
@@ -74,7 +76,8 @@ class ASi:
     def _find_asmasterinplc_set(self):
         self.asmasterinplc_set = set()
         for obj in self.ol:
-            self.asmasterinplc_set.add(obj['plc']+':'+obj['asi_master'])
+            if obj['asi_master']:
+                self.asmasterinplc_set.add(obj['plc']+':'+obj['asi_master'])
 
 
     def _find_asimasters_set(self):
