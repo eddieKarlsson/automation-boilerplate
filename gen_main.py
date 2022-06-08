@@ -1,3 +1,4 @@
+from cgi import print_arguments
 import sys
 import os
 from os import listdir
@@ -14,6 +15,7 @@ from obj_lib.ao import AO
 from obj_lib.pid import PID
 from obj_lib.sum import SUM
 from obj_lib.alarm import Alarm
+from obj_lib.asi import ASi
 
 
 class GenMain:
@@ -23,7 +25,8 @@ class GenMain:
     def __init__(self, excel_path, output_path, config_path):
         self.excel_path = excel_path
         self.output_path = output_path
-        self.config_path = config_path
+        self.config_path = config_path        
+        self.plcinexcel = set()
         self.s = Settings()
         self.dict_list = []
         self.it_path = os.path.join(self.output_path, self.s.INTOUCH_DIR)
@@ -91,8 +94,13 @@ class GenMain:
                     self.s.ALARM_SHEETNAME, self.s.ALARM_START_INDEX, 'alarm', generic_alarm=True)
             self.dict_list.append(self.alarm_dict)
 
+        if not self.s.ASI_DISABLE:
+            self.asi_dict = self._obj_data_to_dict(
+                    self.s.ASI_SHEETNAME, self.s.ASI_START_INDEX, 'asi', asi=True)
+            self.dict_list.append(self.asi_dict)
+
     def _obj_data_to_dict(self, sheet, start_index, type, config=False, eng_var=False, volumeperpulse=False,
-                          generic_alarm=False):
+                          generic_alarm=False, asi=False):
         """Read all object data to dict"""
 
         # Open excel sheet
@@ -144,6 +152,12 @@ class GenMain:
                 if self.s.COL_ALARM_TEXT_NAME == cellval:
                     column_alarm_text = i
 
+            if asi:
+                if self.s.COL_ASI_ADDR_NAME == cellval:
+                    column_asi_addr = i
+                if self.s.COL_ASI_MASTER_NAME == cellval:
+                    column_asi_master = i
+
         if self.s.debug_level > 0:
             print('SHEET:', sheet)
             print('\t', 'column_id:', column_id)
@@ -161,6 +175,9 @@ class GenMain:
             if generic_alarm:
                 print('\t', 'column_alarm_prio:', column_alarm_prio)
                 print('\t', 'column_alarm_text:', column_alarm_text)
+            if asi:
+                print('\t', 'column_asi_addr:', column_asi_addr)
+                print('\t', 'column_asi_master:', column_asi_master)
 
 
         # Loop through object list and add key-value pairs to object dict
@@ -210,8 +227,17 @@ class GenMain:
                 cell_alarm_prio = ws.cell(row=i, column=column_alarm_prio)
                 obj['alarm_prio'] = cell_alarm_prio.value
 
+            if asi:
+                cell_asi_addr = ws.cell(row=i, column=column_asi_addr)
+                obj['asi_addr'] = cell_asi_addr.value
+                cell_asi_master = ws.cell(row=i, column=column_asi_master)
+                obj['asi_master'] = cell_asi_master.value
+
             obj_list.append(obj)
             index += 1
+
+        for obj in obj_list:
+            self.plcinexcel.add(obj['plc'])
 
         return obj_list
 
@@ -220,6 +246,14 @@ class GenMain:
         dirs = [self.s.TIA_DIR, self.s.INTOUCH_DIR, self.s.SQL_DIR]
         for dir in dirs:
             newdir = os.path.join(self.output_path, dir)
+            if not os.path.exists(newdir):
+                os.makedirs(newdir)
+
+    def create_subdirsplc(self):
+        """Create all subdirectiories beyond output path"""
+        for plc in self.plcinexcel:
+            newdir = os.path.join(self.output_path, self.s.TIA_DIR)
+            newdir = os.path.join(newdir, plc)
             if not os.path.exists(newdir):
                 os.makedirs(newdir)
 
@@ -290,6 +324,7 @@ class GenMain:
 
         self.get_config_from_config_path()
         self.create_subdirs()
+        self.create_subdirsplc()
 
         if self.s.VALVE_DISABLE:
             self._print_disabled_in_settings('Valve')
@@ -344,6 +379,11 @@ class GenMain:
         else:
             Alarm(self, self.output_path, self.alarm_dict, self.config_path,
                 config_type=self.config_type)
+
+        if self.s.ASI_DISABLE:
+            self._print_disabled_in_settings('ASi')
+        else:
+            ASi(self, self.output_path, self.asi_dict, self.config_path, config_type=self.config_type)
 
         self._combine_it_files()
         self._combine_sql_files()
