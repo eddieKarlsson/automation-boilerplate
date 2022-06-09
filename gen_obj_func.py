@@ -65,6 +65,12 @@ class GenObjFunc:
         if obj.get('alarm_prio') is not None:
             line = line.replace(self.s.ALARM_PRIO_REPLACE, str(obj['alarm_prio']))
 
+        if obj.get('asi_addr') is not None:
+            line = line.replace(self.s.ASI_ADDR_REPLACE, str(obj['asi_addr']))     
+
+        if obj.get('asi_master') is not None:
+            line = line.replace(self.s.ASI_MASTER_REPLACE, str(obj['asi_master']))   
+
         return line
 
     @staticmethod
@@ -80,7 +86,7 @@ class GenObjFunc:
             for line in config:
                 if end in str(line):
                     section_found = False
-                if section_found:
+                if section_found:                    
                     inst_data += line
                 if begin in str(line):
                     exists_in_config = True
@@ -103,7 +109,7 @@ class GenObjFunc:
         list_result.append(result)
         return inst_data
 
-    def multiple(self, obj_list, config_file, list_result, ref_txt):
+    def multiple(self, obj_list, config_file, list_result, ref_txt, plc_name=None):
         """Get text lines from config file and replace by data in excel for
             each item, then append the new lines to memory"""
 
@@ -115,6 +121,9 @@ class GenObjFunc:
             end = '</' + ref_txt + '>'
 
             for obj in obj_list:
+                if plc_name is not None and plc_name != obj['plc']:
+                    continue            
+
                 config.seek(0, 0)  # Seek to beginning of file
                 for line_index, line in enumerate(config, start=1):
                     if end in str(line):
@@ -189,6 +198,89 @@ class GenObjFunc:
                 'result_ok': result_ok,
                 'bad_result_msg': result_msg
             }
+        list_result.append(result)
+        return inst_data
+
+    @staticmethod
+    def single_withreplace(config_file, list_result, ref_txt, replace, obj):
+        """Read a text file and copy the data inside notifiers to memory"""
+        with open(config_file, 'r') as config:
+            exists_in_config = False
+            section_found = False
+            inst_data = ''
+            begin = '<' + ref_txt + '>'
+            end = '</' + ref_txt + '>'
+
+            for line in config:
+                if end in str(line):
+                    section_found = False
+                if section_found:        
+                    line = line.replace(replace, obj)             
+                    inst_data += line
+                if begin in str(line):
+                    exists_in_config = True
+                    section_found = True
+        if not exists_in_config:
+            result_ok = False
+            result_msg = f"'{ref_txt}' not found in config file"
+        else:
+            result_ok = True
+            result_msg = None
+
+        # Return a dictionary with the result
+        result = {
+            'ref_txt': ref_txt,
+            'type': None,
+            'result_ok': result_ok,
+            'bad_result_msg': result_msg
+        }
+
+        list_result.append(result)
+        return inst_data
+
+    def multiple_twochecks(self, obj_list, config_file, list_result, ref_txt, plc_name=None, asmaster_name=None):
+        """Get text lines from config file and replace by data in excel for
+            each item, then append the new lines to memory"""
+
+        with open(config_file, 'r') as config:
+            exists_in_config = False
+            section_found = False
+            inst_data = ''
+            begin = '<' + ref_txt + '>'
+            end = '</' + ref_txt + '>'
+
+            for obj in obj_list:
+                if (plc_name is not None and plc_name != obj['plc']) or (asmaster_name is not None and asmaster_name != obj['asi_master']):
+                    continue            
+
+                config.seek(0, 0)  # Seek to beginning of file
+                for line_index, line in enumerate(config, start=1):
+                    if end in str(line):
+                        section_found = False
+                    if section_found:
+                        line = self._replace_keywords(line, obj)
+                        inst_data += line
+                    if begin in str(line):
+                        exists_in_config = True
+                        section_found = True
+
+                    # will be last item processed but doesn't matter
+                    type = obj['type']
+            if not exists_in_config:
+                result_ok = False
+                result_msg = f"'{ref_txt}' not found in config file"
+            else:
+                result_ok = True
+                result_msg = None
+
+            # Return a dictionary with the result
+            result = {
+                'ref_txt': ref_txt,
+                'type': None,
+                'result_ok': result_ok,
+                'bad_result_msg': result_msg
+            }
+
         list_result.append(result)
         return inst_data
 

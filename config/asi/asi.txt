@@ -1,0 +1,58 @@
+ASI FUNCTION BLOCK
+
+<TIA_FB_HEADER>
+FUNCTION_BLOCK "ASi Master FB @ASIMASTER"
+{ S7_Optimized_Access := 'TRUE' }
+VERSION : 0.1
+   VAR_INPUT 
+      "ASi Master" : HW_IO;
+   END_VAR
+
+   VAR_OUTPUT 
+      Error : Bool;
+   END_VAR
+
+   VAR_IN_OUT    
+</TIA_FB_HEADER>
+<TIA_FB_INOUT>
+      "@NODEADDR" : "MC UDT VALVE";   // @ID
+</TIA_FB_INOUT>
+<TIA_FB_BEGIN>
+   END_VAR
+
+
+   VAR 
+      Data { S7_SetPoint := 'False'} : "MC UDT  62ASiNormal";
+   END_VAR
+
+   VAR_TEMP 
+      ReadStatus : Int;
+      WriteStatus : Int;
+   END_VAR
+
+
+BEGIN
+</TIA_FB_BEGIN>
+<TIA_FB_CODE1>
+	#ReadStatus := DPRD_DAT(LADDR:=#"ASi Master", RECORD=>#Data.Inputs);	
+	
+</TIA_FB_CODE1>
+<TIA_FB_CODE2>	
+	IF #"@NODEADDR".Config.UI_Config > 0 THEN
+    //Inputs
+    #"@NODEADDR".In."Main Active FB" := #Data.Inputs."@NODEADDR Bit1";
+    #"@NODEADDR".In."Main DeActive FB" := #Data.Inputs."@NODEADDR Bit0";
+    
+    //Outputs
+    #Data.Outputs."@NODEADDR Bit1" := #"@NODEADDR".Out.Main;
+    #Data.Outputs."@NODEADDR Bit2" := #"@NODEADDR".Out.Upper;
+    #Data.Outputs."@NODEADDR Bit3" := #"@NODEADDR".Out.Lower;
+END_IF;
+	
+</TIA_FB_CODE2>
+	
+<TIA_FB_CODE3>	
+	#WriteStatus := DPWR_DAT(LADDR := #"ASi Master", RECORD := #Data.Outputs);	
+	#Error := #ReadStatus <> 0 OR #WriteStatus <> 0;
+END_FUNCTION_BLOCK
+</TIA_FB_CODE3>

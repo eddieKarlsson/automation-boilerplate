@@ -47,6 +47,12 @@ class Settings:
         self.COL_VolumePerPulse_Name = 'Volume Per Pulse'  # Used in Intouch
         self.VolumePerPulse_REPLACE = '@VolumePerPulse'  # string to be replaced in config file
 
+        self.COL_ASI_ADDR_NAME = 'ASI Addr'  # Used in TIA
+        self.ASI_ADDR_REPLACE = '@NODEADDR'  # string to be replaced in config file
+
+        self.COL_ASI_MASTER_NAME = 'ASI Master'  # Used in TIA
+        self.ASI_MASTER_REPLACE = '@ASIMASTER'  # string to be replaced in config file
+
         self.DI_DISABLE = False
         self.DI_START_INDEX = 0  # Start-position index in datablock
         self.DI_SHEETNAME = 'DI'
@@ -82,6 +88,10 @@ class Settings:
         self.ALARM_DISABLE = False
         self.ALARM_START_INDEX = 0
         self.ALARM_SHEETNAME = 'Alarm'
+
+        self.ASI_DISABLE = False
+        self.ASI_START_INDEX = 0
+        self.ASI_SHEETNAME = 'Valve'
 
         self.TIA_DIR = 'TIA'
         self.INTOUCH_DIR = 'InTouch'

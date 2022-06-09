@@ -44,6 +44,24 @@ class DO:
         with open(path, 'w', encoding='cp1252') as f:
             f.write(data)
 
+    def _find_plcs(self):
+        """find what plcs are in the object list"""
+        self.plc_set = set()  # Create a set,  doesnt allow duplicate values
+        for obj in self.ol:
+            self.plc_set.add(obj['plc'])
+
+    def _tia_db_multiple_plc(self):
+        for plc in self.plc_set:
+            data = self.gen.single(self.cf, self.rl, 'TIA_DB_Header')
+            data += self.gen.multiple(self.ol, self.cf, self.rl, 'TIA_DB_Var', plc_name=plc)
+            data += self.gen.single(self.cf, self.rl, 'TIA_DB_Footer')
+
+            filename = plc + '_' + self.type + '_db.db'
+            pathwithplc = path = os.path.join(self.tia_path, plc)
+            path = os.path.join(pathwithplc, filename)
+            with open(path, 'w', encoding='cp1252') as f:
+                f.write(data)
+
     def _tia_symbol(self):
         data = self.gen.multiple(self.ol, self.cf, self.rl,
                                  'TIA_Symbol')
@@ -84,7 +102,8 @@ class DO:
 
     def generate(self):
         if self.ol:
-            self._tia_db()
+            self._find_plcs()
+            self._tia_db_multiple_plc()
             #self._tia_symbol()
             #self._tia_code()
             self._intouch()
