@@ -53,7 +53,7 @@ class ASi:
                 if asmaster:
                     for same in self.asmasterinplc_set:
                         if (plc+':'+asmaster) == same:
-                            data = self.gen.single(self.cf, self.rl, 'TIA_FB_HEADER')
+                            data = self.gen.single_withreplace(self.cf, self.rl, 'TIA_FB_HEADER', self.s.ASI_MASTER_REPLACE, asmaster)
                             data += self.gen.multiple_twochecks(self.ol, self.cf, self.rl, 'TIA_FB_INOUT', plc, asmaster)
                             data += self.gen.single(self.cf, self.rl, 'TIA_FB_BEGIN')
                             data += self.gen.single(self.cf, self.rl, 'TIA_FB_CODE1')

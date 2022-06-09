@@ -201,6 +201,43 @@ class GenObjFunc:
         list_result.append(result)
         return inst_data
 
+    @staticmethod
+    def single_withreplace(config_file, list_result, ref_txt, replace, obj):
+        """Read a text file and copy the data inside notifiers to memory"""
+        with open(config_file, 'r') as config:
+            exists_in_config = False
+            section_found = False
+            inst_data = ''
+            begin = '<' + ref_txt + '>'
+            end = '</' + ref_txt + '>'
+
+            for line in config:
+                if end in str(line):
+                    section_found = False
+                if section_found:        
+                    line = line.replace(replace, obj)             
+                    inst_data += line
+                if begin in str(line):
+                    exists_in_config = True
+                    section_found = True
+        if not exists_in_config:
+            result_ok = False
+            result_msg = f"'{ref_txt}' not found in config file"
+        else:
+            result_ok = True
+            result_msg = None
+
+        # Return a dictionary with the result
+        result = {
+            'ref_txt': ref_txt,
+            'type': None,
+            'result_ok': result_ok,
+            'bad_result_msg': result_msg
+        }
+
+        list_result.append(result)
+        return inst_data
+
     def multiple_twochecks(self, obj_list, config_file, list_result, ref_txt, plc_name=None, asmaster_name=None):
         """Get text lines from config file and replace by data in excel for
             each item, then append the new lines to memory"""

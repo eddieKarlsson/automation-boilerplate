@@ -1,11 +1,15 @@
 ASI FUNCTION BLOCK
 
 <TIA_FB_HEADER>
-FUNCTION_BLOCK "ASi Master FB ASXXX"
+FUNCTION_BLOCK "ASi Master FB @ASIMASTER"
 { S7_Optimized_Access := 'TRUE' }
 VERSION : 0.1
    VAR_INPUT 
       "ASi Master" : HW_IO;
+   END_VAR
+
+   VAR_OUTPUT 
+      Error : Bool;
    END_VAR
 
    VAR_IN_OUT    
@@ -35,19 +39,20 @@ BEGIN
 </TIA_FB_CODE1>
 <TIA_FB_CODE2>	
 	IF #"@NODEADDR".Config.UI_Config > 0 THEN
-	    //Inputs
-	    #"@NODEADDR".In."Main Active FB" := #Data.Inputs."@NODEADDR".ActFB;
-	    #"@NODEADDR".In."Main DeActive FB" := #Data.Inputs."@NODEADDR".DeactFB;
-	    
-	    //Outputs
-	    #Data.Outputs."@NODEADDR".MainAct := #"@NODEADDR".Out.Main;
-	    #Data.Outputs."@NODEADDR".USAct := #"@NODEADDR".Out.Upper;
-	    #Data.Outputs."@NODEADDR".LSAct := #"@NODEADDR".Out.Lower;
-	END_IF;
+    //Inputs
+    #"@NODEADDR".In."Main Active FB" := #Data.Inputs."@NODEADDR Bit1";
+    #"@NODEADDR".In."Main DeActive FB" := #Data.Inputs."@NODEADDR Bit0";
+    
+    //Outputs
+    #Data.Outputs."@NODEADDR Bit1" := #"@NODEADDR".Out.Main;
+    #Data.Outputs."@NODEADDR Bit2" := #"@NODEADDR".Out.Upper;
+    #Data.Outputs."@NODEADDR Bit3" := #"@NODEADDR".Out.Lower;
+END_IF;
 	
 </TIA_FB_CODE2>
 	
 <TIA_FB_CODE3>	
-	#WriteStatus := DPWR_DAT(LADDR := #"ASi Master", RECORD := #Data.Outputs);
+	#WriteStatus := DPWR_DAT(LADDR := #"ASi Master", RECORD := #Data.Outputs);	
+	#Error := #ReadStatus <> 0 OR #WriteStatus <> 0;
 END_FUNCTION_BLOCK
 </TIA_FB_CODE3>
