@@ -1,4 +1,4 @@
-rm dist/main.exe
-rm main.exe
+Remove-Item dist/main.exe
+Remove-Item main.exe
 pyinstaller main.py --onefile --icon=gui\icon.ico
-cp dist/main.exe .
+Copy-Item dist/main.exe .
