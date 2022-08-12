@@ -1,4 +1,3 @@
-from cgi import print_arguments
 import sys
 import os
 from os import listdir
