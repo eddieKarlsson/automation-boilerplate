@@ -11,11 +11,17 @@ class Settings:
 
         """Settings"""
         self.HEADER_ROW = 3  # Excel header
+        self.UNIT_HEADER_ROW = 4  # Excel header in unit sheet     
         self.ROW = 6  # Excel start row of data
+        self.UNIT_ROW = 5  # Excel start row of data in unit sheet
+
         self.INDEX_REPLACE = '@INDEX'  # string to be replaced in config file
 
         self.COL_ID_NAME = 'ID'
         self.ID_REPLACE = '@ID'  # string to be replaced in config file
+
+        self.COL_TYPE_NAME = 'Type'
+        self.TYPE_REPLACE = '@TYPE'  # string to be replaced in config file
 
         self.COL_COMMENT_NAME = 'Description'
         self.COMMENT_REPLACE = '@CMT'  # string to be replaced in config file
@@ -93,6 +99,10 @@ class Settings:
         self.ASI_START_INDEX = 0
         self.ASI_SHEETNAME = 'Valve'
 
+        self.UNIT_DISABLE = False
+        self.UNIT_START_INDEX = 0
+        self.UNIT_SHEETNAME = 'Units_Phases'
+
         self.TIA_DIR = 'TIA'
         self.INTOUCH_DIR = 'InTouch'
         self.SQL_DIR = 'SQL'
@@ -109,6 +119,12 @@ class Settings:
             self.debug_level = int(sys.argv[1])
         else:
             self.debug_level = 0
+
+        #  Disable options from function is special debug value provided
+        if self.debug_level == 1337:
+            self._disable_options(True, False)
+        elif self.debug_level == 1338:
+            self._disable_options(False, True)
 
     def _create_user_settings(self):
         """Create dict which contains all user data"""
@@ -139,3 +155,20 @@ class Settings:
         """Dump Dict to JSON file"""
         with open(self.json_file, 'w') as f:
             json.dump(user_settings, f, indent=self.indent)
+
+    def _disable_options(self, disable_all_non_unit, disable_unit):
+        if disable_all_non_unit:
+            self.DI_DISABLE = True
+            self.DO_DISABLE = True
+            self.VALVE_DISABLE = True
+            self.MOTOR_DISABLE = True
+            self.AI_DISABLE = True
+            self.AO_DISABLE = True
+            self.PID_DISABLE = True
+            self.SUM_DISABLE = True
+            self.ALARM_DISABLE = True
+            self.ASI_DISABLE = True
+
+        if disable_unit:
+            self.UNIT_DISABLE = True
+
