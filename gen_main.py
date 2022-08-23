@@ -273,7 +273,6 @@ class GenMain:
             elif self.s.COL_PLC_NAME == cellval:
                 column_plc = i
 
-        
         if self.s.debug_level > 0:
             print('UNIT UNITSHEET:', sheet)
             print('\t', 'UNIT column_id:', column_id)
@@ -294,14 +293,14 @@ class GenMain:
             if cell_id.value is None:
                 break
             
-            def _is_valid_unit_type(type):
-                for i in UnitTypes:
-                    if type == i.value:
+            def _is_valid_unit_type(in_type):
+                for type in UnitTypes:
+                    if in_type == type.value:
                         return True
                 return False
 
-            def _is_unit(type):
-                if "Unit" in type:
+            def _is_unit(in_type):
+                if "Unit" in in_type:
                     return True
                 else:
                     return False
@@ -313,19 +312,16 @@ class GenMain:
             if is_unit:
                 mem_unit = cell_id.value  # remember the last units name (ID)
                 mem_plc = cell_plc.value  # remember the last units PLC
-
-
-            if is_phase and mem_unit is not None:
-                unit_owner = mem_unit
+                parent = None
             else:
-                unit_owner = None
+                parent = mem_unit
 
-            # Always insert these key-value pairs
+            # Create object dict, always with these key-value pairs
             obj = {
                 'is_valid_unit_type': is_valid_unit_type,
                 'is_unit': is_unit,
                 'is_phase': is_phase,
-                'unit_owner': unit_owner,
+                'parent': parent,
                 'type': cell_type.value,
                 'id': cell_id.value,
                 'plc': mem_plc,
@@ -334,9 +330,6 @@ class GenMain:
             unit_phase_list.append(obj)
         
         return unit_phase_list
-
-   
-
 
     def create_subdirs(self):
         """Create all subdirectiories beyond output path"""

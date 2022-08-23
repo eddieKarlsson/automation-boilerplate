@@ -29,47 +29,54 @@ class UnitsPhases:
         else:
             print(f'\nWARNING: {self.type.upper()} not generated, no items found in TD')
 
-    def _intouch_file(self):
-        #  TODO all
-        data = self.gen.single(self.cf, self.rl, 'Intouch_Header')
-        data += self.gen.multiple(self.ol, self.cf, self.rl, 'Intouch_Tag')
 
-        filename = self.type + '_it.csv'
-        path = os.path.join(self.it_path, filename)
-        with open(path, 'w', encoding='cp1252') as f:
-            f.write(data)
-
-    def _intouch(self):
+    def intouch(self):
 
         for obj in self.ol:
+            # unpack dict object to var
             obj_id = obj['id']
             obj_type = obj['type']
             obj_plc = obj['plc']
+            obj_is_valid_unit_type = obj['is_valid_unit_type']
+            obj_is_unit = obj['is_unit']
+            obj_is_phase = obj['is_phase']
+            obj_parent = obj['parent']
+
 
             #  Skip object if not valid
-            if not obj['is_valid_unit_type']:
+            if not obj_is_valid_unit_type:
                 print(f'\nWARNING: ID {obj_id} is skipped, invalid Type')
                 continue
 
-            if obj['is_unit']:
-                #  TODO create path to unit subfolder
-                #  TODO append the new folder to a list of folders of all units
+            dest_dir = os.path.join(self.output_path, obj_parent)
+
+            if obj_is_phase:
+                # Check if parent dir of unit exists, if not skip the object
+                if not os.path.exists(dest_dir):
+                    print(f'\nWARNING: {obj_parent}{obj_id} skipped, expected this dir but not found! {dest_dir}')
+                    continue
+                
+                # Create intouch file
                 #  TODO Create Intouch file to subfolder
-
                 pass
-            elif obj['is_phase']:
-                #  TODO Create Intouch file to subfolder
+            elif obj_is_unit:
+                print('###Creating', dest_dir)
+                os.makedirs(dest_dir)
+                self._create_intouch_unit_file(obj_id, dest_dir)
 
-                pass
 
+    def _create_intouch_unit_file(self, in_id, in_path):
+        data = self.gen.single(self.cf, self.rl, 'Intouch_Header')
+        data += self.gen.multiple(self.ol, self.cf, self.rl, 'Intouch_Tag')
 
-            
-
-            
-            
+        filename = in_id + '_it.csv'
+        path = os.path.join(in_path, filename)
+        with open(path, 'w', encoding='cp1252') as f:
+            f.write(data)
 
 
     def generate(self):
+        print(self.it_path)
         for obj in self.ol:
             print(obj)
         pass
