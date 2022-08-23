@@ -1,6 +1,6 @@
 import os
 import os.path
-from gen_obj_func import GenObjFunc as genfunc
+from gen_unit_func import GenUnitFunc as genfunc
 
 
 class UnitsPhases:
@@ -56,16 +56,14 @@ class UnitsPhases:
                     print(f'\nWARNING: {obj_parent}{obj_id} skipped, expected this dir but not found! {dest_dir}')
                     continue
                 
-                # Create intouch file
-                #  TODO Create Intouch file to subfolder
-                pass
+                print('###NOT IMPLEMENTED')
             elif obj_is_unit:
                 print('###Creating', dest_dir)
                 os.makedirs(dest_dir)
                 self._create_intouch_unit_file(obj_id, dest_dir)
 
 
-    def _create_intouch_unit_file(self, in_id, in_path):
+    def _create_intouch_file(self, in_id, in_path):
         data = self.gen.single(self.cf, self.rl, 'Intouch_Header')
         data += self.gen.multiple(self.ol, self.cf, self.rl, 'Intouch_Tag')
 

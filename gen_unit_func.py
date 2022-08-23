@@ -2,7 +2,8 @@ import os
 import os.path
 
 
-class GenObjFunc:
+class GenUnitFunc:
+    # TODO go through all
     """Multiple functions to interact with worbook and sub-classes in obj_lib,
     and ui.
     """
