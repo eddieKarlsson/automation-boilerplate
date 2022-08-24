@@ -15,7 +15,7 @@ class UnitsPhases:
         self.cp = os.path.join(config_path, self.type)  # Config folder path
 
         self.output_path = output_path
-        self.it_path = os.path.join(self.output_path, self.s.INTOUCH_DIR)
+        self.it_path = os.path.join(self.output_path, self.s.INTOUCH_DIR, self.type)
 
         self.ol = obj_list
 
@@ -44,14 +44,14 @@ class UnitsPhases:
             #  Skip object if not valid
             if not obj_is_valid_unit_type:
                 if obj_parent is None:
-                    print(f'\nWARNING: ID {obj_parent}_{obj_id} is skipped, invalid Type')
+                    print(f'\nWARNING: {obj_id} is skipped, invalid Type')
                 else:
-                    print(f'\nWARNING: ID {obj_id} is skipped, invalid Type')
-            continue
+                    print(f'\nWARNING: {obj_parent}_{obj_id} is skipped, invalid Type')
 
-            print('yo')
+                continue
+
             if obj_is_unit:
-                dest_dir = os.path.join(self.output_path, obj_id)
+                dest_dir = os.path.join(self.it_path, obj_id)
                 if not os.path.exists(dest_dir):
                     os.makedirs(dest_dir)
                 self._create_intouch_file(dest_dir, obj)
@@ -71,7 +71,7 @@ class UnitsPhases:
         if obj['parent'] is None:
             filename = obj['id'] + '_IT.csv'
         else:
-            filename = obj['parent'] + obj['id'] + '_IT.csv'
+            filename = obj['parent']+ '_' + obj['id'] + '_IT.csv'
         path = os.path.join(path, filename)
         with open(path, 'w') as f:
             f.write(data)

@@ -87,7 +87,7 @@ class DI:
         data = self.gen.single(self.cf, self.rl, 'Intouch_Header')
         data += self.gen.multiple(self.ol, self.cf, self.rl, 'Intouch_Tag')
 
-        filename = self.type + '_it.csv'
+        filename = self.type + '_IT.csv'
         path = os.path.join(self.it_path, filename)
         with open(path, 'w', encoding='cp1252') as f:
             f.write(data)

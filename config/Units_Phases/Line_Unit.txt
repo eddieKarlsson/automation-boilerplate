@@ -1,3 +1,4 @@
+<Line_Unit_IT>
 :mode=ask;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 :IODisc;Group;Comment;Logged;EventLogged;EventLoggingPriority;RetentiveValue;InitialDisc;OffMsg;OnMsg;AlarmState;AlarmPri;DConversion;AccessName;ItemUseTagname;ItemName;ReadOnly;AlarmComment;AlarmAckModel;DSCAlarmDisable;DSCAlarmInhibitor;SymbolicName;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 @ID_AnyPhaseHeld;@AlarmGroup;;No;No;0;No;Off;;;None;1;Direct;@PLC;No;@ID.AnyPhaseHeld;No;;0;0;;;No;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -14,3 +15,4 @@
 :IOReal;Group;Comment;Logged;EventLogged;EventLoggingPriority;RetentiveValue;RetentiveAlarmParameters;AlarmValueDeadband;AlarmDevDeadband;EngUnits;InitialValue;MinEU;MaxEU;Deadband;LogDeadband;LoLoAlarmState;LoLoAlarmValue;LoLoAlarmPri;LoAlarmState;LoAlarmValue;LoAlarmPri;HiAlarmState;HiAlarmValue;HiAlarmPri;HiHiAlarmState;HiHiAlarmValue;HiHiAlarmPri;MinorDevAlarmState;MinorDevAlarmValue;MinorDevAlarmPri;MajorDevAlarmState;MajorDevAlarmValue;MajorDevAlarmPri;DevTarget;ROCAlarmState;ROCAlarmValue;ROCAlarmPri;ROCTimeBase;MinRaw;MaxRaw;Conversion;AccessName;ItemUseTagname;ItemName;ReadOnly;AlarmComment;AlarmAckModel;LoLoAlarmDisable;LoAlarmDisable;HiAlarmDisable;HiHiAlarmDisable;MinDevAlarmDisable;MajDevAlarmDisable;RocAlarmDisable;LoLoAlarmInhibitor;LoAlarmInhibitor;HiAlarmInhibitor;HiHiAlarmInhibitor;MinDevAlarmInhibitor;MajDevAlarmInhibitor;RocAlarmInhibitor;SymbolicName;
 @ID_CIPRemTime;@AlarmGroup;;No;No;0;No;No;0;0;;0;0;30000;0;0;Off;0;1;Off;0;1;Off;0;1;Off;0;1;Off;0;1;Off;0;1;0;Off;0;1;Min;0;30000;Linear;@PLC;No;@ID.Status.Remaining Time Cleaned;No;;0;0;0;0;0;0;0;0;;;;;;;;;No
 @ID_ProdRemTime;@AlarmGroup;;No;No;0;No;No;0;0;;0;0;30000;0;0;Off;0;1;Off;0;1;Off;0;1;Off;0;1;Off;0;1;Off;0;1;0;Off;0;1;Min;0;30000;Linear;@PLC;No;@ID.Status.Remaining Time Product;No;;0;0;0;0;0;0;0;0;;;;;;;;;No
+</Line_Unit_IT>

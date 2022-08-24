@@ -312,8 +312,8 @@ class GenMain:
                     return False
 
             is_valid_unit_type = _is_valid_unit_type(cell_type.value)
-            is_unit = _is_unit(cell_type.value) and is_valid_unit_type
-            is_phase = not is_unit and is_valid_unit_type
+            is_unit = _is_unit(cell_type.value)
+            is_phase = not is_unit
 
             if is_unit:
                 #  Remembers var from unit, in that way less
@@ -375,7 +375,7 @@ class GenMain:
         in files other than the first
         """
 
-        outfile = os.path.join(self.it_path, "ALL_General_IT.csv")
+        outfile = os.path.join(self.it_path, "ALL_GENERAL_IT.csv")
 
         if os.path.exists(outfile):
             os.remove(outfile)
@@ -492,7 +492,7 @@ class GenMain:
 
         if self.s.UNIT_DISABLE:
             self._print_disabled_in_settings('Units_Phases')
-        else: UnitsPhases(self, self.unit_output_path, self.unit_phase_list, 
+        else: UnitsPhases(self, self.output_path, self.unit_phase_list, 
                           self.config_path, config_type=self.config_type)
 
         self._combine_it_files()
