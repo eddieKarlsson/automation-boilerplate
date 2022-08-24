@@ -3,76 +3,32 @@ import os.path
 
 
 class GenUnitFunc:
-    # TODO go through all
     """Multiple functions to interact with worbook and sub-classes in obj_lib,
     and ui.
     """
     def __init__(self, gen_main):
         self.s = gen_main.s
 
+
     def _replace_keywords(self, line, obj):
         """Take in a line and convert all the identifiers to obj data"""
 
         # Replace the keywords that always exists
         line = line.replace(self.s.ID_REPLACE, obj['id'])
-        line = line.replace(self.s.ALARM_GROUP_REPLACE, obj['alarmgroup'])
-        line = line.replace("@Type", obj['type'])
+        line = line.replace(self.s.TYPE_REPLACE, obj['type'])
+        
+        if obj['parent'] is not None:
+            line = line.replace('@PARENT', obj['parent'])
 
-        # check if comment exists, if not insert empty string
-        if obj['comment'] is None:
-            line = line.replace(self.s.COMMENT_REPLACE, '')
-        else:
-            line = line.replace(self.s.COMMENT_REPLACE,
-                                obj['comment'])
+        if obj['plc'] is not None:
+            line = line.replace(self.s.PLC_REPLACE, obj['plc'])
 
-        # Replace index
-        line = line.replace(self.s.INDEX_REPLACE, str(obj['index']))
-
-        # Replace PLC
-        if obj['plc'] is None:
-            line = line.replace(self.s.PLC_REPLACE, '')
-        else:
-            line = line.replace(self.s.PLC_REPLACE,
-                                obj['plc'])
-
-        # Replace the keywords that are optional (check if they exist)
-        if obj.get('config') is not None:
-            line = line.replace(self.s.CONFIG_REPLACE, str(obj['config']))
-
-        if obj.get('volumeperpulse') is not None:
-            line = line.replace(self.s.VolumePerPulse_REPLACE, str(obj['volumeperpulse']))
-
-        if obj.get('eng_unit') is not None:
-            line = line.replace(self.s.ENG_UNIT_REPLACE,
-                                obj['eng_unit'])
-        else:
-            line = line.replace(self.s.ENG_UNIT_REPLACE, '')
-
-        if obj.get('eng_min') is not None:
-            line = str(line.replace(self.s.ENG_MIN_REPLACE,
-                                    str(obj['eng_min'])))
-        else:
-            line = line.replace(self.s.ENG_MIN_REPLACE, '0')
-
-        if obj.get('eng_max') is not None:
-            line = str(line.replace(self.s.ENG_MAX_REPLACE,
-                                    str(obj['eng_max'])))
-        else:
-            line = line.replace(self.s.ENG_MAX_REPLACE, '100')
-
-        if obj.get('alarm_text') is not None:
-            line = line.replace(self.s.ALARM_TEXT_REPLACE, obj['alarm_text'])
-
-        if obj.get('alarm_prio') is not None:
-            line = line.replace(self.s.ALARM_PRIO_REPLACE, str(obj['alarm_prio']))
-
-        if obj.get('asi_addr') is not None:
-            line = line.replace(self.s.ASI_ADDR_REPLACE, str(obj['asi_addr']))     
-
-        if obj.get('asi_master') is not None:
-            line = line.replace(self.s.ASI_MASTER_REPLACE, str(obj['asi_master']))   
+        if obj['hmi_group'] is not None:
+            line = line.replace(self.s.ALARM_GROUP_REPLACE, obj['hmi_group'])
 
         return line
+        
+
 
     @staticmethod
     def single(config_file, list_result, ref_txt):
@@ -110,99 +66,10 @@ class GenUnitFunc:
         list_result.append(result)
         return inst_data
 
-    def multiple(self, obj_list, config_file, list_result, ref_txt, plc_name=None):
-        """Get text lines from config file and replace by data in excel for
-            each item, then append the new lines to memory"""
 
-        with open(config_file, 'r') as config:
-            exists_in_config = False
-            section_found = False
-            inst_data = ''
-            begin = '<' + ref_txt + '>'
-            end = '</' + ref_txt + '>'
-
-            for obj in obj_list:
-                if plc_name is not None and plc_name != obj['plc']:
-                    continue            
-
-                config.seek(0, 0)  # Seek to beginning of file
-                for line_index, line in enumerate(config, start=1):
-                    if end in str(line):
-                        section_found = False
-                    if section_found:
-                        line = self._replace_keywords(line, obj)
-                        inst_data += line
-                    if begin in str(line):
-                        exists_in_config = True
-                        section_found = True
-
-            if not exists_in_config:
-                result_ok = False
-                result_msg = f"'{ref_txt}' not found in config file"
-            else:
-                result_ok = True
-                result_msg = None
-
-            # Return a dictionary with the result
-            result = {
-                'ref_txt': ref_txt,
-                'type': None,
-                'result_ok': result_ok,
-                'bad_result_msg': result_msg
-            }
-
-        list_result.append(result)
-        return inst_data
-
-    def multiple_config(self, obj_list, sub_dir, list_result, ref_txt,
-                        data_size=30, data_offset=14):
-        """Same as td_multiple, but config stored in different files"""
-        # Setup variables
-        exists_in_config = False
-        section_found = False
-        inst_data = ''
-        begin = '<' + ref_txt + '>'
-        end = '</' + ref_txt + '>'
-
-        # loop through excel rows, get value at corresponding cell
-        for obj in obj_list:
-            # combine file path and open corresponding file
-            filename = obj['config'] + '.txt'
-            file_and_path = os.path.join(sub_dir, filename)
-
-            with open(file_and_path, 'r') as config:
-                for line_index, line in enumerate(config, start=1):
-                    if end in str(line):
-                        section_found = False
-                    if section_found:
-                        line = self._replace_keywords(line, obj, data_size, data_offset)
-                        inst_data += line
-                    if begin in str(line):
-                        exists_in_config = True
-                        section_found = True
-
-                    # will be last item processed but doesn't matter
-                    type = obj['type']
-            if not exists_in_config:
-                result_ok = False
-                result_msg = f"'{ref_txt}' not found in config file"
-            else:
-                result_ok = True
-                result_msg = None
-
-            # Return a dictionary with the result
-            result = {
-                'ref_txt': ref_txt,
-                'type': None,
-                'result_ok': result_ok,
-                'bad_result_msg': result_msg
-            }
-        list_result.append(result)
-        return inst_data
-
-    @staticmethod
-    def single_withreplace(config_file, list_result, ref_txt, replace, obj):
-        """Read a text file and copy the data inside notifiers to memory"""
+    def single_obj(self, config_file, list_result, obj, ref_txt):
+        """Read each line in a text file and replace any strings that match the ones
+        states in _replace keywords"""
         with open(config_file, 'r') as config:
             exists_in_config = False
             section_found = False
@@ -214,7 +81,7 @@ class GenUnitFunc:
                 if end in str(line):
                     section_found = False
                 if section_found:        
-                    line = line.replace(replace, obj)             
+                    line = self._replace_keywords(line, obj)                                                
                     inst_data += line
                 if begin in str(line):
                     exists_in_config = True
@@ -237,51 +104,6 @@ class GenUnitFunc:
         list_result.append(result)
         return inst_data
 
-    def multiple_twochecks(self, obj_list, config_file, list_result, ref_txt, plc_name=None, asmaster_name=None):
-        """Get text lines from config file and replace by data in excel for
-            each item, then append the new lines to memory"""
-
-        with open(config_file, 'r') as config:
-            exists_in_config = False
-            section_found = False
-            inst_data = ''
-            begin = '<' + ref_txt + '>'
-            end = '</' + ref_txt + '>'
-
-            for obj in obj_list:
-                if (plc_name is not None and plc_name != obj['plc']) or (asmaster_name is not None and asmaster_name != obj['asi_master']):
-                    continue            
-
-                config.seek(0, 0)  # Seek to beginning of file
-                for line_index, line in enumerate(config, start=1):
-                    if end in str(line):
-                        section_found = False
-                    if section_found:
-                        line = self._replace_keywords(line, obj)
-                        inst_data += line
-                    if begin in str(line):
-                        exists_in_config = True
-                        section_found = True
-
-                    # will be last item processed but doesn't matter
-                    type = obj['type']
-            if not exists_in_config:
-                result_ok = False
-                result_msg = f"'{ref_txt}' not found in config file"
-            else:
-                result_ok = True
-                result_msg = None
-
-            # Return a dictionary with the result
-            result = {
-                'ref_txt': ref_txt,
-                'type': None,
-                'result_ok': result_ok,
-                'bad_result_msg': result_msg
-            }
-
-        list_result.append(result)
-        return inst_data
 
     @staticmethod
     def result(list_with_dicts, type='undefined'):

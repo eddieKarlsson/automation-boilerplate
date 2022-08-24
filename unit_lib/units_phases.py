@@ -35,8 +35,6 @@ class UnitsPhases:
         for obj in self.ol:
             # unpack dict object to var
             obj_id = obj['id']
-            obj_type = obj['type']
-            obj_plc = obj['plc']
             obj_is_valid_unit_type = obj['is_valid_unit_type']
             obj_is_unit = obj['is_unit']
             obj_is_phase = obj['is_phase']
@@ -45,37 +43,39 @@ class UnitsPhases:
 
             #  Skip object if not valid
             if not obj_is_valid_unit_type:
-                print(f'\nWARNING: ID {obj_id} is skipped, invalid Type')
-                continue
+                if obj_parent is None:
+                    print(f'\nWARNING: ID {obj_parent}_{obj_id} is skipped, invalid Type')
+                else:
+                    print(f'\nWARNING: ID {obj_id} is skipped, invalid Type')
+            continue
 
-            dest_dir = os.path.join(self.output_path, obj_parent)
-
-            if obj_is_phase:
+            print('yo')
+            if obj_is_unit:
+                dest_dir = os.path.join(self.output_path, obj_id)
+                if not os.path.exists(dest_dir):
+                    os.makedirs(dest_dir)
+                self._create_intouch_file(dest_dir, obj)
+            elif obj_is_phase:
                 # Check if parent dir of unit exists, if not skip the object
                 if not os.path.exists(dest_dir):
                     print(f'\nWARNING: {obj_parent}{obj_id} skipped, expected this dir but not found! {dest_dir}')
                     continue
                 self._create_intouch_file(dest_dir, obj)
                 
-                print('###NOT IMPLEMENTED')
-            elif obj_is_unit:
-                print('###Creating', dest_dir)
-                os.makedirs(dest_dir)
-                self._create_intouch_unit_file(obj_id, dest_dir)
 
 
-    def _create_intouch_file(self, in_id, in_path):
-        data = self.gen.single(self.cf, self.rl, 'Intouch_Header')
-        data += self.gen.multiple(self.ol, self.cf, self.rl, 'Intouch_Tag')
+    def _create_intouch_file(self, path, obj):
+        config_file = os.path.join(self.cp, obj['type'] + '.txt')
+        data = self.gen.single_obj(config_file, self.rl, obj, obj['type'] + '_IT')
 
-        filename = in_id + '_it.csv'
-        path = os.path.join(in_path, filename)
-        with open(path, 'w', encoding='cp1252') as f:
+        if obj['parent'] is None:
+            filename = obj['id'] + '_IT.csv'
+        else:
+            filename = obj['parent'] + obj['id'] + '_IT.csv'
+        path = os.path.join(path, filename)
+        with open(path, 'w') as f:
             f.write(data)
 
 
     def generate(self):
-        print(self.it_path)
-        for obj in self.ol:
-            print(obj)
-        pass
+        self.intouch()

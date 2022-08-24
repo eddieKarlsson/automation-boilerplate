@@ -272,12 +272,16 @@ class GenMain:
                 column_type = i            
             elif self.s.COL_PLC_NAME == cellval:
                 column_plc = i
+            elif self.s.COL_ALARM_GROUP_NAME == cellval:
+                column_hmi_group = i
+
 
         if self.s.debug_level > 0:
             print('UNIT UNITSHEET:', sheet)
             print('\t', 'UNIT column_id:', column_id)
             print('\t', 'UNIT column_type:', column_type)
             print('\t', 'UNIT column_plc:', column_plc)
+            print('\t', 'UNIT column_hmi_group:', column_hmi_group)
 
         unit_phase_list = []
         #  loop over the objects in sheet
@@ -288,6 +292,8 @@ class GenMain:
             cell_id = ws.cell(row=i, column=column_id)
             cell_type = ws.cell(row=i, column=column_type)
             cell_plc = ws.cell(row=i, column=column_plc)
+            cell_hmi_group = ws.cell(row=i, column=column_hmi_group)
+
 
             # Break if we get a blank ID cell
             if cell_id.value is None:
@@ -310,8 +316,11 @@ class GenMain:
             is_phase = not is_unit and is_valid_unit_type
 
             if is_unit:
-                mem_unit = cell_id.value  # remember the last units name (ID)
-                mem_plc = cell_plc.value  # remember the last units PLC
+                #  Remembers var from unit, in that way less
+                #  duplicate data in excel
+                mem_unit = cell_id.value
+                mem_plc = cell_plc.value
+                mem_hmi_group = cell_hmi_group.value
                 parent = None
             else:
                 parent = mem_unit
@@ -325,6 +334,7 @@ class GenMain:
                 'type': cell_type.value,
                 'id': cell_id.value,
                 'plc': mem_plc,
+                'hmi_group': mem_hmi_group,
             }
 
             unit_phase_list.append(obj)

@@ -5,5 +5,5 @@ class UnitTypes(Enum):
     the table in excel under _configs"""
     
     PHASE = 'Phase'
-    LINE_UNIT = 'Line Unit'
-    TANK_UNIT = 'Tank Unit'
+    LINE_UNIT = 'Line_Unit'
+    TANK_UNIT = 'Tank_Unit'
