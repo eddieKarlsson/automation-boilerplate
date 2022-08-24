@@ -55,6 +55,7 @@ class UnitsPhases:
                 if not os.path.exists(dest_dir):
                     print(f'\nWARNING: {obj_parent}{obj_id} skipped, expected this dir but not found! {dest_dir}')
                     continue
+                self._create_intouch_file(dest_dir, obj)
                 
                 print('###NOT IMPLEMENTED')
             elif obj_is_unit:
