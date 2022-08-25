@@ -7,7 +7,7 @@ class Settings:
     """A class to store all settings, user-data in JSON format."""
 
     def __init__(self):
-        self.version = 2.2
+        self.version = 2.3
 
         """Settings"""
         self.HEADER_ROW = 3  # Excel header
