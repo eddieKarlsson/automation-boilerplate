@@ -11,3 +11,8 @@ All notable changes to this project will be documented in this file.
 - TIA Generation split in PLC folders
 - ASi Block generation created istead of IO Addr in PLC
 - New updated exmaple_td
+
+## [V2.3] - 2022-08-25
+- Added funtionality to create Intouch taglists for Units and phases
+- More data in excel for units and phases
+- New updated latest_td
