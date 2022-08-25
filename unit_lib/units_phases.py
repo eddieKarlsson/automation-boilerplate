@@ -40,16 +40,17 @@ class UnitsPhases:
             obj_is_phase = obj['is_phase']
             obj_parent = obj['parent']
 
-
             #  Skip object if not valid
             if not obj_is_valid_unit_type:
                 if obj_parent is None:
-                    print(f'\nWARNING: {obj_id} is skipped, invalid Type')
+                    self.gen.append_bad_result(f'WARNING: {obj_id} is skipped, invalid Type',
+                                                self.rl)
                 else:
-                    print(f'\nWARNING: {obj_parent}_{obj_id} is skipped, invalid Type')
-
+                    self.gen.append_bad_result(f'{obj_parent}_{obj_id} is skipped, invalid Type',
+                                                self.rl)
                 continue
 
+            #  Control logic if object is valid
             if obj_is_unit:
                 dest_dir = os.path.join(self.it_path, obj_id)
                 if not os.path.exists(dest_dir):
@@ -58,7 +59,7 @@ class UnitsPhases:
             elif obj_is_phase:
                 # Check if parent dir of unit exists, if not skip the object
                 if not os.path.exists(dest_dir):
-                    print(f'\nWARNING: {obj_parent}{obj_id} skipped, expected this dir but not found! {dest_dir}')
+                    self.gen.append_bad_result(f'\nWARNING: {obj_parent}{obj_id} skipped, expected this dir {dest_dir} but not found!')
                     continue
                 self._create_intouch_file(dest_dir, obj)
                 
@@ -73,9 +74,10 @@ class UnitsPhases:
         else:
             filename = obj['parent']+ '_' + obj['id'] + '_IT.csv'
         path = os.path.join(path, filename)
-        with open(path, 'w') as f:
+        with open(path, 'w', encoding='cp1252') as f:
             f.write(data)
 
 
     def generate(self):
         self.intouch()
+        self.gen.result(self.rl, type=self.type.upper())

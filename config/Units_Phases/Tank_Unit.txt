@@ -21,7 +21,7 @@
 @ID_CIPRemTime;@AlarmGroup;;No;No;0;No;No;0;0;;0;0;30000;0;0;Off;0;1;Off;0;1;Off;0;1;Off;0;1;Off;0;1;Off;0;1;0;Off;0;1;Min;0;30000;Linear;@PLC;No;@ID.Status.Remaining Time Cleaned;No;;0;0;0;0;0;0;0;0;;;;;;;;;No
 @ID_Level;@AlarmGroup;;No;No;0;No;No;0;0;%;0;0;100;0;0;Off;0;1;Off;0;1;Off;0;1;Off;0;1;Off;0;1;Off;0;1;0;Off;0;1;Min;0;100;Linear;@PLC;No;@ID.Status.Level;No;;0;0;0;0;0;0;0;0;;;;;;;;;No
 @ID_ProdRemTime;@AlarmGroup;;No;No;0;No;No;0;0;;0;0;30000;0;0;Off;0;1;Off;0;1;Off;0;1;Off;0;1;Off;0;1;Off;0;1;0;Off;0;1;Min;0;30000;Linear;@PLC;No;@ID.Status.Remaining Time Product;No;;0;0;0;0;0;0;0;0;;;;;;;;;No
-@ID_Temp;@AlarmGroup;;No;No;0;No;No;0;0;ï¿½C;0;0;160;0;0;Off;0;1;Off;0;1;Off;0;1;Off;0;1;Off;0;1;Off;0;1;0;Off;0;1;Min;0;160;Linear;@PLC;No;@ID.Status.Temperature;No;;0;0;0;0;0;0;0;0;;;;;;;;;No
+@ID_Temp;@AlarmGroup;;No;No;0;No;No;0;0;°C;0;0;160;0;0;Off;0;1;Off;0;1;Off;0;1;Off;0;1;Off;0;1;Off;0;1;0;Off;0;1;Min;0;160;Linear;@PLC;No;@ID.Status.Temperature;No;;0;0;0;0;0;0;0;0;;;;;;;;;No
 @ID_Volume;@AlarmGroup;;No;No;0;No;No;0;0;l;0;0;30000;0;0;Off;0;1;Off;0;1;Off;0;1;Off;0;1;Off;0;1;Off;0;1;0;Off;0;1;Min;0;30000;Linear;@PLC;No;@ID.Status.Volume;No;;0;0;0;0;0;0;0;0;;;;;;;;;No
 @ID_Weight;@AlarmGroup;;No;No;0;No;No;0;0;kg;0;0;30000;0;0;Off;0;1;Off;0;1;Off;0;1;Off;0;1;Off;0;1;Off;0;1;0;Off;0;1;Min;0;30000;Linear;@PLC;No;@ID.Status.Weight;No;;0;0;0;0;0;0;0;0;;;;;;;;;No
 </Tank_Unit_IT>

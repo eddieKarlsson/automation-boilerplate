@@ -33,7 +33,7 @@ class GenUnitFunc:
     @staticmethod
     def single(config_file, list_result, ref_txt):
         """Read a text file and copy the data inside notifiers to memory"""
-        with open(config_file, 'r') as config:
+        with open(config_file, 'r', encoding='cp1252') as config:
             exists_in_config = False
             section_found = False
             inst_data = ''
@@ -70,7 +70,7 @@ class GenUnitFunc:
     def single_obj(self, config_file, list_result, obj, ref_txt):
         """Read each line in a text file and replace any strings that match the ones
         states in _replace keywords"""
-        with open(config_file, 'r') as config:
+        with open(config_file, 'r', encoding='cp1252') as config:
             exists_in_config = False
             section_found = False
             inst_data = ''
@@ -86,6 +86,8 @@ class GenUnitFunc:
                 if begin in str(line):
                     exists_in_config = True
                     section_found = True
+        
+        
         if not exists_in_config:
             result_ok = False
             result_msg = f"'{ref_txt}' not found in config file"
@@ -93,9 +95,15 @@ class GenUnitFunc:
             result_ok = True
             result_msg = None
 
+        if obj['parent'] is None:
+            help_msg = obj['id']
+        else:
+            help_msg = f"{obj['parent']}_{obj['id']}"
+
+        result_ref_txt = f"{help_msg} ({ref_txt})"
         # Return a dictionary with the result
         result = {
-            'ref_txt': ref_txt,
+            'ref_txt': result_ref_txt,
             'type': None,
             'result_ok': result_ok,
             'bad_result_msg': result_msg
@@ -103,6 +111,22 @@ class GenUnitFunc:
 
         list_result.append(result)
         return inst_data
+
+
+    def append_bad_result(self, bad_result_msg, list_result):
+        # Return a dictionary with the result
+        if self.s.debug_level > 0:
+            print('\n',bad_result_msg)
+
+        result = {
+            'ref_txt': '',
+            'type': None,
+            'result_ok': False,
+            'bad_result_msg': bad_result_msg
+        }
+
+        list_result.append(result)
+
 
 
     @staticmethod
