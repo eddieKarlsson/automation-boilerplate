@@ -412,6 +412,33 @@ class GenMain:
                     for line_index, line in enumerate(rf):
                         wf.write(line)
 
+    @staticmethod
+    def _parse_s7_db_addr(in_db_addr):
+        #  Format expected e.g. DB9001.DBX12.0, DB9001.DBB12, DB9001.DBW12, DB9001.DBD12
+        splitted = in_db_addr.split('.')
+
+        if len(splitted) == 3: 
+            # three elements == two dots == DB9001.DBX0.0 format
+            db, dbx, bit = splitted
+        elif len(splitted) == 2:
+            #  two elements == one dot == any other format specified
+            db, dbx = splitted
+
+        remove_chars = ['D', 'B', 'X', 'W', 'D']
+
+        for char in remove_chars:
+            dbx = dbx.replace(char, '')
+
+        db_offset = int(dbx)
+
+        return db, db_offset
+
+        
+
+
+
+
+
     def generate(self):
         print('Version', self.s.version)
 
