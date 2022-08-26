@@ -256,6 +256,7 @@ class GenMain:
             print(msg)
             sys.exit()
         
+            column_db_start_addr = None
             # Loop header and set the corresponding variables to
             # the integer number
         for i in range(1, 10):
@@ -274,7 +275,8 @@ class GenMain:
                 column_plc = i
             elif self.s.COL_ALARM_GROUP_NAME == cellval:
                 column_hmi_group = i
-
+            elif self.s.COL_DB_START_ADDR_NAME == cellval:
+                column_db_start_addr = i
 
         if self.s.debug_level > 0:
             print('UNIT UNITSHEET:', sheet)
@@ -282,17 +284,27 @@ class GenMain:
             print('\t', 'UNIT column_type:', column_type)
             print('\t', 'UNIT column_plc:', column_plc)
             print('\t', 'UNIT column_hmi_group:', column_hmi_group)
+            print('\t', 'UNIT column_db_start_addr:', column_db_start_addr)
+
 
         unit_phase_list = []
         #  loop over the objects in sheet
         mem_unit = None
         mem_plc = None
+
+        if column_db_start_addr is not None:
+            db_addr_exists = True
+        else:
+            db_addr_exists = False
+
         for i in range(self.s.UNIT_ROW, ws.max_row + 1):
             #  Create cell references
             cell_id = ws.cell(row=i, column=column_id)
             cell_type = ws.cell(row=i, column=column_type)
             cell_plc = ws.cell(row=i, column=column_plc)
             cell_hmi_group = ws.cell(row=i, column=column_hmi_group)
+            if db_addr_exists:
+                cell_db_start_addr = ws.cell(row=i, column=column_db_start_addr)
 
 
             # Break if we get a blank ID cell
@@ -336,6 +348,12 @@ class GenMain:
                 'plc': mem_plc,
                 'hmi_group': mem_hmi_group,
             }
+
+            # Insert DB start addr if property exists
+            if db_addr_exists:
+                db, db_offset = self._parse_s7_db_addr(cell_db_start_addr.value)
+                obj['db_nr_str'] = db
+                obj['db_offset'] = db_offset
 
             unit_phase_list.append(obj)
         
@@ -432,11 +450,6 @@ class GenMain:
         db_offset = int(dbx)
 
         return db, db_offset
-
-        
-
-
-
 
 
     def generate(self):

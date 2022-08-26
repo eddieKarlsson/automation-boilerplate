@@ -59,6 +59,12 @@ class Settings:
         self.COL_ASI_MASTER_NAME = 'ASI Master'  # Used in TIA
         self.ASI_MASTER_REPLACE = '@ASIMASTER'  # string to be replaced in config file
 
+        self.COL_DB_START_ADDR_NAME = 'DB_start_address'
+
+        self.OFFSET_IDENTIFIER = '@OFFSET'
+        self.OFFSET_END_IDENTIFIER = '@END_OFFSET'
+        self.DB_NR_REPLACE = '@DB_NR'
+
         self.DI_DISABLE = False
         self.DI_START_INDEX = 0  # Start-position index in datablock
         self.DI_SHEETNAME = 'DI'

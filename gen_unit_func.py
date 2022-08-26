@@ -13,6 +13,9 @@ class GenUnitFunc:
     def _replace_keywords(self, line, obj):
         """Take in a line and convert all the identifiers to obj data"""
 
+        offset = self.s.OFFSET_IDENTIFIER
+        offset_end = self.s.OFFSET_END_IDENTIFIER
+        
         # Replace the keywords that always exists
         line = line.replace(self.s.ID_REPLACE, obj['id'])
         line = line.replace(self.s.TYPE_REPLACE, obj['type'])
@@ -26,8 +29,45 @@ class GenUnitFunc:
         if obj['hmi_group'] is not None:
             line = line.replace(self.s.ALARM_GROUP_REPLACE, obj['hmi_group'])
 
+        if obj['db_nr_str'] is not None:
+            line = line.replace(self.s.DB_NR_REPLACE, obj['db_nr_str'])
+
+        offset_in_line = offset and offset_end in line
+        if obj['db_offset'] is not None and offset_in_line:
+            line = self._replace_offset(line, obj)
+
         return line
         
+
+    def _replace_offset(self, line, obj):
+        offset = self.s.OFFSET_IDENTIFIER
+        offset_end = self.s.OFFSET_END_IDENTIFIER
+
+        if offset and offset_end in line:
+            start_char_index = line.find(offset)  # find char offset
+        else:
+            print(f'WARNING replace offset fault identifier {offset} or {offset_end} was not found')
+            return line  # if not found just return line unchanged
+
+        not_found_whole_string = True
+        temp_str = line[start_char_index]
+        i = start_char_index
+        while not_found_whole_string:
+            i += 1
+            temp_str += line[i]  # add char to string
+            
+            if offset_end in temp_str:
+                not_found_whole_string = False
+        
+        str_to_replace_in_line = temp_str
+        temp_str = temp_str.replace(offset, '')
+        temp_str = temp_str.replace(offset_end, '')
+        temp_offset = int(temp_str)
+        temp_offset += obj['db_offset']
+
+        line = line.replace(str_to_replace_in_line, str(temp_offset))
+
+        return line
 
 
     @staticmethod
