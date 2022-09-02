@@ -16,3 +16,7 @@ All notable changes to this project will be documented in this file.
 - Added funtionality to create Intouch taglists for Units and phases
 - More data in excel for units and phases
 - New updated latest_td
+
+## [V2.31] - 2022-09-02
+- Added more functionality to create DBs and help code to call PID in STL
+- More configurations for motor in excel
