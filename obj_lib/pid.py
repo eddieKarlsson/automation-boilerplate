@@ -73,17 +73,24 @@ class PID:
         with open(path, 'w', encoding='cp1252') as f:
             f.write(data)
 
-    def _tia_code(self):
-        data = self.gen.single(self.cf, self.rl, 'TIA_Code_Header')
-        data += self.gen.multiple(self.ol, self.cf, self.rl, 'TIA_Code_Var')
-        data += self.gen.single(self.cf, self.rl, 'TIA_Code_Var_Footer')
-        data += self.gen.multiple_config(self.ol, self.cp, self.rl, 'TIA_Code_Body')
-        data += self.gen.single(self.cf, self.rl, 'TIA_Code_Footer')
+    def _tia_help_code(self):
+        for plc in self.plc_set:
+            data = self.gen.multiple(self.ol, self.cf, self.rl, 'TIA_Help_PID_Call', plc_name=plc)
+            filename = plc + '_' + self.type + '_help-pid-call-to-copy.txt'
+            pathwithplc = path = os.path.join(self.tia_path, plc)
+            path = os.path.join(pathwithplc, filename)
+            with open(path, 'w', encoding='cp1252') as f:
+                f.write(data)
 
-        filename = self.type + '_code.awl'
-        path = os.path.join(self.tia_path, filename)
-        with open(path, 'w', encoding='cp1252') as f:
-            f.write(data)
+    def _tia_idb(self):
+        for plc in self.plc_set:
+            data = self.gen.multiple(self.ol, self.cf, self.rl, 'TIA_iDB', plc_name=plc)
+            filename = plc + '_' + self.type + '_iDBs.db'
+            pathwithplc = path = os.path.join(self.tia_path, plc)
+            path = os.path.join(pathwithplc, filename)
+            with open(path, 'w', encoding='cp1252') as f:
+                f.write(data)
+
 
     def _intouch(self):
         data = self.gen.single(self.cf, self.rl, 'Intouch_Header')
@@ -106,8 +113,8 @@ class PID:
         if self.ol:
             self._find_plcs()
             self._tia_db_multiple_plc()
-            #self._tia_symbol()
-            #self._tia_code()
+            self._tia_idb()
+            self._tia_help_code()
             self._intouch()
             self._sql()
             self.gen.result(self.rl, type=self.type.upper())

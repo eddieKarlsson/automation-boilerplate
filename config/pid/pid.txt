@@ -45,3 +45,24 @@ BEGIN
 
 END_DATA_BLOCK
 </TIA_DB_Footer>
+
+<TIA_iDB>
+DATA_BLOCK "@ID iDB"
+{ S7_Optimized_Access := 'TRUE' }
+VERSION : 0.1
+NON_RETAIN
+"MC PID"
+
+BEGIN
+
+END_DATA_BLOCK
+
+</TIA_iDB>
+
+<TIA_Help_PID_Call>
+   CALL  "MC PID", "@ID iDB"
+   AI  :="DB AI".@ID
+   CV  :="DB AO"..In.Input
+   PID :="DB PID".@ID
+   
+</TIA_Help_PID_Call>
