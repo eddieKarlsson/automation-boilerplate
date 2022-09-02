@@ -55,7 +55,7 @@ class PID:
             data = self.gen.single(self.cf, self.rl, 'TIA_DB_Header')
             data += self.gen.multiple(self.ol, self.cf, self.rl, 'TIA_DB_Var', plc_name=plc)
             data += self.gen.single(self.cf, self.rl, 'TIA_DB_Begin')
-            data += self.gen.multiple(self.ol, self.cf, self.rl, 'TIA_DB_Parameters', plc_name=plc)
+            #  data += self.gen.multiple(self.ol, self.cf, self.rl, 'TIA_DB_Parameters', plc_name=plc)
             data += self.gen.single(self.cf, self.rl, 'TIA_DB_Footer')
 
             filename = plc + '_' + self.type + '_db.db'
@@ -104,8 +104,8 @@ class PID:
 
     def generate(self):
         if self.ol:
-            #self._find_plcs()
-            #self._tia_db_multiple_plc()
+            self._find_plcs()
+            self._tia_db_multiple_plc()
             #self._tia_symbol()
             #self._tia_code()
             self._intouch()

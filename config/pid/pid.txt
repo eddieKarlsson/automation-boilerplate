@@ -21,3 +21,27 @@ SQL Configuration
 <SQLProcedure>
 EXEC [dbo].[GeneratorAddCM] N'@ID', N'@PLC', N'@Type'
 </SQLProcedure>
+
+
+<TIA_DB_Header>
+DATA_BLOCK "DB PID"
+{ S7_Optimized_Access := 'FALSE' }
+VERSION : 0.1
+   STRUCT
+</TIA_DB_Header>
+
+<TIA_DB_Var>
+      "@ID" : "MC UDT PID";   // @CMT
+</TIA_DB_Var>
+
+<TIA_DB_Begin>
+   END_STRUCT;
+
+
+BEGIN
+</TIA_DB_Begin>
+
+<TIA_DB_Footer>
+
+END_DATA_BLOCK
+</TIA_DB_Footer>
