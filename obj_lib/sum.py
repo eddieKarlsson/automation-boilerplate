@@ -11,15 +11,16 @@ class SUM:
         self.s = gen_main.s  # Instanciate settings
 
         self.type = 'sum'
+        self.masterfolder = 'CMs'
         self.config_type = config_type
 
-        self.cp = os.path.join(config_path, self.type)  # Config folder path
+        self.cp = os.path.join(config_path, self.masterfolder, self.type)  # Config folder path
         self.cf = os.path.join(self.cp, self.type + '.txt')  # base config file
 
         self.output_path = output_path
-        self.tia_path = os.path.join(self.output_path, self.s.TIA_DIR)
-        self.it_path = os.path.join(self.output_path, self.s.INTOUCH_DIR)
-        self.sql_path = os.path.join(self.output_path, self.s.SQL_DIR)
+        self.tia_path = os.path.join(self.output_path, self.masterfolder, self.s.TIA_DIR)
+        self.it_path = os.path.join(self.output_path, self.masterfolder, self.s.INTOUCH_DIR)
+        self.sql_path = os.path.join(self.output_path, self.masterfolder, self.s.SQL_DIR)
 
         self.ol = obj_list
 
@@ -60,8 +61,10 @@ class SUM:
             data += self.gen.single(self.cf, self.rl, 'TIA_DB_Footer')
 
             filename = plc + '_' + self.type + '_db.db'
-            pathwithplc = path = os.path.join(self.tia_path, plc)
+            pathwithplc = os.path.join(self.tia_path, plc)
             path = os.path.join(pathwithplc, filename)
+            if not os.path.exists(pathwithplc):
+                os.makedirs(pathwithplc)
             with open(path, 'w', encoding='cp1252') as f:
                 f.write(data)
 
@@ -71,6 +74,8 @@ class SUM:
 
         filename = self.type + '_symbols.sdf'
         path = os.path.join(self.tia_path, filename)
+        if not os.path.exists(self.tia_path):
+            os.makedirs(self.tia_path)
         with open(path, 'w', encoding='cp1252') as f:
             f.write(data)
 
@@ -83,6 +88,8 @@ class SUM:
 
         filename = self.type + '_code.awl'
         path = os.path.join(self.tia_path, filename)
+        if not os.path.exists(self.tia_path):
+            os.makedirs(self.tia_path)
         with open(path, 'w', encoding='cp1252') as f:
             f.write(data)
 
@@ -92,6 +99,8 @@ class SUM:
 
         filename = self.type + '_IT.csv'
         path = os.path.join(self.it_path, filename)
+        if not os.path.exists(self.it_path):
+            os.makedirs(self.it_path)
         with open(path, 'w', encoding='cp1252') as f:
             f.write(data)
 
@@ -100,6 +109,8 @@ class SUM:
 
         filename = self.type + '_sql.csv'
         path = os.path.join(self.sql_path, filename)
+        if not os.path.exists(self.sql_path):
+            os.makedirs(self.sql_path)
         with open(path, 'w', encoding='cp1252') as f:
             f.write(data)
 

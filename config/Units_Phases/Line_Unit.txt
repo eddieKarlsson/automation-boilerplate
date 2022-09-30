@@ -1,5 +1,5 @@
 <Line_Unit_IT>
-:mode=ask;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+:mode=update;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 :IODisc;Group;Comment;Logged;EventLogged;EventLoggingPriority;RetentiveValue;InitialDisc;OffMsg;OnMsg;AlarmState;AlarmPri;DConversion;AccessName;ItemUseTagname;ItemName;ReadOnly;AlarmComment;AlarmAckModel;DSCAlarmDisable;DSCAlarmInhibitor;SymbolicName;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 @ID_AnyPhaseHeld;@AlarmGroup;;No;No;0;No;Off;;;None;1;Direct;@PLC;No;@ID.AnyPhaseHeld;No;;0;0;;;No;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 @ID_AnyPhaseRunning;@AlarmGroup;;No;No;0;No;Off;;;None;1;Direct;@PLC;No;@ID.AnyPhaseRunning;No;;0;0;;;No;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
