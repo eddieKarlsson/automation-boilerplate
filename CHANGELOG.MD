@@ -20,3 +20,6 @@ All notable changes to this project will be documented in this file.
 ## [V2.31] - 2022-09-02
 - Added more functionality to create DBs and help code to call PID in STL
 - More configurations for motor in excel
+
+## [V2.32] - 2022-09-30
+- Added more functionality to create Line Souce and Destination Queue Tags

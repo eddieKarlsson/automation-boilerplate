@@ -26,13 +26,13 @@ class GenMain:
     def __init__(self, excel_path, output_path, config_path):
         self.excel_path = excel_path
         self.output_path = output_path
+        self.cm_output_path = os.path.join(self.output_path, 'CMs')
+        self.alarm_output_path = os.path.join(self.output_path, 'Alarm')
         self.unit_output_path = os.path.join(self.output_path, 'Units_Phases')
         self.config_path = config_path        
         self.plcinexcel = set()
         self.s = Settings()
         self.dict_list = []
-        self.it_path = os.path.join(self.output_path, self.s.INTOUCH_DIR)
-        self.sql_path = os.path.join(self.output_path, self.s.SQL_DIR)
         self.generate()
 
     def _open_gen_excel(self):
@@ -393,22 +393,26 @@ class GenMain:
         in files other than the first
         """
 
-        outfile = os.path.join(self.it_path, "ALL_GENERAL_IT.csv")
+        for folder in listdir(self.output_path):
+            filename = "ALL_" + folder + "_IT.csv"
+            path = os.path.join(self.output_path, folder, self.s.INTOUCH_DIR)
+            outfile = os.path.join(path, filename)
 
-        if os.path.exists(outfile):
-            os.remove(outfile)
+            if os.path.exists(outfile):
+                os.remove(outfile)
 
-        file_list = [f for f in listdir(self.it_path)
-                     if isfile(join(self.it_path, f))]
+            if os.path.exists(path):
+                file_list = [f for f in listdir(path)
+                    if isfile(join(path, f))]            
 
-        with open(outfile, 'w', encoding='cp1252') as wf:
-            for file_index, file in enumerate(file_list):
-                with open(os.path.join(self.it_path, file), 'r', encoding='cp1252') as rf:
-                    for line_index, line in enumerate(rf):
-                        # Skip first line header if it's not the first file
-                        if file_index > 0 and line_index <= 0:
-                            continue
-                        wf.write(line)
+                with open(outfile, 'w', encoding='cp1252') as wf:
+                        for file_index, file in enumerate(file_list):
+                            with open(os.path.join(path, file), 'r', encoding='cp1252') as rf:
+                                for line_index, line in enumerate(rf):
+                                    # Skip first line header if it's not the first file
+                                    if file_index > 0 and line_index <= 0:
+                                            continue
+                                    wf.write(line)                    
 
     def _combine_sql_files(self):
         """
@@ -416,19 +420,26 @@ class GenMain:
         in files other than the first
         """
 
-        outfile = os.path.join(self.sql_path, "ALL_SQL.csv")
+        for folder in listdir(self.output_path):
+            filename = "ALL_" + folder + "_SQL.csv"
+            path = os.path.join(self.output_path, folder, self.s.SQL_DIR)
+            outfile = os.path.join(path, filename)
 
-        if os.path.exists(outfile):
-            os.remove(outfile)
+            if os.path.exists(outfile):
+                os.remove(outfile)
 
-        file_list = [f for f in listdir(self.sql_path)
-                     if isfile(join(self.sql_path, f))]
+            if os.path.exists(path):
+                file_list = [f for f in listdir(path)
+                    if isfile(join(path, f))]            
 
-        with open(outfile, 'w', encoding='cp1252') as wf:
-            for file_index, file in enumerate(file_list):
-                with open(os.path.join(self.sql_path, file), 'r', encoding='cp1252') as rf:
-                    for line_index, line in enumerate(rf):
-                        wf.write(line)
+                with open(outfile, 'w', encoding='cp1252') as wf:
+                        for file_index, file in enumerate(file_list):
+                            with open(os.path.join(path, file), 'r', encoding='cp1252') as rf:
+                                for line_index, line in enumerate(rf):
+                                    # Skip first line header if it's not the first file
+                                    if file_index > 0 and line_index <= 0:
+                                            continue
+                                    wf.write(line)   
 
     @staticmethod
     def _parse_s7_db_addr(in_db_addr):
@@ -451,7 +462,6 @@ class GenMain:
 
         return db, db_offset
 
-
     def generate(self):
         print('Version', self.s.version)
 
@@ -467,8 +477,6 @@ class GenMain:
                 print(_)
 
         self.get_config_from_config_path()
-        self.create_subdirs()
-        self.create_subdirsplc()
 
         if self.s.VALVE_DISABLE:
             self._print_disabled_in_settings('Valve')
@@ -532,7 +540,8 @@ class GenMain:
 
         if self.s.UNIT_DISABLE:
             self._print_disabled_in_settings('Units_Phases')
-        else: UnitsPhases(self, self.output_path, self.unit_phase_list, 
+        else: 
+            UnitsPhases(self, self.output_path, self.unit_phase_list, 
                           self.config_path, config_type=self.config_type)
 
         self._combine_it_files()

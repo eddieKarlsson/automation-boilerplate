@@ -7,3 +7,5 @@ class UnitTypes(Enum):
     PHASE = 'Phase'
     LINE_UNIT = 'Line_Unit'
     TANK_UNIT = 'Tank_Unit'
+    LINE_SROUCE = 'Line_Source'
+    LINE_DESTINATION = 'Line_Destination'

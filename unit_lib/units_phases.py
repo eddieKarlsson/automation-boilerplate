@@ -18,7 +18,7 @@ class UnitsPhases:
         self.cp = os.path.join(config_path, self.type)  # Config folder path
 
         self.output_path = output_path
-        self.it_path = os.path.join(self.output_path, self.s.INTOUCH_DIR, self.type)
+        self.it_path = os.path.join(self.output_path, self.type)
 
         self.ol = obj_list
 
