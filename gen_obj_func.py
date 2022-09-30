@@ -135,8 +135,6 @@ class GenObjFunc:
                         exists_in_config = True
                         section_found = True
 
-                    # will be last item processed but doesn't matter
-                    type = obj['type']
             if not exists_in_config:
                 result_ok = False
                 result_msg = f"'{ref_txt}' not found in config file"

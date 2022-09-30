@@ -1,4 +1,4 @@
-from cgi import print_arguments
+from re import I
 import sys
 import os
 from os import listdir
@@ -16,7 +16,8 @@ from obj_lib.pid import PID
 from obj_lib.sum import SUM
 from obj_lib.alarm import Alarm
 from obj_lib.asi import ASi
-
+from unit_lib.unit_types import UnitTypes
+from unit_lib.units_phases import UnitsPhases
 
 class GenMain:
     """Main class called from UI,
@@ -25,13 +26,13 @@ class GenMain:
     def __init__(self, excel_path, output_path, config_path):
         self.excel_path = excel_path
         self.output_path = output_path
+        self.unit_output_path = os.path.join(self.output_path, 'Units_Phases')
         self.config_path = config_path        
         self.plcinexcel = set()
         self.s = Settings()
         self.dict_list = []
         self.it_path = os.path.join(self.output_path, self.s.INTOUCH_DIR)
         self.sql_path = os.path.join(self.output_path, self.s.SQL_DIR)
-
         self.generate()
 
     def _open_gen_excel(self):
@@ -98,6 +99,9 @@ class GenMain:
             self.asi_dict = self._obj_data_to_dict(
                     self.s.ASI_SHEETNAME, self.s.ASI_START_INDEX, 'asi', asi=True)
             self.dict_list.append(self.asi_dict)
+        
+        if not self.s.UNIT_DISABLE:
+            self.unit_phase_list = self._unit_data_to_list(self.s.UNIT_SHEETNAME)
 
     def _obj_data_to_dict(self, sheet, start_index, type, config=False, eng_var=False, volumeperpulse=False,
                           generic_alarm=False, asi=False):
@@ -241,6 +245,120 @@ class GenMain:
 
         return obj_list
 
+    def _unit_data_to_list(self, sheet):
+        """Read all unit object data to dict"""
+
+        # Open excel sheet
+        try:
+            ws = self.wb[sheet]
+        except KeyError:
+            msg = f'ERROR! {sheet} sheet does not exist, program will exit'
+            print(msg)
+            sys.exit()
+        
+            column_db_start_addr = None
+            # Loop header and set the corresponding variables to
+            # the integer number
+        for i in range(1, 10):
+            cell = ws.cell(row=self.s.UNIT_HEADER_ROW, column=i)
+            cellval = str(cell.value)
+
+            # If cell is empty (NoneType) - skip it
+            if cellval is None:
+                continue
+
+            if self.s.COL_ID_NAME == cellval:
+                column_id = i
+            elif self.s.COL_TYPE_NAME == cellval:
+                column_type = i            
+            elif self.s.COL_PLC_NAME == cellval:
+                column_plc = i
+            elif self.s.COL_ALARM_GROUP_NAME == cellval:
+                column_hmi_group = i
+            elif self.s.COL_DB_START_ADDR_NAME == cellval:
+                column_db_start_addr = i
+
+        if self.s.debug_level > 0:
+            print('UNIT UNITSHEET:', sheet)
+            print('\t', 'UNIT column_id:', column_id)
+            print('\t', 'UNIT column_type:', column_type)
+            print('\t', 'UNIT column_plc:', column_plc)
+            print('\t', 'UNIT column_hmi_group:', column_hmi_group)
+            print('\t', 'UNIT column_db_start_addr:', column_db_start_addr)
+
+
+        unit_phase_list = []
+        #  loop over the objects in sheet
+        mem_unit = None
+        mem_plc = None
+
+        if column_db_start_addr is not None:
+            db_addr_exists = True
+        else:
+            db_addr_exists = False
+
+        for i in range(self.s.UNIT_ROW, ws.max_row + 1):
+            #  Create cell references
+            cell_id = ws.cell(row=i, column=column_id)
+            cell_type = ws.cell(row=i, column=column_type)
+            cell_plc = ws.cell(row=i, column=column_plc)
+            cell_hmi_group = ws.cell(row=i, column=column_hmi_group)
+            if db_addr_exists:
+                cell_db_start_addr = ws.cell(row=i, column=column_db_start_addr)
+
+
+            # Break if we get a blank ID cell
+            if cell_id.value is None:
+                break
+            
+            def _is_valid_unit_type(in_type):
+                for type in UnitTypes:
+                    if in_type == type.value:
+                        return True
+                return False
+
+            def _is_unit(in_type):
+                if "Unit" in in_type:
+                    return True
+                else:
+                    return False
+
+            is_valid_unit_type = _is_valid_unit_type(cell_type.value)
+            is_unit = _is_unit(cell_type.value)
+            is_phase = not is_unit
+
+            if is_unit:
+                #  Remembers var from unit, in that way less
+                #  duplicate data in excel
+                mem_unit = cell_id.value
+                mem_plc = cell_plc.value
+                mem_hmi_group = cell_hmi_group.value
+                parent = None
+            else:
+                parent = mem_unit
+
+            # Create object dict, always with these key-value pairs
+            obj = {
+                'is_valid_unit_type': is_valid_unit_type,
+                'is_unit': is_unit,
+                'is_phase': is_phase,
+                'parent': parent,
+                'type': cell_type.value,
+                'id': cell_id.value,
+                'plc': mem_plc,
+                'hmi_group': mem_hmi_group,
+            }
+
+            # Insert DB start addr if property exists
+            if db_addr_exists:
+                db, db_offset = self._parse_s7_db_addr(cell_db_start_addr.value)
+                obj['db_nr_str'] = db
+                obj['db_offset'] = db_offset
+
+            unit_phase_list.append(obj)
+        
+        return unit_phase_list
+
     def create_subdirs(self):
         """Create all subdirectiories beyond output path"""
         dirs = [self.s.TIA_DIR, self.s.INTOUCH_DIR, self.s.SQL_DIR]
@@ -275,7 +393,7 @@ class GenMain:
         in files other than the first
         """
 
-        outfile = os.path.join(self.it_path, "ALL_IT.csv")
+        outfile = os.path.join(self.it_path, "ALL_GENERAL_IT.csv")
 
         if os.path.exists(outfile):
             os.remove(outfile)
@@ -312,6 +430,28 @@ class GenMain:
                     for line_index, line in enumerate(rf):
                         wf.write(line)
 
+    @staticmethod
+    def _parse_s7_db_addr(in_db_addr):
+        #  Format expected e.g. DB9001.DBX12.0, DB9001.DBB12, DB9001.DBW12, DB9001.DBD12
+        splitted = in_db_addr.split('.')
+
+        if len(splitted) == 3: 
+            # three elements == two dots == DB9001.DBX0.0 format
+            db, dbx, bit = splitted
+        elif len(splitted) == 2:
+            #  two elements == one dot == any other format specified
+            db, dbx = splitted
+
+        remove_chars = ['D', 'B', 'X', 'W', 'D']
+
+        for char in remove_chars:
+            dbx = dbx.replace(char, '')
+
+        db_offset = int(dbx)
+
+        return db, db_offset
+
+
     def generate(self):
         print('Version', self.s.version)
 
@@ -321,6 +461,10 @@ class GenMain:
             for dict in self.dict_list:
                 for obj in dict:
                     print(obj)
+
+        if not self.s.UNIT_DISABLE and self.s.debug_level > 0:
+            for _ in self.unit_phase_list:
+                print(_)
 
         self.get_config_from_config_path()
         self.create_subdirs()
@@ -384,6 +528,12 @@ class GenMain:
             self._print_disabled_in_settings('ASi')
         else:
             ASi(self, self.output_path, self.asi_dict, self.config_path, config_type=self.config_type)
+
+
+        if self.s.UNIT_DISABLE:
+            self._print_disabled_in_settings('Units_Phases')
+        else: UnitsPhases(self, self.output_path, self.unit_phase_list, 
+                          self.config_path, config_type=self.config_type)
 
         self._combine_it_files()
         self._combine_sql_files()
