@@ -23,17 +23,21 @@ class GenMain:
     """Main class called from UI,
     read data from excel and then execute sub-class functions
     """
-    def __init__(self, excel_path, output_path, config_path):
-        self.excel_path = excel_path
-        self.output_path = output_path
+    def __init__(self):
+        self.s = Settings()
+        self.user_settings = self.s.user_settings
+
+        self.excel_path = self.user_settings['excel_path']
+        self.output_path = self.user_settings['output_path']
+        self.config_path = self.user_settings['config_path']    
         self.cm_output_path = os.path.join(self.output_path, 'CMs')
         self.alarm_output_path = os.path.join(self.output_path, 'Alarm')
         self.unit_output_path = os.path.join(self.output_path, 'Units_Phases')
-        self.config_path = config_path        
         self.plcinexcel = set()
-        self.s = Settings()
         self.dict_list = []
-        self.generate()
+
+
+        self.generate()       
 
     def _open_gen_excel(self):
         try:
@@ -50,57 +54,57 @@ class GenMain:
         self._open_gen_excel()
 
         # Create all dictionaries, if enabled in settings
-        if not self.s.DI_DISABLE:
+        if not self.user_settings['DI_DISABLE']:
             self.di_dict = self._obj_data_to_dict(
                         self.s.DI_SHEETNAME, self.s.DI_START_INDEX, 'di')
             self.dict_list.append(self.di_dict)
 
-        if not self.s.DO_DISABLE:
+        if not self.user_settings['DO_DISABLE']:
             self.do_dict = self._obj_data_to_dict(
                         self.s.DO_SHEETNAME, self.s.DO_START_INDEX, 'do')
             self.dict_list.append(self.do_dict)
 
-        if not self.s.VALVE_DISABLE:
+        if not self.user_settings['VALVE_DISABLE']:
             self.valve_dict = self._obj_data_to_dict(
                 self.s.VALVE_SHEETNAME, self.s.VALVE_START_INDEX, 'valve', config=True)
             self.dict_list.append(self.valve_dict)
 
-        if not self.s.MOTOR_DISABLE:
+        if not self.user_settings['MOTOR_DISABLE']:
             self.motor_dict = self._obj_data_to_dict(
                 self.s.MOTOR_SHEETNAME, self.s.MOTOR_START_INDEX, 'motor', config=True)
             self.dict_list.append(self.motor_dict)
 
-        if not self.s.AI_DISABLE:
+        if not self.user_settings['AI_DISABLE']:
             self.ai_dict = self._obj_data_to_dict(
                 self.s.AI_SHEETNAME, self.s.AI_START_INDEX, 'ai', eng_var=True)
             self.dict_list.append(self.ai_dict)
 
-        if not self.s.AO_DISABLE:
+        if not self.user_settings['AO_DISABLE']:
             self.ao_dict = self._obj_data_to_dict(
                     self.s.AO_SHEETNAME, self.s.AO_START_INDEX, 'ao', eng_var=True)
             self.dict_list.append(self.ao_dict)
 
-        if not self.s.PID_DISABLE:
+        if not self.user_settings['PID_DISABLE']:
             self.pid_dict = self._obj_data_to_dict(
                     self.s.PID_SHEETNAME, self.s.PID_START_INDEX, 'pid', eng_var=True)
             self.dict_list.append(self.pid_dict)
 
-        if not self.s.SUM_DISABLE:
+        if not self.user_settings['SUM_DISABLE']:
             self.sum_dict = self._obj_data_to_dict(
                     self.s.SUM_SHEETNAME, self.s.SUM_START_INDEX, 'sum', eng_var=True, volumeperpulse=True)
             self.dict_list.append(self.sum_dict)
 
-        if not self.s.ALARM_DISABLE:
+        if not self.user_settings['ALARM_DISABLE']:
             self.alarm_dict = self._obj_data_to_dict(
                     self.s.ALARM_SHEETNAME, self.s.ALARM_START_INDEX, 'alarm', generic_alarm=True)
             self.dict_list.append(self.alarm_dict)
 
-        if not self.s.ASI_DISABLE:
+        if not self.user_settings['ASI_DISABLE']:
             self.asi_dict = self._obj_data_to_dict(
                     self.s.ASI_SHEETNAME, self.s.ASI_START_INDEX, 'asi', asi=True)
             self.dict_list.append(self.asi_dict)
         
-        if not self.s.UNIT_DISABLE:
+        if not self.user_settings['UNITS_DISABLE']:
             self.unit_phase_list = self._unit_data_to_list(self.s.UNIT_SHEETNAME)
 
     def _obj_data_to_dict(self, sheet, start_index, type, config=False, eng_var=False, volumeperpulse=False,
@@ -127,12 +131,21 @@ class GenMain:
 
             if self.s.COL_ID_NAME == cellval:
                 column_id = i
+                column_ioid = i
+            if self.s.COL_IOID_NAME == cellval:
+                column_ioid = i
             if self.s.COL_COMMENT_NAME == cellval:
                 column_comment = i
             if self.s.COL_ALARM_GROUP_NAME == cellval:
                 column_alarmgroup = i
             if self.s.COL_PLC_NAME == cellval:
                 column_plc = i
+
+            if type == 'pid':
+                if self.s.COL_IDPV_NAME == cellval:
+                    column_idpv = i
+                if self.s.COL_IDCV_NAME == cellval:
+                    column_idcv = i
 
             if config:
                 if self.s.COL_CONFIG_NAME == cellval:
@@ -165,6 +178,7 @@ class GenMain:
         if self.s.debug_level > 0:
             print('SHEET:', sheet)
             print('\t', 'column_id:', column_id)
+            print('\t', 'column_ioid:', column_ioid)
             print('\t', 'column_comment:', column_comment)
             print('\t', 'column_alarmgroup:', column_alarmgroup)
             print('\t', 'column_plc:', column_plc)
@@ -182,6 +196,9 @@ class GenMain:
             if asi:
                 print('\t', 'column_asi_addr:', column_asi_addr)
                 print('\t', 'column_asi_master:', column_asi_master)
+            if type == 'pid':
+                print('\t', 'column_idpv:', column_idpv)
+                print('\t', 'column_idcv:', column_idcv)
 
 
         # Loop through object list and add key-value pairs to object dict
@@ -191,6 +208,7 @@ class GenMain:
         for i in range(self.s.ROW, ws.max_row + 1):
             # Break if we get a blank ID cell
             cell_id = ws.cell(row=i, column=column_id)
+            cell_ioid = ws.cell(row=i, column=column_ioid)
             cell_comment = ws.cell(row=i, column=column_comment)
             cell_alarmgroup = ws.cell(row=i, column=column_alarmgroup)
             cell_plc = ws.cell(row=i, column=column_plc)
@@ -202,6 +220,7 @@ class GenMain:
             obj = {
                 'type': type,
                 'id': cell_id.value,
+                'ioid': cell_ioid.value,
                 'comment': cell_comment.value,
                 'index': index,
                 'alarmgroup': cell_alarmgroup.value,
@@ -236,6 +255,12 @@ class GenMain:
                 obj['asi_addr'] = cell_asi_addr.value
                 cell_asi_master = ws.cell(row=i, column=column_asi_master)
                 obj['asi_master'] = cell_asi_master.value
+
+            if type == 'pid':
+                cell_idpv = ws.cell(row=i, column=column_idpv)
+                obj['idpv'] = cell_idpv.value
+                cell_idcv = ws.cell(row=i, column=column_idcv)
+                obj['idcv'] = cell_idcv.value
 
             obj_list.append(obj)
             index += 1
@@ -472,73 +497,72 @@ class GenMain:
                 for obj in dict:
                     print(obj)
 
-        if not self.s.UNIT_DISABLE and self.s.debug_level > 0:
+        if not self.user_settings['UNITS_DISABLE'] and self.s.debug_level > 0:
             for _ in self.unit_phase_list:
                 print(_)
 
         self.get_config_from_config_path()
 
-        if self.s.VALVE_DISABLE:
+        if self.user_settings['VALVE_DISABLE']:
             self._print_disabled_in_settings('Valve')
         else:
             Valve(self, self.output_path, self.valve_dict, self.config_path,
                   config_type=self.config_type)
 
-        if self.s.MOTOR_DISABLE:
+        if self.user_settings['MOTOR_DISABLE']:
             self._print_disabled_in_settings('Motor')
         else:
             Motor(self, self.output_path, self.motor_dict, self.config_path,
                   config_type=self.config_type)
 
-        if self.s.DI_DISABLE:
+        if self.user_settings['DI_DISABLE']:
             self._print_disabled_in_settings('DI')
         else:
             DI(self, self.output_path, self.di_dict, self.config_path,
                 config_type=self.config_type)
 
-        if self.s.DO_DISABLE:
+        if self.user_settings['DO_DISABLE']:
             self._print_disabled_in_settings('DO')
         else:
             DO(self, self.output_path, self.do_dict, self.config_path,
                 config_type=self.config_type)
 
-        if self.s.AI_DISABLE:
+        if self.user_settings['AI_DISABLE']:
             self._print_disabled_in_settings('AI')
         else:
             AI(self, self.output_path, self.ai_dict, self.config_path,
                 config_type=self.config_type)
 
-        if self.s.AO_DISABLE:
+        if self.user_settings['AO_DISABLE']:
             self._print_disabled_in_settings('AO')
         else:
             AO(self, self.output_path, self.ao_dict, self.config_path,
                 config_type=self.config_type)
 
-        if self.s.PID_DISABLE:
+        if self.user_settings['PID_DISABLE']:
             self._print_disabled_in_settings('PID')
         else:
             PID(self, self.output_path, self.pid_dict, self.config_path,
                 config_type=self.config_type)
 
-        if self.s.SUM_DISABLE:
+        if self.user_settings['SUM_DISABLE']:
             self._print_disabled_in_settings('SUM')
         else:
             SUM(self, self.output_path, self.sum_dict, self.config_path,
                 config_type=self.config_type)
 
-        if self.s.ALARM_DISABLE:
+        if self.user_settings['ALARM_DISABLE']:
             self._print_disabled_in_settings('Alarm')
         else:
             Alarm(self, self.output_path, self.alarm_dict, self.config_path,
                 config_type=self.config_type)
 
-        if self.s.ASI_DISABLE:
+        if self.user_settings['ASI_DISABLE']:
             self._print_disabled_in_settings('ASi')
         else:
             ASi(self, self.output_path, self.asi_dict, self.config_path, config_type=self.config_type)
 
-
-        if self.s.UNIT_DISABLE:
+        if self.user_settings['UNITS_DISABLE']:
             self._print_disabled_in_settings('Units_Phases')
         else: 
             UnitsPhases(self, self.output_path, self.unit_phase_list, 

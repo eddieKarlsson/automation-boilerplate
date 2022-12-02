@@ -12,9 +12,22 @@ class GenObjFunc:
     def _replace_keywords(self, line, obj):
         """Take in a line and convert all the identifiers to obj data"""
 
+        # PID ID PV and CV
+        if obj.get('idpv') is not None:
+            line = line.replace(self.s.IDPV_REPLACE, str(obj['idpv']))
+        if obj.get('idcv') is not None:
+            line = line.replace(self.s.IDCV_REPLACE, str(obj['idcv']))
+
         # Replace the keywords that always exists
-        line = line.replace(self.s.ID_REPLACE, obj['id'])
-        line = line.replace(self.s.ALARM_GROUP_REPLACE, obj['alarmgroup'])
+        line = line.replace(self.s.ID_REPLACE, str(obj['id']))
+
+        line = line.replace(self.s.IOID_REPLACE, str(obj['ioid']))
+
+        if obj.get('alarmgroup') is not None:
+            line = line.replace(self.s.ALARM_GROUP_REPLACE, str(obj['alarmgroup']))
+        else:
+            line = line.replace(self.s.ALARM_GROUP_REPLACE, '')
+        
         line = line.replace("@Type", obj['type'])
 
         # check if comment exists, if not insert empty string
