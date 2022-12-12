@@ -63,18 +63,11 @@ class GenUI(customtkinter.CTk):
     def create_window_contents(self):
         """Create window contents"""
 
-        # create header
-        self.header = customtkinter.CTkFrame(self, corner_radius=0, height=0)
-        self.header.grid(row=0, column=0, padx=(20, 0), pady=(20, 0), sticky="nsew")
-
-        self.headerlabel = customtkinter.CTkLabel(self.header, text="automation-boilerplate", font=customtkinter.CTkFont(size=20, weight="bold"), anchor=customtkinter.W)
-        self.headerlabel.grid(row=0, column=0, padx=10, pady=10)
-
         # create filesheader
         self.filesheader = customtkinter.CTkFrame(self, corner_radius=0)
         self.filesheader.grid(row=1, column=0, padx=(20, 0), pady=(20, 0), sticky="nsew")
 
-        self.filesheaderlabel = customtkinter.CTkLabel(self.filesheader, text="Välj filer och mappar", font=customtkinter.CTkFont(size=20, weight="bold"), anchor=customtkinter.W)
+        self.filesheaderlabel = customtkinter.CTkLabel(self.filesheader, text="Välj filer och mappar", font=customtkinter.CTkFont(size=20, weight="bold"))
         self.filesheaderlabel.grid(row=1, column=0, padx=10, pady=10)
 
         # create files
