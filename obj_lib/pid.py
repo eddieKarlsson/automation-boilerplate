@@ -13,6 +13,7 @@ class PID:
         self.type = 'pid'
         self.masterfolder = 'CMs'
         self.config_type = config_type
+        self.user_settings = self.s.user_settings
 
         self.cp = os.path.join(config_path, self.masterfolder, self.type)  # Config folder path
         self.cf = os.path.join(self.cp, self.type + '.txt')  # base config file
@@ -33,7 +34,6 @@ class PID:
             self.generate()
         else:
             print(f'\nWARNING: {self.type.upper()} not generated, no items found in TD')
-
 
     def _tia_db(self):
         data = self.gen.single(self.cf, self.rl, 'TIA_DB_Header')
@@ -158,7 +158,8 @@ class PID:
             #self._tia_code()
             #self._intouch()
             #self._sql()
-            self._Au2Mate_DB()
-            self._Au2Mate_Code()
-            self._Au2Mate_Platform()
+            if not self.user_settings['Au2_DISABLE']:
+                self._Au2Mate_DB()
+                self._Au2Mate_Code()
+                self._Au2Mate_Platform()
             self.gen.result(self.rl, type=self.type.upper())

@@ -18,6 +18,7 @@ from obj_lib.alarm import Alarm
 from obj_lib.asi import ASi
 from unit_lib.unit_types import UnitTypes
 from unit_lib.units_phases import UnitsPhases
+from obj_lib.Au2ParInstance import Au2ParInstance
 
 class GenMain:
     """Main class called from UI,
@@ -106,6 +107,11 @@ class GenMain:
         
         if not self.user_settings['UNITS_DISABLE']:
             self.unit_phase_list = self._unit_data_to_list(self.s.UNIT_SHEETNAME)
+
+        if not self.user_settings['Au2_DISABLE']:
+            self.parameters_dict = self._pars_data_to_dict(
+                    'Parameters', 6, 'Parameters')
+            self.dict_list.append(self.parameters_dict)
 
     def _obj_data_to_dict(self, sheet, start_index, type, config=False, eng_var=False, volumeperpulse=False,
                           generic_alarm=False, asi=False):
@@ -267,6 +273,86 @@ class GenMain:
 
         for obj in obj_list:
             self.plcinexcel.add(obj['plc'])
+
+        return obj_list
+
+    def _pars_data_to_dict(self, sheet, start_index, type, config=False):
+        """Read all object data to dict"""
+
+        # Open excel sheet
+        try:
+            ws = self.wb[sheet]
+        except KeyError:
+            msg = f'ERROR! {sheet} sheet does not exist, program will exit'
+            print(msg)
+            sys.exit()
+
+            # Loop header and set the corresponding variables to
+            # the integer number
+        for i in range(1, 20):
+            cell = ws.cell(row=self.s.HEADER_ROW, column=i)
+            cellval = str(cell.value)
+
+            # If cell is empty (NoneType) - skip it
+            if cellval is None:
+                continue
+
+            if "Name" == cellval:
+                column_name = i
+            if "TYPE" == cellval:
+                column_type = i
+            if "OFFSET" == cellval:
+                column_offset = i
+            if "DESC" == cellval:
+                column_desc = i
+            if "DataType" == cellval:
+                column_datatype = i
+            if "DB" == cellval:
+                column_db = i
+            if "PLC" == cellval:
+                column_plc = i
+
+        if self.s.debug_level > 0:
+            print('SHEET:', sheet)
+            print('\t', 'column_name:', column_name)
+            print('\t', 'column_type:', column_type)
+            print('\t', 'column_offset:', column_offset)
+            print('\t', 'column_desc:', column_desc)
+            print('\t', 'column_datatype:', column_datatype)
+            print('\t', 'column_db:', column_db)
+            print('\t', 'column_plc:', column_plc)
+
+        # Loop through object list and add key-value pairs to object dict
+        # then append each object-dict to list
+        obj_list = []
+        index = start_index
+        for i in range(self.s.ROW, ws.max_row + 1):
+            # Break if we get a blank ID cell
+            cell_name = ws.cell(row=i, column=column_name)
+            cell_type = ws.cell(row=i, column=column_type)
+            cell_offset = ws.cell(row=i, column=column_offset)
+            cell_desc = ws.cell(row=i, column=column_desc)
+            cell_datatype = ws.cell(row=i, column=column_datatype)
+            cell_db = ws.cell(row=i, column=column_db)
+            cell_plc = ws.cell(row=i, column=column_plc)
+
+            if cell_name.value is None:
+                break
+
+            # Always insert these key-value pairs
+            obj = {
+                'type': type,
+                'name': cell_name.value,
+                'type': cell_type.value,
+                'offset': cell_offset.value,
+                'desc': cell_desc.value,
+                'datatype': cell_datatype.value,
+                'db': cell_db.value,
+                'plc': cell_plc.value,
+            }
+
+            obj_list.append(obj)
+            index += 1
 
         return obj_list
 
@@ -567,6 +653,11 @@ class GenMain:
         else: 
             UnitsPhases(self, self.output_path, self.unit_phase_list, 
                           self.config_path, config_type=self.config_type)
+
+        if self.user_settings['Au2_DISABLE']:
+            self._print_disabled_in_settings('Au2')
+        else:
+            Au2ParInstance(self, self.output_path, self.parameters_dict, self.config_path, config_type=self.config_type)
 
         self._combine_it_files()
         self._combine_sql_files()

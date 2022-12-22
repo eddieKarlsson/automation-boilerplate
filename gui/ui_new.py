@@ -165,6 +165,11 @@ class GenUI(customtkinter.CTk):
         self.units_disabled = customtkinter.CTkCheckBox(master=self.configs, variable=self.units_var, text="Disable UNITS generation")
         self.units_disabled.grid(row=7, column=2, pady=(20, 10), padx=20, sticky="n")
 
+        self.Au2_var = customtkinter.BooleanVar()
+        self.Au2_var.initialize(self.user_settings['Au2_DISABLE'])
+        self.Au2_disabled = customtkinter.CTkCheckBox(master=self.configs, variable=self.Au2_var, text="Disable Au2 generation")
+        self.Au2_disabled.grid(row=7, column=3, pady=(20, 10), padx=20, sticky="n")
+
         # Run script
         self.runButton = customtkinter.CTkButton(self.configs, text="Generera", command=self.run_self, state=customtkinter.DISABLED)
         self.runButton.grid(row=10, column=0, padx=20, pady=10)
@@ -233,4 +238,5 @@ class GenUI(customtkinter.CTk):
         self.user_settings['ALARM_DISABLE'] = self.alarm_var.get()
         self.user_settings['ASI_DISABLE'] = self.asi_var.get()
         self.user_settings['UNITS_DISABLE'] = self.units_var.get()
+        self.user_settings['Au2_DISABLE'] = self.Au2_var.get()
         

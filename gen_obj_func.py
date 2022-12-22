@@ -19,33 +19,35 @@ class GenObjFunc:
             line = line.replace(self.s.IDCV_REPLACE, str(obj['idcv']))
 
         # Replace the keywords that always exists
-        line = line.replace(self.s.ID_REPLACE, str(obj['id']))
+        if obj.get('id') is not None:
+            line = line.replace(self.s.ID_REPLACE, str(obj['id']))
 
-        line = line.replace(self.s.IOID_REPLACE, str(obj['ioid']))
+        if obj.get('ioid') is not None:
+            line = line.replace(self.s.IOID_REPLACE, str(obj['ioid']))
 
         if obj.get('alarmgroup') is not None:
             line = line.replace(self.s.ALARM_GROUP_REPLACE, str(obj['alarmgroup']))
         else:
             line = line.replace(self.s.ALARM_GROUP_REPLACE, '')
         
-        line = line.replace("@Type", obj['type'])
+        if obj.get('type') is not None:
+            line = line.replace("@Type", obj['type'])
 
         # check if comment exists, if not insert empty string
-        if obj['comment'] is None:
-            line = line.replace(self.s.COMMENT_REPLACE, '')
+        if obj.get('comment') is not None:
+            line = line.replace(self.s.COMMENT_REPLACE, obj['comment'])
         else:
-            line = line.replace(self.s.COMMENT_REPLACE,
-                                obj['comment'])
+            line = line.replace(self.s.COMMENT_REPLACE, '')
 
         # Replace index
-        line = line.replace(self.s.INDEX_REPLACE, str(obj['index']))
+        if obj.get('index') is not None:
+            line = line.replace(self.s.INDEX_REPLACE, str(obj['index']))        
 
         # Replace PLC
-        if obj['plc'] is None:
-            line = line.replace(self.s.PLC_REPLACE, '')
+        if obj.get('plc') is not None:
+            line = line.replace(self.s.PLC_REPLACE, obj['plc'])
         else:
-            line = line.replace(self.s.PLC_REPLACE,
-                                obj['plc'])
+            line = line.replace(self.s.PLC_REPLACE, '')
 
         # Replace the keywords that are optional (check if they exist)
         if obj.get('config') is not None:
@@ -83,6 +85,24 @@ class GenObjFunc:
 
         if obj.get('asi_master') is not None:
             line = line.replace(self.s.ASI_MASTER_REPLACE, str(obj['asi_master']))   
+
+        if obj.get('name') is not None:
+            line = line.replace('@Name', str(obj['name']))
+
+        if obj.get('type') is not None:
+            line = line.replace('@TYPE', str(obj['type']))   
+
+        if obj.get('offset') is not None:
+            line = line.replace('@OFFSET', str(obj['offset']))   
+
+        if obj.get('datatype') is not None:
+            line = line.replace('@DataType', str(obj['datatype']))   
+
+        if obj.get('db') is not None:
+            line = line.replace('@DB', str(obj['db']))   
+
+        if obj.get('plc') is not None:
+            line = line.replace('@PLC', str(obj['plc']))      
 
         return line
 

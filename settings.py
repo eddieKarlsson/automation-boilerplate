@@ -142,7 +142,8 @@ class Settings:
             'SUM_DISABLE': "true",
             'ALARM_DISABLE': "true",
             'ASI_DISABLE': "true",
-            'UNITS_DISABLE': "true"
+            'UNITS_DISABLE': "true",
+            'Au2_DISABLE': "true"
         }
 
         return user_settings
