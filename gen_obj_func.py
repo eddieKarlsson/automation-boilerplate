@@ -12,42 +12,27 @@ class GenObjFunc:
     def _replace_keywords(self, line, obj):
         """Take in a line and convert all the identifiers to obj data"""
 
-        # PID ID PV and CV
-        if obj.get('idpv') is not None:
-            line = line.replace(self.s.IDPV_REPLACE, str(obj['idpv']))
-        if obj.get('idcv') is not None:
-            line = line.replace(self.s.IDCV_REPLACE, str(obj['idcv']))
-
         # Replace the keywords that always exists
-        if obj.get('id') is not None:
-            line = line.replace(self.s.ID_REPLACE, str(obj['id']))
-
-        if obj.get('ioid') is not None:
-            line = line.replace(self.s.IOID_REPLACE, str(obj['ioid']))
-
-        if obj.get('alarmgroup') is not None:
-            line = line.replace(self.s.ALARM_GROUP_REPLACE, str(obj['alarmgroup']))
-        else:
-            line = line.replace(self.s.ALARM_GROUP_REPLACE, '')
-        
-        if obj.get('type') is not None:
-            line = line.replace("@Type", obj['type'])
+        line = line.replace(self.s.ID_REPLACE, obj['id'])
+        line = line.replace(self.s.ALARM_GROUP_REPLACE, obj['alarmgroup'])
+        line = line.replace("@Type", obj['type'])
 
         # check if comment exists, if not insert empty string
-        if obj.get('comment') is not None:
-            line = line.replace(self.s.COMMENT_REPLACE, obj['comment'])
-        else:
+        if obj['comment'] is None:
             line = line.replace(self.s.COMMENT_REPLACE, '')
+        else:
+            line = line.replace(self.s.COMMENT_REPLACE,
+                                obj['comment'])
 
         # Replace index
-        if obj.get('index') is not None:
-            line = line.replace(self.s.INDEX_REPLACE, str(obj['index']))        
+        line = line.replace(self.s.INDEX_REPLACE, str(obj['index']))
 
         # Replace PLC
-        if obj.get('plc') is not None:
-            line = line.replace(self.s.PLC_REPLACE, obj['plc'])
-        else:
+        if obj['plc'] is None:
             line = line.replace(self.s.PLC_REPLACE, '')
+        else:
+            line = line.replace(self.s.PLC_REPLACE,
+                                obj['plc'])
 
         # Replace the keywords that are optional (check if they exist)
         if obj.get('config') is not None:
@@ -85,24 +70,6 @@ class GenObjFunc:
 
         if obj.get('asi_master') is not None:
             line = line.replace(self.s.ASI_MASTER_REPLACE, str(obj['asi_master']))   
-
-        if obj.get('name') is not None:
-            line = line.replace('@Name', str(obj['name']))
-
-        if obj.get('type') is not None:
-            line = line.replace('@TYPE', str(obj['type']))   
-
-        if obj.get('offset') is not None:
-            line = line.replace('@OFFSET', str(obj['offset']))   
-
-        if obj.get('datatype') is not None:
-            line = line.replace('@DataType', str(obj['datatype']))   
-
-        if obj.get('db') is not None:
-            line = line.replace('@DB', str(obj['db']))   
-
-        if obj.get('plc') is not None:
-            line = line.replace('@PLC', str(obj['plc']))      
 
         return line
 

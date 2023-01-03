@@ -13,7 +13,6 @@ class AO:
         self.type = 'ao'
         self.masterfolder = 'CMs'
         self.config_type = config_type
-        self.user_settings = self.s.user_settings
 
         self.cp = os.path.join(config_path, self.masterfolder, self.type)  # Config folder path
         self.cf = os.path.join(self.cp, self.type + '.txt')  # base config file
@@ -112,47 +111,12 @@ class AO:
         with open(path, 'w', encoding='cp1252') as f:
             f.write(data)
 
-    def _Au2Mate_DB(self):
-        data = self.gen.multiple(self.ol, self.cf, self.rl, 'Au2Mate_DB')
-
-        filename = self.type + '_db.awl'
-        path = os.path.join(self.tia_path, filename)
-        if not os.path.exists(self.tia_path):
-            os.makedirs(self.tia_path)
-        with open(path, 'w', encoding='cp1252') as f:
-            f.write(data)
-
-    def _Au2Mate_Code(self):
-        data = self.gen.multiple(self.ol, self.cf, self.rl, 'Au2Mate_Code')
-
-        filename = self.type + '_code.awl'
-        path = os.path.join(self.tia_path, filename)
-        if not os.path.exists(self.tia_path):
-            os.makedirs(self.tia_path)
-        with open(path, 'w', encoding='cp1252') as f:
-            f.write(data)
-
-    def _Au2Mate_Platform(self):
-        data = self.gen.single(self.cf, self.rl, 'Au2Mate_Platform_Header')
-        data += self.gen.multiple(self.ol, self.cf, self.rl, 'Au2Mate_Platform_Data')
-
-        filename = self.type + '_platform.csv'
-        path = os.path.join(self.tia_path, filename)
-        if not os.path.exists(self.tia_path):
-            os.makedirs(self.tia_path)
-        with open(path, 'w', encoding='cp1252') as f:
-            f.write(data)
-
     def generate(self):
         if self.ol:
             self._find_plcs()
-            #self._tia_db_multiple_plc()
+            self._tia_db_multiple_plc()
             #self._tia_symbol()
             #self._tia_code()
-            #self._intouch()
-            #self._sql()
-            if not self.user_settings['Au2_DISABLE']:
-                self._Au2Mate_DB()
-                self._Au2Mate_Code()
-                self._Au2Mate_Platform()
+            self._intouch()
+            self._sql()
             self.gen.result(self.rl, type=self.type.upper())
