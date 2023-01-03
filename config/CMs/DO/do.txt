@@ -99,7 +99,3 @@ TITLE = @ID
 <TIA_Code_Footer>
 END_FUNCTION
 </TIA_Code_Footer>
-
-<Au2Mate_DB>
-   @ID : "udt_xxx"; // @CMT
-</Au2Mate_DB>
