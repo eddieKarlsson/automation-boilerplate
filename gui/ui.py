@@ -12,8 +12,9 @@ class GenUI(tk.Frame):
         self.master = master
         self.pack()
 
+        # Get Current User Data    
         self.s = Settings()
-        self.user_data = self.s.load_user_settings()
+        self.user_settings = self.get_user_settings()
 
         # Constants
         self.height = 275
@@ -87,7 +88,7 @@ class GenUI(tk.Frame):
         # Excel path label
         self.excelLabel = tk.Label(self.frame, bg=self.button_bg,
                                    fg=self.button_fg,
-                                   text=(self.user_data['excel_path']))
+                                   text=(self.user_settings['excel_path']))
 
         self.excelLabel.place(relx=0.27, rely=y, relheight=self.buttonHeight)
 
@@ -103,7 +104,7 @@ class GenUI(tk.Frame):
         # Output path label
         self.outpathLabel = tk.Label(self.frame, bg=self.button_bg,
                                      fg=self.button_fg,
-                                     text=(self.user_data['output_path']))
+                                     text=(self.user_settings['output_path']))
 
         self.outpathLabel.place(relx=0.27, rely=y,
                                 relheight=self.buttonHeight)
@@ -122,13 +123,14 @@ class GenUI(tk.Frame):
             # config path label
             self.cfgpathLabel = tk.Label(self.frame, bg=self.button_bg,
                                          fg=self.button_fg,
-                                         text=(self.user_data['config_path']))
+                                         text=(self.user_settings['config_path']))
 
             self.cfgpathLabel.place(relx=0.27, rely=y,
                                     relheight=self.buttonHeight)
 
         y += self.buttonYSpacing
         y += self.buttonYSpacing
+
         # Run script
         self.run_self = tk.Button(self.master, text="Run script",
                                   bg=self.button_bg, fg=self.button_fg,
@@ -143,8 +145,8 @@ class GenUI(tk.Frame):
                         "*.xlsx"),
                        ("all files", "*.*")))
 
-        # Write to user_data dictionary, to save it for later.
-        self.user_data['excel_path'] = excelPath
+        # Write to user_settings dictionary, to save it for later.
+        self.user_settings['excel_path'] = excelPath
         # Update label
         self.excelLabel.config(text=excelPath)
 
@@ -153,30 +155,31 @@ class GenUI(tk.Frame):
 
     def output_path(self):
         output_path = filedialog.askdirectory()
-        # Write to user_data dictionary, to save it for later.
-        self.user_data['output_path'] = output_path
+        # Write to user_settings dictionary, to save it for later.
+        self.user_settings['output_path'] = output_path
         # Update label
         self.outpathLabel.config(text=output_path)
 
     def config_path(self):
         config_path = filedialog.askdirectory()
-        # Write to user_data dictionary, to save it for later.
-        self.user_data['config_path'] = config_path
+        # Write to user_settings dictionary, to save it for later.
+        self.user_settings['config_path'] = config_path
         # Update label
         self.cfgpathLabel.config(text=config_path)
 
     def check_path_validity(self):
-        if os.path.isfile(self.user_data['excel_path']):
+        if os.path.isfile(self.user_settings['excel_path']):
             self.run_self.configure(state=tk.NORMAL)
         else:
             self.run_self.configure(state=tk.DISABLED)
 
     def run_self(self):
-        GenMain(self.user_data['excel_path'], self.user_data['output_path'],
-                self.user_data['config_path'])
+        self.check_disable_buttons()
+        self.s.store_user_settings(self.user_settings)
+        GenMain()
 
     def open_config_path(self):
-        c_path = self.user_data['config_path']
+        c_path = self.user_settings['config_path']
         c2_path = os.path.realpath(c_path)
         os.startfile(c2_path)
 
@@ -186,4 +189,6 @@ class GenUI(tk.Frame):
         self.label = tk.Label(self.about, text=self.s.version).pack()
 
     def get_user_settings(self):
-        return self.user_data
+        return self.s.user_settings
+
+        

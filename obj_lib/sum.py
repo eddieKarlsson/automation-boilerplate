@@ -13,6 +13,7 @@ class SUM:
         self.type = 'sum'
         self.masterfolder = 'CMs'
         self.config_type = config_type
+        self.user_settings = self.s.user_settings
 
         self.cp = os.path.join(config_path, self.masterfolder, self.type)  # Config folder path
         self.cf = os.path.join(self.cp, self.type + '.txt')  # base config file

@@ -20,6 +20,15 @@ class Settings:
         self.COL_ID_NAME = 'ID'
         self.ID_REPLACE = '@ID'  # string to be replaced in config file
 
+        self.COL_IOID_NAME = 'IO ID'
+        self.IOID_REPLACE = '@IOID'  # string to be replaced in config file
+
+        self.COL_IDPV_NAME = 'ID PV'
+        self.IDPV_REPLACE = '@IDPV'  # string to be replaced in config file
+        
+        self.COL_IDCV_NAME = 'ID CV'
+        self.IDCV_REPLACE = '@IDCV'  # string to be replaced in config file
+
         self.COL_TYPE_NAME = 'Type'
         self.TYPE_REPLACE = '@TYPE'  # string to be replaced in config file
 
@@ -65,47 +74,36 @@ class Settings:
         self.OFFSET_END_IDENTIFIER = '@END_OFFSET'
         self.DB_NR_REPLACE = '@DB_NR'
 
-        self.DI_DISABLE = False
         self.DI_START_INDEX = 0  # Start-position index in datablock
         self.DI_SHEETNAME = 'DI'
 
-        self.DO_DISABLE = False
         self.DO_START_INDEX = 0
         self.DO_SHEETNAME = 'DO'
 
-        self.VALVE_DISABLE = False
         self.VALVE_START_INDEX = 0
         self.VALVE_SHEETNAME = 'Valve'
 
-        self.MOTOR_DISABLE = False
         self.MOTOR_START_INDEX = 0
         self.MOTOR_SHEETNAME = 'Motor'
 
-        self.AI_DISABLE = False
         self.AI_START_INDEX = 0
         self.AI_SHEETNAME = 'AI'
 
-        self.AO_DISABLE = False
         self.AO_START_INDEX = 0
         self.AO_SHEETNAME = 'AO'
 
-        self.PID_DISABLE = False
         self.PID_START_INDEX = 0
         self.PID_SHEETNAME = 'PID'
 
-        self.SUM_DISABLE = False
         self.SUM_START_INDEX = 0
         self.SUM_SHEETNAME = 'Sum'
 
-        self.ALARM_DISABLE = False
         self.ALARM_START_INDEX = 0
         self.ALARM_SHEETNAME = 'Alarm'
 
-        self.ASI_DISABLE = False
         self.ASI_START_INDEX = 0
         self.ASI_SHEETNAME = 'Valve'
 
-        self.UNIT_DISABLE = False
         self.UNIT_START_INDEX = 0
         self.UNIT_SHEETNAME = 'Units_Phases'
 
@@ -126,18 +124,26 @@ class Settings:
         else:
             self.debug_level = 0
 
-        #  Disable options from function is special debug value provided
-        if self.debug_level == 1337:
-            self._disable_options(True, False)
-        elif self.debug_level == 1338:
-            self._disable_options(False, True)
+        self.user_settings = self.load_user_settings()
 
     def _create_user_settings(self):
         """Create dict which contains all user data"""
         user_settings = {
             'excel_path': 'No excel specified',
             'output_path': 'No path specified',
-            'config_path': 'config',
+            'config_path': "config",
+            'DI_DISABLE': "true",
+            'DO_DISABLE': "true",
+            'VALVE_DISABLE': "true",
+            'MOTOR_DISABLE': "true",
+            'AI_DISABLE': "true",
+            'AO_DISABLE': "true",
+            'PID_DISABLE': "true",
+            'SUM_DISABLE': "true",
+            'ALARM_DISABLE': "true",
+            'ASI_DISABLE': "true",
+            'UNITS_DISABLE': "true",
+            'Au2_DISABLE': "true"
         }
 
         return user_settings
@@ -161,20 +167,3 @@ class Settings:
         """Dump Dict to JSON file"""
         with open(self.json_file, 'w') as f:
             json.dump(user_settings, f, indent=self.indent)
-
-    def _disable_options(self, disable_all_non_unit, disable_unit):
-        if disable_all_non_unit:
-            self.DI_DISABLE = True
-            self.DO_DISABLE = True
-            self.VALVE_DISABLE = True
-            self.MOTOR_DISABLE = True
-            self.AI_DISABLE = True
-            self.AO_DISABLE = True
-            self.PID_DISABLE = True
-            self.SUM_DISABLE = True
-            self.ALARM_DISABLE = True
-            self.ASI_DISABLE = True
-
-        if disable_unit:
-            self.UNIT_DISABLE = True
-

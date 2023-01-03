@@ -66,3 +66,37 @@ END_DATA_BLOCK
    PID :="DB PID".@ID
    
 </TIA_Help_PID_Call>
+
+<Au2Mate_DB>
+   @ID : "udt_xxx"; // @CMT
+</Au2Mate_DB>
+
+<Au2Mate_Code>
+NETWORK
+TITLE =@ID - @CMT
+
+      CALL  "sys_PID"
+       INCOPT:=TRUE                     // Normal control mode
+       MEAS  :="AIN".@IDPV.PNT      // Process value
+       HSCI  :="AIN".@IDPV.HSCI     // High measuring range
+       LSCI  :="AIN".@IDPV.LSCI     // Low measuring range
+       HSCO  :="AOUT".@IDCV.HSCO    // Output range high limit
+       LSCO  :="AOUT".@IDCV.LSCO    // Output range low limit
+       FBK   :="AOUT".@IDCV.OUT     // Control value feedback
+       FSVAL :=0.000000e+000            // STOP VALUE
+       OUT   :="AOUT".@IDCV.MEAS    // Control value
+       DATA  :="PID".@ID         // Internal data-area
+
+</Au2Mate_Code>
+
+<Au2Mate_Platform_Header>
+; Created on: 2022-12-01 11:33:31 from Galaxy: aaKristianstad
+
+
+:TEMPLATE=$SysPIDS7
+:Tagname,Area,SecurityGroup,Container,ContainedName,AliasName,ShortDesc,UDAs,Extensions,CmdData,Debug,GetIOAdr,HMI_OperatorReq,aaSetup_AIN,aaSetup_AOUT,HMI_Autotune_Active,HMI_Autotune_Tagname,HMI_PLC_Act_SP,HMI_PLC_DTime,HMI_PLC_ITime,HMI_PLC_Man_SP,HMI_PLC_PGain,HMI_Sta_Manual,HMI_Sta_ON,HMI_Sta_Operator,HMI_Sta_Regulating,HMI_Sta_Remote,HMI_Sta_RemoteAvailable,HMI_Sta_SP_Change,HMI_Sta_Tracking,HMI_Sta_Tune_Active,HMI_Sta_Tune_Selected,aaSetup_PLC,aaSetup_PLCStartAdrByte,aaSetup_PLCStartAdrDB,HMI_AlmCommandTimeOut,HMI_AlmCommandTimeOutTxt,HMI_PLC_Command,HMI_PLC_Status,AnalogOutputEnabled,PV,PV.EngUnits,PV.Mode,Scaled,Deadband,PV.Historized,SP,PV.Mode.Historized,AnalogOutput.DiffAddr,PV.Input.InputSource,HMI_PLC_Act_SP.InputSource,HMI_PLC_Act_SP.DiffOutputDest,HMI_PLC_Act_SP.Deadband,HMI_PLC_Act_SP.OutputDest,HMI_PLC_DTime.InputSource,HMI_PLC_DTime.DiffOutputDest,HMI_PLC_DTime.Deadband,HMI_PLC_DTime.OutputDest,HMI_PLC_ITime.InputSource,HMI_PLC_ITime.DiffOutputDest,HMI_PLC_ITime.Deadband,HMI_PLC_ITime.OutputDest,HMI_PLC_Man_SP.InputSource,HMI_PLC_Man_SP.DiffOutputDest,HMI_PLC_Man_SP.Deadband,HMI_PLC_Man_SP.OutputDest,HMI_PLC_PGain.InputSource,HMI_PLC_PGain.DiffOutputDest,HMI_PLC_PGain.Deadband,HMI_PLC_PGain.OutputDest,HMI_Autotune_Tagname.InputSource,HMI_Autotune_Tagname.DiffOutputDest,HMI_Autotune_Tagname.OutputDest,HMI_Autotune_Active.InputSource,HMI_Autotune_Active.InvertValue,SP.LoLimit,SP.HiLimit,CtrlMode,CtrlTrack.Enabled,CtrlTrack.ValueHist.Historized,CtrlMode.Historized,SP.Reference,SP.ReferenceSecondary,Command.AliasReferences,CommandTimeout.AliasReferences,StatusChange.AliasReferences,GetIOAdr.AliasReferences,AutoTune.AliasReferences,HMI_AlmCommandTimeOut.ActiveAlarmState,HMI_AlmCommandTimeOut.AlarmShelveCmd,HMI_AlmCommandTimeOut.Alarm.TimeDeadband,HMI_AlmCommandTimeOut.AlarmSourceAttr,HMI_PLC_Command.InputSource,HMI_PLC_Command.DiffOutputDest,HMI_PLC_Command.Deadband,HMI_PLC_Command.OutputDest,HMI_PLC_Status.InputSource,HMI_PLC_Status.Deadband,HMI_AlmCommandTimeOut.HasStatistics,RawMin,RawMax,EngUnitsMin,EngUnitsMax,ClampEnabled,EngUnitsRangeMin,EngUnitsRangeMax,SP.ValueDeadBand,SP.ForceStoragePeriod,SP.TrendHi,SP.TrendLo,SP.Description,SP.InterpolationType,SP.RolloverValue,SP.SampleCount,SP.EnableSwingingDoor,SP.RateDeadBand
+</Au2Mate_Platform_Header>
+
+<Au2Mate_Platform_Data>
+@ID,IFix,A1_K_Milk,@PLC,@ID,,"@CMT",<UDAInfo></UDAInfo>,<ExtensionInfo><ObjectExtension/><AttributeExtension/></ExtensionInfo>,<CmdData><BooleanLabel></BooleanLabel></CmdData>,false,true,None,@IDPV,@IDCV,false,,0.0,0.0,0.0,0.0,0.0,false,false,false,false,false,false,false,false,false,false,"OI_S7PLC01_SM.S7PLC01_SM",@AlarmGroup,73,false,,0,0,false,0.0,@ENGUNIT,Auto,true,0.0,false,0.0,false,false,---,---,false,0.0,---,---,false,0.0,---,---,false,0.0,---,---,false,0.0,---,---,false,0.0,---,---,false,---,---,false,NaN,NaN,None,false,false,false,---,---,No Data,No Data,No Data,No Data,No Data,true,"Duration=0; Reason="""";",0000 00:00:00.0000000,me.HMI_AlmCommandTimeOut,---,false,0.0,---,---,0.0,false,@ENGMIN.0,@ENGMAX.0,@ENGMIN.0,@ENGMAX.0,false,@ENGMIN.0,@ENGMAX.0,0.1,600000,@ENGMAX.0,@ENGMIN.0,,SystemDefault,0.0,0,false,0.0,
+</Au2Mate_Platform_Data>

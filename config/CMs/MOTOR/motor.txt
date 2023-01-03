@@ -70,3 +70,34 @@ var end
 <TIA_Code_Var>
 "I*@ID" : Bool;
 </TIA_Code_Var>
+
+Au2Mate Datablock
+
+<Au2Mate_DB>
+   @ID : "udt_xxx"; // @CMT
+</Au2Mate_DB>
+
+<Au2Mate_Code>
+NETWORK
+TITLE =@ID - @CMT
+
+      CALL "sys_MTR" (
+           MTYPE                    := 0,// Motor with run feedback
+           DVLIM1                   := FALSE,// Not used for this type 
+           DVLIM2                   := FALSE,// Not used for this type 
+           DATA                     := "MTR".@ID,// Valve work data
+           COUT                     := "sys_DUMMY_BIT2");// Output
+
+</Au2Mate_Code>
+
+<Au2Mate_Platform_Header>
+; Created on: 2022-11-23 09:14:06 from Galaxy: aaKristianstad
+
+
+:TEMPLATE=$SysMTRS7
+:Tagname,Area,SecurityGroup,Container,ContainedName,AliasName,ShortDesc,ExecutionRelativeOrder,ExecutionRelatedObject,UDAs,Extensions,CmdData,Debug,GetIOAdr,HMI_OperatorReq,HMI_Sta_Activated,HMI_Sta_AutDsr,HMI_Sta_Fault,HMI_Sta_ManualMode,HMI_Sta_Masked,HMI_Sta_Monitored,HMI_Sta_AlmFeedback,HMI_Sta_AlmFeedbackTxt,HMI_Sta_AlmMasked,HMI_Sta_AlmMaskedTxt,HMI_Sta_AlmMonitor,HMI_Sta_AlmMonitorTxt,HMI_Sta_Changing,HMI_Sta_EnableInterLock,HMI_Sta_EnableReversing,HMI_Sta_InterLocked,HMI_Sta_NoReadyFeedback,HMI_Sta_NoRunFeedback,HMI_Sta_Ready,HMI_Sta_Reversing,HMI_Sta_Run,aaSetup_PLC,aaSetup_PLCStartAdrByte,aaSetup_PLCStartAdrDB,HMI_AlmCommandTimeOut,HMI_AlmCommandTimeOutTxt,HMI_PLC_AlmDly,HMI_PLC_Command,HMI_PLC_Status,Stats.Enabled,CtrlTrack.Enabled,CmdTimeoutAlarm.Alarmed,UncommandedChangeAlarm.Alarmed,Cmd.Historized,CmdTimeoutAlarm.Limit,CtrlMode,PV.IsActive1.Alarmed,PV.IsActive2.Alarmed,PV.IsNull.Alarmed,HMI_Sta_AlmFeedback.ActiveAlarmState,HMI_Sta_AlmFeedback.AlarmShelveCmd,HMI_Sta_AlmFeedback.Alarm.TimeDeadband,HMI_Sta_AlmFeedback.AlarmSourceAttr,HMI_Sta_AlmMasked.ActiveAlarmState,HMI_Sta_AlmMasked.AlarmShelveCmd,HMI_Sta_AlmMasked.Alarm.TimeDeadband,HMI_Sta_AlmMasked.AlarmSourceAttr,HMI_Sta_AlmMonitor.ActiveAlarmState,HMI_Sta_AlmMonitor.AlarmShelveCmd,HMI_Sta_AlmMonitor.Alarm.TimeDeadband,HMI_Sta_AlmMonitor.AlarmSourceAttr,HMI_Sta_AlmFeedback.HasStatistics,HMI_Sta_AlmMasked.HasStatistics,HMI_Sta_AlmMonitor.HasStatistics,Command.AliasReferences,CommandTimeout.AliasReferences,StatusChange.AliasReferences,GetIOAdr.AliasReferences,HMI_AlmCommandTimeOut.ActiveAlarmState,HMI_AlmCommandTimeOut.AlarmShelveCmd,HMI_AlmCommandTimeOut.Alarm.TimeDeadband,HMI_AlmCommandTimeOut.AlarmSourceAttr,HMI_PLC_Command.InputSource,HMI_PLC_Command.Deadband,HMI_PLC_Command.OutputDest,HMI_PLC_Status.InputSource,HMI_PLC_Status.Deadband,HMI_PLC_AlmDly.InputSource,HMI_PLC_AlmDly.Deadband,HMI_PLC_AlmDly.OutputDest,HMI_AlmCommandTimeOut.HasStatistics,PV.ForceStoragePeriod,PV.TrendHi,PV.TrendLo,PV.Description,PV.InterpolationType,PV.RolloverValue,PV.SampleCount,PV.EnableSwingingDoor,PV.RateDeadBand
+</Au2Mate_Platform_Header>
+
+<Au2Mate_Platform_Data>
+@ID,IFix,A1_K_Milk,@PLC,@ID,,"@CMT",None,,<UDAInfo></UDAInfo>,<ExtensionInfo><ObjectExtension/><AttributeExtension/></ExtensionInfo>,<CmdData><BooleanLabel></BooleanLabel></CmdData>,false,true,None,false,false,false,false,false,false,false,,false,,false,,false,false,false,false,false,false,false,false,false,"OI_S7PLC01_SM.S7PLC01_SM",@AlarmGroup,74,false,,0,0,0,false,false,false,false,false,0000 00:00:10.0000000,Manual,false,false,false,true,"Duration=0; Reason="""";",0000 00:00:00.0000000,me.HMI_Sta_AlmFeedback,true,"Duration=0; Reason="""";",0000 00:00:00.0000000,me.HMI_Sta_AlmMasked,true,"Duration=0; Reason="""";",0000 00:00:00.0000000,me.HMI_Sta_AlmMonitor,false,false,false,No Data,No Data,No Data,No Data,true,"Duration=0; Reason="""";",0000 00:00:00.0000000,me.HMI_AlmCommandTimeOut,---,0.0,---,---,0.0,---,0.0,---,false,0,10.0,0.0,,SystemDefault,0.0,0,false,0.0,
+</Au2Mate_Platform_Data>

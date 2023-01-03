@@ -99,3 +99,33 @@ TITLE = @ID
 <TIA_Code_Footer>
 END_FUNCTION
 </TIA_Code_Footer>
+
+Au2Mate Datablock
+
+<Au2Mate_DB>
+   @ID : "udt_xxx"; // @CMT
+</Au2Mate_DB>
+
+<Au2Mate_Code>
+NETWORK
+TITLE =@ID - @CMT
+
+      CALL "sys_DIN" (
+           IN                       := "O@IOID_IN",// Digital input
+           DATA                     := "DIN".@ID);// DIN work data
+
+      A     "DIN".@ID.DIN; 
+      =     "O@IOID_OK"; 
+</Au2Mate_Code>
+
+<Au2Mate_Platform_Header>
+; Created on: 2022-11-23 09:14:06 from Galaxy: aaKristianstad
+
+
+:TEMPLATE=$SysDINS7
+:Tagname,Area,SecurityGroup,Container,ContainedName,AliasName,ShortDesc,ExecutionRelativeOrder,ExecutionRelatedObject,UDAs,Extensions,CmdData,Debug,GetIOAdr,HMI_OperatorReq,HMI_Sta_Activated,HMI_Sta_AutDsr,HMI_Sta_Fault,HMI_Sta_ManualMode,HMI_Sta_Masked,HMI_Sta_Monitored,HMI_Sta_ActualInput,HMI_Sta_AlmAlarmed,HMI_Sta_AlmAlarmedTxt,HMI_Sta_AlmMasked,HMI_Sta_AlmMaskedTxt,HMI_Sta_AlmMonitor,HMI_Sta_AlmMonitorTxt,HMI_Sta_NoDeadBandTimers,aaSetup_PLC,aaSetup_PLCStartAdrByte,aaSetup_PLCStartAdrDB,HMI_AlmCommandTimeOut,HMI_AlmCommandTimeOutTxt,HMI_PLC_AlmDly,HMI_PLC_Command,HMI_PLC_DinDly,HMI_PLC_Status,PV_Actual,StateNames,PV.IsActive1.Alarmed,PV.IsActive2.Alarmed,PV.IsNull.Alarmed,HMI_Sta_AlmAlarmed.ActiveAlarmState,HMI_Sta_AlmAlarmed.AlarmShelveCmd,HMI_Sta_AlmAlarmed.Alarm.TimeDeadband,HMI_Sta_AlmAlarmed.AlarmSourceAttr,HMI_Sta_AlmMasked.ActiveAlarmState,HMI_Sta_AlmMasked.AlarmShelveCmd,HMI_Sta_AlmMasked.Alarm.TimeDeadband,HMI_Sta_AlmMasked.AlarmSourceAttr,HMI_Sta_AlmMonitor.ActiveAlarmState,HMI_Sta_AlmMonitor.AlarmShelveCmd,HMI_Sta_AlmMonitor.Alarm.TimeDeadband,HMI_Sta_AlmMonitor.AlarmSourceAttr,HMI_Sta_AlmAlarmed.HasStatistics,HMI_Sta_AlmMasked.HasStatistics,HMI_Sta_AlmMonitor.HasStatistics,Command.AliasReferences,CommandTimeOut.AliasReferences,StatusChange.AliasReferences,GetIOAdr.AliasReferences,HMI_PLC_AlmDly.InputSource,HMI_PLC_AlmDly.Deadband,HMI_PLC_AlmDly.OutputDest,HMI_PLC_Command.InputSource,HMI_PLC_Command.Deadband,HMI_PLC_Command.OutputDest,HMI_PLC_DinDly.InputSource,HMI_PLC_DinDly.Deadband,HMI_PLC_DinDly.OutputDest,HMI_PLC_Status.InputSource,HMI_PLC_Status.Deadband,PV_Actual.ValueDeadBand,PV_Actual.ForceStoragePeriod,PV_Actual.TrendHi,PV_Actual.TrendLo,PV_Actual.EngUnits,PV_Actual.Hist.DescAttrName,PV_Actual.InterpolationType,PV_Actual.RolloverValue,PV_Actual.SampleCount,PV_Actual.EnableSwingingDoor,PV_Actual.RateDeadBand,HMI_AlmCommandTimeOut.ActiveAlarmState,HMI_AlmCommandTimeOut.AlarmShelveCmd,HMI_AlmCommandTimeOut.Alarm.TimeDeadband,HMI_AlmCommandTimeOut.AlarmSourceAttr,HMI_AlmCommandTimeOut.HasStatistics,PV.ForceStoragePeriod,PV.TrendHi,PV.TrendLo,PV.Description,PV.InterpolationType,PV.RolloverValue,PV.SampleCount,PV.EnableSwingingDoor,PV.RateDeadBand
+</Au2Mate_Platform_Header>
+
+<Au2Mate_Platform_Data>
+@ID,IFix,A1_K_Milk,@PLC,@ID,,"@CMT",None,,<UDAInfo></UDAInfo>,<ExtensionInfo><ObjectExtension/><AttributeExtension/></ExtensionInfo>,<CmdData><BooleanLabel></BooleanLabel></CmdData>,false,true,None,false,false,false,false,false,false,false,false,,false,,false,,false,"OI_S7PLC01_SM.S7PLC01_SM",@AlarmGroup,77,false,,0,0,0,0,false,"Passive,Active,Active2,Changing,Fault",false,false,false,true,"Duration=0; Reason="""";",0000 00:00:00.0000000,me.HMI_Sta_AlmAlarmed,true,"Duration=0; Reason="""";",0000 00:00:00.0000000,me.HMI_Sta_AlmMasked,true,"Duration=0; Reason="""";",0000 00:00:00.0000000,me.HMI_Sta_AlmMonitor,false,false,false,No Data,No Data,No Data,No Data,---,0.0,---,---,0.0,---,---,0.0,---,---,0.0,0.0,600000,10.0,0.0,,me.ShortDesc,SystemDefault,0.0,0,false,0.0,true,"Duration=0; Reason="""";",0000 00:00:00.0000000,me.HMI_AlmCommandTimeOut,false,600000,10.0,0.0,,SystemDefault,0.0,0,false,0.0,
+</Au2Mate_Platform_Data>

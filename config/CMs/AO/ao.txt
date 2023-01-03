@@ -68,3 +68,33 @@ code footer
 TODO - swap to real source txt for AO
 "Q*@ID","%@INDEX.0","REAL","True","True","0,0","@CMT","";"True"
 </TIA_Symbol>
+
+<Au2Mate_DB>
+   @ID : "udt_xxx"; // @CMT
+</Au2Mate_DB>
+
+<Au2Mate_Code>
+NETWORK
+TITLE =@ID - @CMT
+
+      CALL  "sys_AOUT"
+       _TYPE     :=0
+       COMP_FAULT:="SYSTEMNOLLA"
+       HSCO      :=1.000000e+002
+       LSCO      :=0.000000e+000
+       DATA      :="AOUT".@ID
+       OUT       :=#TMP_Out
+
+</Au2Mate_Code>
+
+<Au2Mate_Platform_Header>
+; Created on: 2022-11-23 09:14:06 from Galaxy: aaKristianstad
+
+
+:TEMPLATE=$SysAOUTS7
+:Tagname,Area,SecurityGroup,Container,ContainedName,AliasName,ShortDesc,UDAs,Extensions,CmdData,Debug,GetIOAdr,HMI_OperatorReq,HMI_Sta_AlmComponentFault,HMI_Sta_AlmComponentFaultTxt,HMI_Sta_AlmMasked,HMI_Sta_AlmMaskedTxt,HMI_Sta_AlmMonitor,HMI_Sta_AlmMonitorTxt,HMI_Sta_Fault,HMI_Sta_Limited,HMI_Sta_ManualMode,HMI_Sta_Masked,HMI_Sta_Monitored,aaSetup_PLC,aaSetup_PLCStartAdrByte,aaSetup_PLCStartAdrDB,HMI_AlmCommandTimeOut,HMI_AlmCommandTimeOutTxt,HMI_PLC_Command,HMI_PLC_Status,PV,PV.EngUnits,PV.Mode,Deadband,SP,SP.Historized,PV.Mode.Historized,PV.Input.InputSource,HMI_Sta_AlmMasked.ActiveAlarmState,HMI_Sta_AlmMasked.AlarmShelveCmd,HMI_Sta_AlmMasked.Alarm.TimeDeadband,HMI_Sta_AlmMasked.AlarmSourceAttr,HMI_Sta_AlmMonitor.ActiveAlarmState,HMI_Sta_AlmMonitor.AlarmShelveCmd,HMI_Sta_AlmMonitor.Alarm.TimeDeadband,HMI_Sta_AlmMonitor.AlarmSourceAttr,HMI_Sta_AlmComponentFault.ActiveAlarmState,HMI_Sta_AlmComponentFault.AlarmShelveCmd,HMI_Sta_AlmComponentFault.Alarm.TimeDeadband,HMI_Sta_AlmComponentFault.AlarmSourceAttr,HMI_Sta_AlmMasked.HasStatistics,HMI_Sta_AlmMonitor.HasStatistics,HMI_Sta_AlmComponentFault.HasStatistics,PV.Output.OutputDest,ConversionMode,RawMin,RawMax,EngUnitsMin,EngUnitsMax,EngUnitsRangeMin,EngUnitsRangeMax,Command.AliasReferences,CommandTimeout.AliasReferences,StatusChange.AliasReferences,GetIOAdr.AliasReferences,HMI_AlmCommandTimeOut.ActiveAlarmState,HMI_AlmCommandTimeOut.AlarmShelveCmd,HMI_AlmCommandTimeOut.Alarm.TimeDeadband,HMI_AlmCommandTimeOut.AlarmSourceAttr,HMI_PLC_Command.InputSource,HMI_PLC_Command.Deadband,HMI_PLC_Command.OutputDest,HMI_PLC_Status.InputSource,HMI_PLC_Status.Deadband,HMI_AlmCommandTimeOut.HasStatistics,PV.ValueDeadBand,PV.ForceStoragePeriod,PV.TrendHi,PV.TrendLo,PV.Description,PV.InterpolationType,PV.RolloverValue,PV.SampleCount,PV.EnableSwingingDoor,PV.RateDeadBand
+</Au2Mate_Platform_Header>
+
+<Au2Mate_Platform_Data>
+@ID,IFix,A1_K_Milk,@PLC,@ID,,"@CMT",<UDAInfo></UDAInfo>,<ExtensionInfo><ObjectExtension/><AttributeExtension/></ExtensionInfo>,<CmdData><BooleanLabel></BooleanLabel></CmdData>,false,true,None,false,,false,,false,,false,false,false,false,false,"OI_S7PLC01_SM.S7PLC01_SM",@AlarmGroup,72,false,,0,0,0.0,@ENGUNIT,Auto,0.0,0.0,false,false,---,true,"Duration=0; Reason="""";",0000 00:00:00.0000000,me.HMI_Sta_AlmMasked,true,"Duration=0; Reason="""";",0000 00:00:00.0000000,me.HMI_Sta_AlmMonitor,true,"Duration=0; Reason="""";",0000 00:00:00.0000000,me.HMI_Sta_AlmComponentFault,false,false,false,---,Linear,0.0,100.0,0.0,100.0,0.0,100.0,No Data,No Data,No Data,No Data,true,"Duration=0; Reason="""";",0000 00:00:00.0000000,me.HMI_AlmCommandTimeOut,---,0.0,---,---,0.0,false,0.1,600000,100.0,0.0,,SystemDefault,0.0,0,false,0.0,
+</Au2Mate_Platform_Data>
