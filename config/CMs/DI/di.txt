@@ -48,12 +48,6 @@ END_DATA_BLOCK
 
 </TIA_Code_Var_Footer>
 
-<TIA_Symbol>
-"I*@ID","%@INDEX.0","Bool","True","True","False","@CMT","","True"
-</TIA_Symbol>
-
-
-
 
 TIA Portal Code Configuration
 
@@ -99,3 +93,12 @@ TITLE = @ID
 <TIA_Code_Footer>
 END_FUNCTION
 </TIA_Code_Footer>
+
+
+<TIA_IOcopy>
+"DB DI".@ID.In.IO := "@ID";
+</TIA_IOcopy>
+
+<TIA_Symbol>
+"I*@ID","%@INDEX.0","Bool","True","True","False","@CMT","","True"
+</TIA_Symbol>
