@@ -23,3 +23,6 @@ All notable changes to this project will be documented in this file.
 
 ## [V2.32] - 2022-09-30
 - Added more functionality to create Line Souce and Destination Queue Tags
+
+## [V2.33] - 2023-07-28
+- Add functionality for io-copy and tia tag tabel for IO, just implemented on DI for now

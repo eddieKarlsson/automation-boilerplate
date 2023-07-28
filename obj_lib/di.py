@@ -77,6 +77,19 @@ class DI:
             with open(path, 'w', encoding='cp1252') as f:
                 f.write(data)
 
+    def _tia_iocopy(self):        
+        for plc in self.plc_set:
+            data = self.gen.multiple(self.ol, self.cf, self.rl, 'TIA_IOcopy', plc_name=plc)
+
+            filename = plc + '_' + self.type + '_iocopy.scl'
+            outdir = path = os.path.join(self.tia_path, plc, 'iocopy')
+            path = os.path.join(outdir, filename)
+            if not os.path.exists(outdir):
+                os.makedirs(outdir)
+            with open(path, 'w', encoding='cp1252') as f:
+                f.write(data)
+
+
 
     def _tia_code(self):
         data = self.gen.single(self.cf, self.rl, 'TIA_Code_Header')
@@ -118,6 +131,7 @@ class DI:
             self._find_plcs()
             self._tia_db()
             self._tia_tag()
+            self._tia_iocopy()
             #self._tia_code()
             self._intouch()
             self._sql()
