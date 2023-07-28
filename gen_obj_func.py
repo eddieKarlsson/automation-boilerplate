@@ -9,6 +9,7 @@ class GenObjFunc:
     def __init__(self, gen_main):
         self.s = gen_main.s
 
+
     def _replace_keywords(self, line, obj):
         """Take in a line and convert all the identifiers to obj data"""
 
@@ -69,7 +70,11 @@ class GenObjFunc:
             line = line.replace(self.s.ASI_ADDR_REPLACE, str(obj['asi_addr']))     
 
         if obj.get('asi_master') is not None:
-            line = line.replace(self.s.ASI_MASTER_REPLACE, str(obj['asi_master']))   
+            line = line.replace(self.s.ASI_MASTER_REPLACE, str(obj['asi_master']))
+
+        if obj.get('tag') is not None:
+            line = line.replace(self.s.TAG_REPLACE, obj['tag'])     
+   
 
         return line
 

@@ -33,6 +33,8 @@ class GenMain:
         self.plcinexcel = set()
         self.s = Settings()
         self.dict_list = []
+        self.tag_instance_counter = 0
+        self.tia_tag_offset = 1000
         self.generate()
 
     def _open_gen_excel(self):
@@ -52,7 +54,7 @@ class GenMain:
         # Create all dictionaries, if enabled in settings
         if not self.s.DI_DISABLE:
             self.di_dict = self._obj_data_to_dict(
-                        self.s.DI_SHEETNAME, self.s.DI_START_INDEX, 'di')
+                        self.s.DI_SHEETNAME, self.s.DI_START_INDEX, 'di', tag=True)
             self.dict_list.append(self.di_dict)
 
         if not self.s.DO_DISABLE:
@@ -104,7 +106,7 @@ class GenMain:
             self.unit_phase_list = self._unit_data_to_list(self.s.UNIT_SHEETNAME)
 
     def _obj_data_to_dict(self, sheet, start_index, type, config=False, eng_var=False, volumeperpulse=False,
-                          generic_alarm=False, asi=False):
+                          generic_alarm=False, asi=False, tag=False):
         """Read all object data to dict"""
 
         # Open excel sheet
@@ -183,6 +185,12 @@ class GenMain:
                 print('\t', 'column_asi_addr:', column_asi_addr)
                 print('\t', 'column_asi_master:', column_asi_master)
 
+        # Handle tag offsets        
+        if tag:
+            self.tag_instance_counter += 1
+            if self.tag_instance_counter > 1:
+                self.tia_tag_offset += self.tia_tag_offset
+            self.create_tia_memory_bit(start_address=self.tia_tag_offset, initialize=True)
 
         # Loop through object list and add key-value pairs to object dict
         # then append each object-dict to list
@@ -236,6 +244,11 @@ class GenMain:
                 obj['asi_addr'] = cell_asi_addr.value
                 cell_asi_master = ws.cell(row=i, column=column_asi_master)
                 obj['asi_master'] = cell_asi_master.value
+
+            if tag and obj['type'] == 'di':
+                obj['tag'] = self.create_tia_memory_bit()
+                
+
 
             obj_list.append(obj)
             index += 1
@@ -546,3 +559,19 @@ class GenMain:
 
         self._combine_it_files()
         self._combine_sql_files()
+
+    def create_tia_memory_bit(self, start_address=0, initialize=False):
+        """Returns a memory unique memory address by counting up"""
+        if initialize:
+            self.tia_bit = -1
+            self.tia_byte = start_address
+            initialize = False
+            return
+        
+        self.tia_bit += 1
+
+        if self.tia_bit > 7:
+            self.tia_bit = 0
+            self.tia_byte += 1
+
+        return f"M{self.tia_byte}.{self.tia_bit}"

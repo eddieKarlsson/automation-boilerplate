@@ -16,6 +16,8 @@ class Settings:
         self.UNIT_ROW = 5  # Excel start row of data in unit sheet
 
         self.INDEX_REPLACE = '@INDEX'  # string to be replaced in config file
+        self.TAG_REPLACE = '@TAG'  # string to be replaced in config file
+
 
         self.COL_ID_NAME = 'ID'
         self.ID_REPLACE = '@ID'  # string to be replaced in config file
