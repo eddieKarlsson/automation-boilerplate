@@ -59,7 +59,7 @@ class GenMain:
 
         if not self.s.DO_DISABLE:
             self.do_dict = self._obj_data_to_dict(
-                        self.s.DO_SHEETNAME, self.s.DO_START_INDEX, 'do')
+                        self.s.DO_SHEETNAME, self.s.DO_START_INDEX, 'do', tag=True)
             self.dict_list.append(self.do_dict)
 
         if not self.s.VALVE_DISABLE:
@@ -245,7 +245,9 @@ class GenMain:
                 cell_asi_master = ws.cell(row=i, column=column_asi_master)
                 obj['asi_master'] = cell_asi_master.value
 
-            if tag and obj['type'] == 'di':
+            bit_tag = obj['type'] == 'di' or obj['type'] == 'do'
+            
+            if tag and bit_tag:
                 obj['tag'] = self.create_tia_memory_bit()
                 
 

@@ -99,3 +99,11 @@ TITLE = @ID
 <TIA_Code_Footer>
 END_FUNCTION
 </TIA_Code_Footer>
+
+<TIA_IOcopy>
+"DB DO".@ID.Out.IO := "@ID";
+</TIA_IOcopy>
+
+<TIA_Tag>
+"@ID","%@TAG","Bool","True","True","False","@CMT","","True"
+</TIA_Tag>

@@ -308,7 +308,9 @@ class GenObjFunc:
                 result_bad_cnt += 1
         if result_ok_cnt > 0:
             tmp_text = "Succesfully processed"
-            print(f"\t {tmp_text} {result_ok_cnt} objects: {good_results}")
+            #  print(f"\t {tmp_text} {result_ok_cnt} objects: {good_results}")
+            print(f"\t {tmp_text} {result_ok_cnt} objects")
+
 
         if result_bad_cnt > 0:
             print("\n")
