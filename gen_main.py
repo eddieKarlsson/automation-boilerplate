@@ -19,17 +19,19 @@ from obj_lib.asi import ASi
 from unit_lib.unit_types import UnitTypes
 from unit_lib.units_phases import UnitsPhases
 
+
 class GenMain:
     """Main class called from UI,
     read data from excel and then execute sub-class functions
     """
+
     def __init__(self, excel_path, output_path, config_path):
         self.excel_path = excel_path
         self.output_path = output_path
         self.cm_output_path = os.path.join(self.output_path, 'CMs')
         self.alarm_output_path = os.path.join(self.output_path, 'Alarm')
         self.unit_output_path = os.path.join(self.output_path, 'Units_Phases')
-        self.config_path = config_path        
+        self.config_path = config_path
         self.plcinexcel = set()
         self.s = Settings()
         self.dict_list = []
@@ -54,12 +56,12 @@ class GenMain:
         # Create all dictionaries, if enabled in settings
         if not self.s.DI_DISABLE:
             self.di_dict = self._obj_data_to_dict(
-                        self.s.DI_SHEETNAME, self.s.DI_START_INDEX, 'di', tag=True)
+                self.s.DI_SHEETNAME, self.s.DI_START_INDEX, 'di', tag=True)
             self.dict_list.append(self.di_dict)
 
         if not self.s.DO_DISABLE:
             self.do_dict = self._obj_data_to_dict(
-                        self.s.DO_SHEETNAME, self.s.DO_START_INDEX, 'do', tag=True)
+                self.s.DO_SHEETNAME, self.s.DO_START_INDEX, 'do', tag=True)
             self.dict_list.append(self.do_dict)
 
         if not self.s.VALVE_DISABLE:
@@ -79,31 +81,32 @@ class GenMain:
 
         if not self.s.AO_DISABLE:
             self.ao_dict = self._obj_data_to_dict(
-                    self.s.AO_SHEETNAME, self.s.AO_START_INDEX, 'ao', eng_var=True)
+                self.s.AO_SHEETNAME, self.s.AO_START_INDEX, 'ao', eng_var=True)
             self.dict_list.append(self.ao_dict)
 
         if not self.s.PID_DISABLE:
             self.pid_dict = self._obj_data_to_dict(
-                    self.s.PID_SHEETNAME, self.s.PID_START_INDEX, 'pid', eng_var=True)
+                self.s.PID_SHEETNAME, self.s.PID_START_INDEX, 'pid', eng_var=True)
             self.dict_list.append(self.pid_dict)
 
         if not self.s.SUM_DISABLE:
             self.sum_dict = self._obj_data_to_dict(
-                    self.s.SUM_SHEETNAME, self.s.SUM_START_INDEX, 'sum', eng_var=True, volumeperpulse=True)
+                self.s.SUM_SHEETNAME, self.s.SUM_START_INDEX, 'sum', eng_var=True, volumeperpulse=True)
             self.dict_list.append(self.sum_dict)
 
         if not self.s.ALARM_DISABLE:
             self.alarm_dict = self._obj_data_to_dict(
-                    self.s.ALARM_SHEETNAME, self.s.ALARM_START_INDEX, 'alarm', generic_alarm=True)
+                self.s.ALARM_SHEETNAME, self.s.ALARM_START_INDEX, 'alarm', generic_alarm=True)
             self.dict_list.append(self.alarm_dict)
 
         if not self.s.ASI_DISABLE:
             self.asi_dict = self._obj_data_to_dict(
-                    self.s.ASI_SHEETNAME, self.s.ASI_START_INDEX, 'asi', asi=True)
+                self.s.ASI_SHEETNAME, self.s.ASI_START_INDEX, 'asi', asi=True)
             self.dict_list.append(self.asi_dict)
-        
+
         if not self.s.UNIT_DISABLE:
-            self.unit_phase_list = self._unit_data_to_list(self.s.UNIT_SHEETNAME)
+            self.unit_phase_list = self._unit_data_to_list(
+                self.s.UNIT_SHEETNAME)
 
     def _obj_data_to_dict(self, sheet, start_index, type, config=False, eng_var=False, volumeperpulse=False,
                           generic_alarm=False, asi=False, tag=False):
@@ -185,12 +188,13 @@ class GenMain:
                 print('\t', 'column_asi_addr:', column_asi_addr)
                 print('\t', 'column_asi_master:', column_asi_master)
 
-        # Handle tag offsets        
+        # Handle tag offsets
         if tag:
             self.tag_instance_counter += 1
             if self.tag_instance_counter > 1:
                 self.tia_tag_offset += self.tia_tag_offset
-            self.create_tia_memory_bit(start_address=self.tia_tag_offset, initialize=True)
+            self.create_tia_memory(
+                start_address=self.tia_tag_offset, initialize=True)
 
         # Loop through object list and add key-value pairs to object dict
         # then append each object-dict to list
@@ -222,7 +226,8 @@ class GenMain:
                 obj['config'] = cell_config.value
 
             if volumeperpulse:
-                cell_volumeperpulse = ws.cell(row=i, column=column_volumeperpulse)
+                cell_volumeperpulse = ws.cell(
+                    row=i, column=column_volumeperpulse)
                 obj['volumeperpulse'] = cell_volumeperpulse.value
 
             if eng_var:
@@ -246,11 +251,8 @@ class GenMain:
                 obj['asi_master'] = cell_asi_master.value
 
             bit_tag = obj['type'] == 'di' or obj['type'] == 'do'
-            
-            if tag and bit_tag:
-                obj['tag'] = self.create_tia_memory_bit()
-                
 
+            obj['tag'] = self.create_tia_memory(bit=bit_tag)
 
             obj_list.append(obj)
             index += 1
@@ -270,7 +272,7 @@ class GenMain:
             msg = f'ERROR! {sheet} sheet does not exist, program will exit'
             print(msg)
             sys.exit()
-        
+
             column_db_start_addr = None
             # Loop header and set the corresponding variables to
             # the integer number
@@ -285,7 +287,7 @@ class GenMain:
             if self.s.COL_ID_NAME == cellval:
                 column_id = i
             elif self.s.COL_TYPE_NAME == cellval:
-                column_type = i            
+                column_type = i
             elif self.s.COL_PLC_NAME == cellval:
                 column_plc = i
             elif self.s.COL_ALARM_GROUP_NAME == cellval:
@@ -300,7 +302,6 @@ class GenMain:
             print('\t', 'UNIT column_plc:', column_plc)
             print('\t', 'UNIT column_hmi_group:', column_hmi_group)
             print('\t', 'UNIT column_db_start_addr:', column_db_start_addr)
-
 
         unit_phase_list = []
         #  loop over the objects in sheet
@@ -319,13 +320,13 @@ class GenMain:
             cell_plc = ws.cell(row=i, column=column_plc)
             cell_hmi_group = ws.cell(row=i, column=column_hmi_group)
             if db_addr_exists:
-                cell_db_start_addr = ws.cell(row=i, column=column_db_start_addr)
-
+                cell_db_start_addr = ws.cell(
+                    row=i, column=column_db_start_addr)
 
             # Break if we get a blank ID cell
             if cell_id.value is None:
                 break
-            
+
             def _is_valid_unit_type(in_type):
                 for type in UnitTypes:
                     if in_type == type.value:
@@ -366,12 +367,13 @@ class GenMain:
 
             # Insert DB start addr if property exists
             if db_addr_exists:
-                db, db_offset = self._parse_s7_db_addr(cell_db_start_addr.value)
+                db, db_offset = self._parse_s7_db_addr(
+                    cell_db_start_addr.value)
                 obj['db_nr_str'] = db
                 obj['db_offset'] = db_offset
 
             unit_phase_list.append(obj)
-        
+
         return unit_phase_list
 
     def create_subdirs(self):
@@ -418,16 +420,16 @@ class GenMain:
 
             if os.path.exists(path):
                 file_list = [f for f in listdir(path)
-                    if isfile(join(path, f))]            
+                             if isfile(join(path, f))]
 
                 with open(outfile, 'w', encoding='cp1252') as wf:
-                        for file_index, file in enumerate(file_list):
-                            with open(os.path.join(path, file), 'r', encoding='cp1252') as rf:
-                                for line_index, line in enumerate(rf):
-                                    # Skip first line header if it's not the first file
-                                    if file_index > 0 and line_index <= 0:
-                                            continue
-                                    wf.write(line)                    
+                    for file_index, file in enumerate(file_list):
+                        with open(os.path.join(path, file), 'r', encoding='cp1252') as rf:
+                            for line_index, line in enumerate(rf):
+                                # Skip first line header if it's not the first file
+                                if file_index > 0 and line_index <= 0:
+                                    continue
+                                wf.write(line)
 
     def _combine_sql_files(self):
         """
@@ -445,23 +447,23 @@ class GenMain:
 
             if os.path.exists(path):
                 file_list = [f for f in listdir(path)
-                    if isfile(join(path, f))]            
+                             if isfile(join(path, f))]
 
                 with open(outfile, 'w', encoding='cp1252') as wf:
-                        for file_index, file in enumerate(file_list):
-                            with open(os.path.join(path, file), 'r', encoding='cp1252') as rf:
-                                for line_index, line in enumerate(rf):
-                                    # Skip first line header if it's not the first file
-                                    if file_index > 0 and line_index <= 0:
-                                            continue
-                                    wf.write(line)   
+                    for file_index, file in enumerate(file_list):
+                        with open(os.path.join(path, file), 'r', encoding='cp1252') as rf:
+                            for line_index, line in enumerate(rf):
+                                # Skip first line header if it's not the first file
+                                if file_index > 0 and line_index <= 0:
+                                    continue
+                                wf.write(line)
 
     @staticmethod
     def _parse_s7_db_addr(in_db_addr):
         #  Format expected e.g. DB9001.DBX12.0, DB9001.DBB12, DB9001.DBW12, DB9001.DBD12
         splitted = in_db_addr.split('.')
 
-        if len(splitted) == 3: 
+        if len(splitted) == 3:
             # three elements == two dots == DB9001.DBX0.0 format
             db, dbx, bit = splitted
         elif len(splitted) == 2:
@@ -545,35 +547,38 @@ class GenMain:
             self._print_disabled_in_settings('Alarm')
         else:
             Alarm(self, self.output_path, self.alarm_dict, self.config_path,
-                config_type=self.config_type)
+                  config_type=self.config_type)
 
         if self.s.ASI_DISABLE:
             self._print_disabled_in_settings('ASi')
         else:
-            ASi(self, self.output_path, self.asi_dict, self.config_path, config_type=self.config_type)
-
+            ASi(self, self.output_path, self.asi_dict,
+                self.config_path, config_type=self.config_type)
 
         if self.s.UNIT_DISABLE:
             self._print_disabled_in_settings('Units_Phases')
-        else: 
-            UnitsPhases(self, self.output_path, self.unit_phase_list, 
-                          self.config_path, config_type=self.config_type)
+        else:
+            UnitsPhases(self, self.output_path, self.unit_phase_list,
+                        self.config_path, config_type=self.config_type)
 
         self._combine_it_files()
         self._combine_sql_files()
 
-    def create_tia_memory_bit(self, start_address=0, initialize=False):
+    def create_tia_memory(self, start_address=0, initialize=False, bit=False):
         """Returns a memory unique memory address by counting up"""
         if initialize:
             self.tia_bit = -1
             self.tia_byte = start_address
             initialize = False
             return
-        
-        self.tia_bit += 1
 
-        if self.tia_bit > 7:
-            self.tia_bit = 0
-            self.tia_byte += 1
+        if bit:
+            self.tia_bit += 1
+            if self.tia_bit > 7:
+                self.tia_bit = 0
+                self.tia_byte += 1
+            return f"M{self.tia_byte}.{self.tia_bit}"
 
-        return f"M{self.tia_byte}.{self.tia_bit}"
+        # If not bit create a int
+        self.tia_byte += 2
+        return f"MW{self.tia_byte}"
