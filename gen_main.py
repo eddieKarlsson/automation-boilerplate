@@ -254,7 +254,16 @@ class GenMain:
             
             if tag:
                 obj['tag'] = self.create_tia_memory(memory_size_byte=tmp_mem_size)
-            
+
+            if tag and config and obj['type'] == 'valve':
+                valve_attr = Valve.decode_config_tag_attributes(obj['config'])
+
+                if valve_attr is not None:
+                    for attr in valve_attr:
+                        obj[attr] = self.create_tia_memory(memory_size_byte=tmp_mem_size)
+
+
+
             obj_list.append(obj)
             index += 1
 

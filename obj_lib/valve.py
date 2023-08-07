@@ -25,6 +25,9 @@ class Valve:
 
         self.gen = genfunc(gen_main)
 
+        # A list of all tag attributes
+        self.tag_attributes = self.decode_config_tag_attributes(0xFFFF)
+
         self.rl = []  # Create empty list "result list"
 
         # Check if list is empty, if it is print an error
@@ -122,3 +125,35 @@ class Valve:
             self._intouch()
             self._sql()
             self.gen.result(self.rl, type=self.type.upper())
+
+    @staticmethod
+    def decode_config_tag_attributes(config):
+        """
+            #VLV.Config.Main': = #VLV.Config.UI_Config.%X0;
+            #VLV.Config.Upper': = #VLV.Config.UI_Config.%X1;
+            #VLV.Config.Lower': = #VLV.Config.UI_Config.%X2;
+            #VLV.Config."Main Active FB"': = #VLV.Config.UI_Config.%X3;
+            #VLV.Config."Main DeActive FB"': = #VLV.Config.UI_Config.%X4;
+            #VLV.Config."Reset Activation"': = #VLV.Config.UI_Config.%X5;
+            #VLV.Config."Disable ManMode"': = #VLV.Config.UI_Config.%X6;
+            #VLV.Config.AirOnOff': = #VLV.Config.UI_Config.%X7;
+            #VLV.Config.MixProof': = #VLV.Config.UI_Config.%X8;
+        """
+        attributes = []
+
+        val = int(config)
+
+        if val & 0b10:
+            attributes.append('tag_upperseat_act')    
+        elif val & 0b100:
+            attributes.append('tag_lowerseat_act')
+        elif val & 0b1000:
+            attributes.append('tag_main_act_fb')
+        elif val & 0b10000:
+            attributes.append('tag_main_deact_fb')
+
+        # If list is empty return None
+        if attributes:
+            return attributes
+        else:
+            return None
