@@ -35,21 +35,12 @@ class AO:
             print(f'\nWARNING: {self.type.upper()} not generated, no items found in TD')
 
 
-    def _tia_db(self):
-        data = self.gen.single(self.cf, self.rl, 'TIA_DB_Header')
-        data += self.gen.multiple(self.ol, self.cf, self.rl, 'TIA_DB_Var')
-        data += self.gen.single(self.cf, self.rl, 'TIA_DB_Footer')
-
-        filename = self.type + '_db.db'
-        path = os.path.join(self.tia_path, filename)
-        with open(path, 'w', encoding='cp1252') as f:
-            f.write(data)
-
     def _find_plcs(self):
         """find what plcs are in the object list"""
         self.plc_set = set()  # Create a set,  doesnt allow duplicate values
         for obj in self.ol:
             self.plc_set.add(obj['plc'])
+
 
     def _tia_db_multiple_plc(self):
         for plc in self.plc_set:
@@ -65,16 +56,31 @@ class AO:
             with open(path, 'w', encoding='cp1252') as f:
                 f.write(data)
 
-    def _tia_symbol(self):
-        data = self.gen.multiple(self.ol, self.cf, self.rl,
-                                 'TIA_Symbol')
 
-        filename = self.type + '_symbols.sdf'
-        path = os.path.join(self.tia_path, filename)
-        if not os.path.exists(self.tia_path):
-            os.makedirs(self.tia_path)
-        with open(path, 'w', encoding='cp1252') as f:
-            f.write(data)
+    def _tia_tag(self):        
+        for plc in self.plc_set:
+            data = self.gen.multiple(self.ol, self.cf, self.rl, 'TIA_Tag', plc_name=plc)
+
+            filename = plc + '_' + self.type + '_plctags.sdf'
+            outdir = path = os.path.join(self.tia_path, plc, 'tags')
+            path = os.path.join(outdir, filename)
+            if not os.path.exists(outdir):
+                os.makedirs(outdir)
+            with open(path, 'w', encoding='cp1252') as f:
+                f.write(data)
+
+    def _tia_iocopy(self):        
+        for plc in self.plc_set:
+            data = self.gen.multiple(self.ol, self.cf, self.rl, 'TIA_IOcopy', plc_name=plc)
+
+            filename = plc + '_' + self.type + '_iocopy.scl'
+            outdir = path = os.path.join(self.tia_path, plc, 'iocopy')
+            path = os.path.join(outdir, filename)
+            if not os.path.exists(outdir):
+                os.makedirs(outdir)
+            with open(path, 'w', encoding='cp1252') as f:
+                f.write(data)
+
 
     def _tia_code(self):
         data = self.gen.single(self.cf, self.rl, 'TIA_Code_Header')
@@ -115,7 +121,8 @@ class AO:
         if self.ol:
             self._find_plcs()
             self._tia_db_multiple_plc()
-            #self._tia_symbol()
+            self._tia_tag()
+            self._tia_iocopy()
             #self._tia_code()
             self._intouch()
             self._sql()

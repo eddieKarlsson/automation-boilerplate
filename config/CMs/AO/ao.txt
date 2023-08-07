@@ -64,7 +64,10 @@ code footer
 </TIA_Code_Footer>
 
 
-<TIA_Symbol>
-TODO - swap to real source txt for AO
-"Q*@ID","%@INDEX.0","REAL","True","True","0,0","@CMT","";"True"
-</TIA_Symbol>
+<TIA_IOcopy>
+"@ID" := "DB AO".@ID.Out.Output;
+</TIA_IOcopy>
+
+<TIA_Tag>
+"@ID","%@TAG","Int","True","True","False","@CMT","","True"
+</TIA_Tag>

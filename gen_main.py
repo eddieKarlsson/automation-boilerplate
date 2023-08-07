@@ -35,6 +35,7 @@ class GenMain:
         self.dict_list = []
         self.tag_instance_counter = 0
         self.tia_tag_offset = 1000
+        self.tia_tag_offset_add = 1000
         self.generate()
 
     def _open_gen_excel(self):
@@ -74,12 +75,12 @@ class GenMain:
 
         if not self.s.AI_DISABLE:
             self.ai_dict = self._obj_data_to_dict(
-                self.s.AI_SHEETNAME, self.s.AI_START_INDEX, 'ai', eng_var=True)
+                self.s.AI_SHEETNAME, self.s.AI_START_INDEX, 'ai', eng_var=True, tag=True)
             self.dict_list.append(self.ai_dict)
 
         if not self.s.AO_DISABLE:
             self.ao_dict = self._obj_data_to_dict(
-                    self.s.AO_SHEETNAME, self.s.AO_START_INDEX, 'ao', eng_var=True)
+                    self.s.AO_SHEETNAME, self.s.AO_START_INDEX, 'ao', eng_var=True, tag=True)
             self.dict_list.append(self.ao_dict)
 
         if not self.s.PID_DISABLE:
@@ -189,8 +190,9 @@ class GenMain:
         if tag:
             self.tag_instance_counter += 1
             if self.tag_instance_counter > 1:
-                self.tia_tag_offset += self.tia_tag_offset
-            self.create_tia_memory_bit(start_address=self.tia_tag_offset, initialize=True)
+                self.tia_tag_offset += self.tia_tag_offset_add
+            self.create_tia_memory(start_address=self.tia_tag_offset, initialize=True)
+            
 
         # Loop through object list and add key-value pairs to object dict
         # then append each object-dict to list
@@ -245,13 +247,14 @@ class GenMain:
                 cell_asi_master = ws.cell(row=i, column=column_asi_master)
                 obj['asi_master'] = cell_asi_master.value
 
-            bit_tag = obj['type'] == 'di' or obj['type'] == 'do'
+            if obj['type'] == 'ai' or obj['type'] == 'ao' or obj['type'] == 'sum':
+                tmp_mem_size = 2
+            else:
+                tmp_mem_size = 0
             
-            if tag and bit_tag:
-                obj['tag'] = self.create_tia_memory_bit()
-                
-
-
+            if tag:
+                obj['tag'] = self.create_tia_memory(memory_size_byte=tmp_mem_size)
+            
             obj_list.append(obj)
             index += 1
 
@@ -562,18 +565,22 @@ class GenMain:
         self._combine_it_files()
         self._combine_sql_files()
 
-    def create_tia_memory_bit(self, start_address=0, initialize=False):
+    def create_tia_memory(self, start_address=0, initialize=False, memory_size_byte=2):
         """Returns a memory unique memory address by counting up"""
         if initialize:
             self.tia_bit = -1
-            self.tia_byte = start_address
-            initialize = False
+            self.tia_byte = start_address            
             return
         
-        self.tia_bit += 1
-
-        if self.tia_bit > 7:
-            self.tia_bit = 0
-            self.tia_byte += 1
-
-        return f"M{self.tia_byte}.{self.tia_bit}"
+        if memory_size_byte == 0:  # bit
+            self.tia_bit += 1
+            if self.tia_bit > 7:
+                self.tia_bit = 0
+                self.tia_byte += 1
+            return f"M{self.tia_byte}.{self.tia_bit}"
+        elif memory_size_byte == 4:  # Dword
+            self.tia_byte += memory_size_byte
+            return f"MD{self.tia_byte}"
+        else:  # If not bit or Dword always presume its a 2 byte Int
+            self.tia_byte += 2  # Word
+            return f"MW{self.tia_byte}"

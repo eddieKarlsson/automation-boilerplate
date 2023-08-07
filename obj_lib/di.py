@@ -35,16 +35,6 @@ class DI:
             print(f'\nWARNING: {self.type.upper()} not generated, no items found in TD')
 
 
-    def _tia_db(self):
-        data = self.gen.single(self.cf, self.rl, 'TIA_DB_Header')
-        data += self.gen.multiple(self.ol, self.cf, self.rl, 'TIA_DB_Var')
-        data += self.gen.single(self.cf, self.rl, 'TIA_DB_Footer')
-
-        filename = self.type + '_db.db'
-        path = os.path.join(self.tia_path, filename)
-        with open(path, 'w', encoding='cp1252') as f:
-            f.write(data)
-
     def _find_plcs(self):
         """find what plcs are in the object list"""
         self.plc_set = set()  # Create a set,  doesnt allow duplicate values
