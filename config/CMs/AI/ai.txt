@@ -89,7 +89,7 @@ code footer
 
 
 <TIA_IOcopy>
-"DB AI".@ID.In.Raw Input := "@ID";
+"DB AI".@ID.In."Raw Input" := "@ID";
 </TIA_IOcopy>
 
 <TIA_tag>

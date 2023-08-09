@@ -70,3 +70,20 @@ var end
 <TIA_Code_Var>
 "I*@ID" : Bool;
 </TIA_Code_Var>
+
+
+<TIA_tag_forward_act>
+"@ID_Forward","%@TIA_tag_forward_act","Bool","True","True","False","@CMT","","True"
+</TIA_tag_forward_act>
+
+<TIA_tag_reverse_act>
+"@ID_Reverse","%@TIA_tag_reverse_act","Bool","True","True","False","@CMT","","True"
+</TIA_tag_reverse_act>
+
+<TIA_tag_forward_fb>
+"@ID_ForwardFb","%@TIA_tag_forward_fb","Bool","True","True","False","@CMT","","True"
+</TIA_tag_forward_fb>
+
+<TIA_tag_reverse_fb>
+"@ID_ReverseFb","%@TIA_tag_reverse_fb","Bool","True","True","False","@CMT","","True"
+</TIA_tag_reverse_fb>

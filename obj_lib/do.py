@@ -79,7 +79,9 @@ class DO:
 
     def _tia_iocopy(self):        
         for plc in self.plc_set:
-            data = self.gen.multiple(self.ol, self.cf, self.rl, 'TIA_IOcopy', plc_name=plc)
+            data = f"REGION {self.type.upper()}\n"
+            data += self.gen.multiple(self.ol, self.cf, self.rl, 'TIA_IOcopy', plc_name=plc)
+            data += f"END_REGION\n"
 
             filename = plc + '_' + self.type + '_iocopy.scl'
             outdir = path = os.path.join(self.tia_path, plc, 'iocopy', 'subfiles')

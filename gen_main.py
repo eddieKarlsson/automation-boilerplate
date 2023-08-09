@@ -263,6 +263,14 @@ class GenMain:
                     for attr in valve_attr:
                         obj[attr] = self.create_tia_memory(memory_size_byte=tmp_mem_size)
 
+            if config and obj['type'] == 'motor':
+                # supply the decode function with the configuration word
+                motor_attr = Motor.decode_config_attributes(obj['config'])
+
+                if motor_attr is not None:
+                    for attr in motor_attr:
+                        obj[attr] = self.create_tia_memory(memory_size_byte=tmp_mem_size)
+
             obj_list.append(obj)
             index += 1
 
@@ -467,13 +475,16 @@ class GenMain:
                                             continue
                                     wf.write(line)   
 
-    def _combine_tia_files(self, folder, outfile, newline_sep=False):
+    def _combine_tia_files(self, folder, outfile, newline_sep=False, header=None, footer=None):
             for plc in self.plcinexcel:
                 path_base = os.path.join(self.output_path, 'CMs', self.s.TIA_DIR, plc, folder)
                 subfilespath = os.path.join(path_base, 'subfiles')
                 newfile = f"{plc.upper()}_{outfile}"
                 newfilepath = os.path.join(path_base, newfile)
                 with open(newfilepath, 'w', encoding='cp1252') as wf:
+                    if header is not None:
+                        wf.write(header)
+
                     if os.path.isdir(subfilespath):
                         file_list = [f for f in listdir(subfilespath)
                             if isfile(join(subfilespath, f))]
@@ -482,6 +493,21 @@ class GenMain:
                                 if newline_sep and i > 0:
                                     wf.write('\n')  # add a new line between the contents off files
                                 wf.write(rf.read())  # Read the whole content of read file and write to out file
+
+                    if footer is not None:
+                        wf.write(footer)
+
+    def _create_and_combine_iocopy_fc(self):
+        head = """FUNCTION "IO-Copy" : Void
+{ S7_Optimized_Access := 'TRUE' }
+VERSION : 0.1
+
+BEGIN
+"""
+        foot = """	
+END_FUNCTION
+"""
+        self._combine_tia_files('iocopy', 'IO-Copy.scl', newline_sep=True, header=head, footer=foot)
 
     @staticmethod
     def _parse_s7_db_addr(in_db_addr):
@@ -589,7 +615,7 @@ class GenMain:
         self._combine_it_files()
         self._combine_sql_files()
         self._combine_tia_files('tags', 'ALL_PLCTAGS.sdf')
-        self._combine_tia_files('iocopy', 'IO-Copy.scl', newline_sep=True)
+        self._create_and_combine_iocopy_fc()
 
 
     def create_tia_memory(self, start_address=0, initialize=False, memory_size_byte=2):

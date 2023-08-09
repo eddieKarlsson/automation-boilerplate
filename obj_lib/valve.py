@@ -94,7 +94,7 @@ class Valve:
             all_attr = self.get_all_config_attributes()
 
             for plc in self.plc_set:
-                data = ''
+                data = f"REGION {self.type.upper()}\n"
                 for obj in self.ol:
                     if obj['plc'] != plc:
                         continue
@@ -105,7 +105,8 @@ class Valve:
                             data += self.gen.single_replace(self.cf, self.rl, ref_txt, obj, 
                                                             replace=ref_txt, replace_with=obj[attr])
                     data += '\n'    # to separate objects
-                            
+                    
+                data += f"END_REGION\n"
                 filename = plc + '_' + self.type + '_iocopy.scl'
                 outdir = path = os.path.join(self.tia_path, plc, 'iocopy', 'subfiles')
                 path = os.path.join(outdir, filename)
