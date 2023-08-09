@@ -68,6 +68,6 @@ code footer
 "@ID" := "DB AO".@ID.Out.Output;
 </TIA_IOcopy>
 
-<TIA_Tag>
-"@ID","%@TAG","Int","True","True","False","@CMT","","True"
-</TIA_Tag>
+<TIA_tag>
+"@ID","%@TIA_tag","Int","True","True","False","@CMT","","True"
+</TIA_tag>

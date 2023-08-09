@@ -25,9 +25,6 @@ class Valve:
 
         self.gen = genfunc(gen_main)
 
-        # A list of all tag attributes
-        self.tag_attributes = self.decode_config_tag_attributes(0xFFFF)
-
         self.rl = []  # Create empty list "result list"
 
         # Check if list is empty, if it is print an error
@@ -70,16 +67,52 @@ class Valve:
             with open(path, 'w', encoding='cp1252') as f:
                 f.write(data)
 
-    def _tia_symbol(self):
-        data = self.gen.multiple_config(self.ol, self.cp, self.rl,
-                                        'TIA_Symbol')
+    def _tia_tag(self):
+            all_attr = self.get_all_config_attributes()
 
-        filename = self.type + '_symbols.sdf'
-        path = os.path.join(self.tia_path, filename)
-        if not os.path.exists(self.tia_path):
-            os.makedirs(self.tia_path)
-        with open(path, 'w', encoding='cp1252') as f:
-            f.write(data)
+            for plc in self.plc_set:
+                data = ''
+                for obj in self.ol:
+                    if obj['plc'] != plc:
+                        continue
+
+                    for attr in all_attr:
+                        if obj.get(attr) is not None:
+                            ref_txt = 'TIA_tag_' + attr
+                            data += self.gen.single_replace(self.cf, self.rl, ref_txt, obj, 
+                                                            replace='@' + ref_txt, replace_with=obj[attr])
+                            
+                filename = plc + '_' + self.type + '_plctags.sdf'
+                outdir = path = os.path.join(self.tia_path, plc, 'tags')
+                path = os.path.join(outdir, filename)
+                if not os.path.exists(outdir):
+                    os.makedirs(outdir)
+                with open(path, 'w', encoding='cp1252') as f:
+                    f.write(data)
+
+    def _tia_iocopy(self):
+            all_attr = self.get_all_config_attributes()
+
+            for plc in self.plc_set:
+                data = ''
+                for obj in self.ol:
+                    if obj['plc'] != plc:
+                        continue
+                    
+                    for attr in all_attr:
+                        if obj.get(attr) is not None:
+                            ref_txt = 'TIA_IOcopy_' + attr
+                            data += self.gen.single_replace(self.cf, self.rl, ref_txt, obj, 
+                                                            replace=ref_txt, replace_with=obj[attr])
+                    data += '\n'    # to separate objects
+                            
+                filename = plc + '_' + self.type + '_iocopy.scl'
+                outdir = path = os.path.join(self.tia_path, plc, 'iocopy')
+                path = os.path.join(outdir, filename)
+                if not os.path.exists(outdir):
+                    os.makedirs(outdir)
+                with open(path, 'w', encoding='cp1252') as f:
+                    f.write(data)
 
     def _tia_code(self):
         data = self.gen.single(self.cf, self.rl, 'TIA_Code_Header')
@@ -120,40 +153,45 @@ class Valve:
         if self.ol:
             self._find_plcs()
             self._tia_db_multiple_plc()
-            #self._tia_symbol()
+            self._tia_tag()
+            self._tia_iocopy()
             #self._tia_code()
             self._intouch()
             self._sql()
             self.gen.result(self.rl, type=self.type.upper())
 
     @staticmethod
-    def decode_config_tag_attributes(config):
-        """
+    def decode_config_attributes(config):
+        """ 
+        Decode the configuration word and returns a list of attributes in string format
+        TIA Config:
             #VLV.Config.Main': = #VLV.Config.UI_Config.%X0;
             #VLV.Config.Upper': = #VLV.Config.UI_Config.%X1;
             #VLV.Config.Lower': = #VLV.Config.UI_Config.%X2;
             #VLV.Config."Main Active FB"': = #VLV.Config.UI_Config.%X3;
             #VLV.Config."Main DeActive FB"': = #VLV.Config.UI_Config.%X4;
-            #VLV.Config."Reset Activation"': = #VLV.Config.UI_Config.%X5;
-            #VLV.Config."Disable ManMode"': = #VLV.Config.UI_Config.%X6;
-            #VLV.Config.AirOnOff': = #VLV.Config.UI_Config.%X7;
-            #VLV.Config.MixProof': = #VLV.Config.UI_Config.%X8;
         """
         attributes = []
 
         val = int(config)
 
+        if val & 0b1:
+            attributes.append('main_act')    
         if val & 0b10:
-            attributes.append('tag_upperseat_act')    
-        elif val & 0b100:
-            attributes.append('tag_lowerseat_act')
-        elif val & 0b1000:
-            attributes.append('tag_main_act_fb')
-        elif val & 0b10000:
-            attributes.append('tag_main_deact_fb')
+            attributes.append('upperseat_act')    
+        if val & 0b100:
+            attributes.append('lowerseat_act')
+        if val & 0b1000:
+            attributes.append('main_act_fb')
+        if val & 0b10000:
+            attributes.append('main_deact_fb')
 
         # If list is empty return None
         if attributes:
             return attributes
         else:
             return None
+
+    def get_all_config_attributes(self):
+        # Returns a list of all tag attributes
+        return self.decode_config_attributes(0xFFFF)

@@ -92,6 +92,6 @@ code footer
 "DB AI".@ID.In.Raw Input := "@ID";
 </TIA_IOcopy>
 
-<TIA_Tag>
-"@ID","%@TAG","Int","True","True","False","@CMT","","True"
-</TIA_Tag>
+<TIA_tag>
+"@ID","%@TIA_tag","Int","True","True","False","@CMT","","True"
+</TIA_tag>

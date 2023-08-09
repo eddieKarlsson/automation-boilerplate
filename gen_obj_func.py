@@ -72,9 +72,8 @@ class GenObjFunc:
         if obj.get('asi_master') is not None:
             line = line.replace(self.s.ASI_MASTER_REPLACE, str(obj['asi_master']))
 
-        if obj.get('tag') is not None:
-            line = line.replace(self.s.TAG_REPLACE, obj['tag'])     
-   
+        if obj.get('TIA_tag') is not None:
+            line = line.replace(self.s.TAG_REPLACE, obj['TIA_tag'])     
 
         return line
 
@@ -205,7 +204,7 @@ class GenObjFunc:
         return inst_data
 
     @staticmethod
-    def single_withreplace(config_file, list_result, ref_txt, replace, obj):
+    def single_one_replace(config_file, list_result, ref_txt, replace, replace_with):
         """Read a text file and copy the data inside notifiers to memory"""
         with open(config_file, 'r') as config:
             exists_in_config = False
@@ -218,7 +217,7 @@ class GenObjFunc:
                 if end in str(line):
                     section_found = False
                 if section_found:        
-                    line = line.replace(replace, obj)             
+                    line = line.replace(replace, replace_with)             
                     inst_data += line
                 if begin in str(line):
                     exists_in_config = True
@@ -240,6 +239,46 @@ class GenObjFunc:
 
         list_result.append(result)
         return inst_data
+
+
+    def single_replace(self, config_file, list_result, ref_txt, obj, replace=None, replace_with=None):
+        """Read a text file and copy the data inside notifiers to memory"""
+        with open(config_file, 'r') as config:
+            exists_in_config = False
+            section_found = False
+            inst_data = ''
+            begin = '<' + ref_txt + '>'
+            end = '</' + ref_txt + '>'
+
+            for line in config:
+                if end in str(line):
+                    section_found = False
+                if section_found: 
+                    line = self._replace_keywords(line, obj)
+                    if replace is not None and replace_with is not None:
+                        line = line.replace(replace, replace_with)             
+                    inst_data += line
+                if begin in str(line):
+                    exists_in_config = True
+                    section_found = True
+        if not exists_in_config:
+            result_ok = False
+            result_msg = f"'{ref_txt}' not found in config file"
+        else:
+            result_ok = True
+            result_msg = None
+
+        # Return a dictionary with the result
+        result = {
+            'ref_txt': ref_txt,
+            'type': None,
+            'result_ok': result_ok,
+            'bad_result_msg': result_msg
+        }
+
+        list_result.append(result)
+        return inst_data
+
 
     def multiple_twochecks(self, obj_list, config_file, list_result, ref_txt, plc_name=None, asmaster_name=None):
         """Get text lines from config file and replace by data in excel for
@@ -292,7 +331,7 @@ class GenObjFunc:
         """Check all result dicts and sum them, then print info to user"""
         result_ok_cnt = 0
         result_bad_cnt = 0
-        print('\n')
+        #  print('\n')
         print(type)
 
         good_results = []  # Empty list
@@ -309,7 +348,7 @@ class GenObjFunc:
         if result_ok_cnt > 0:
             tmp_text = "Succesfully processed"
             #  print(f"\t {tmp_text} {result_ok_cnt} objects: {good_results}")
-            print(f"\t {tmp_text} {result_ok_cnt} objects")
+            #print(f"\t {tmp_text} {result_ok_cnt} objects")
 
 
         if result_bad_cnt > 0:

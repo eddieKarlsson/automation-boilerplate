@@ -33,7 +33,7 @@ class GenMain:
         self.plcinexcel = set()
         self.s = Settings()
         self.dict_list = []
-        self.tag_instance_counter = 0
+        self.tia_tag_instance_counter = 0
         self.tia_tag_offset = 1000
         self.tia_tag_offset_add = 1000
         self.generate()
@@ -55,12 +55,12 @@ class GenMain:
         # Create all dictionaries, if enabled in settings
         if not self.s.DI_DISABLE:
             self.di_dict = self._obj_data_to_dict(
-                        self.s.DI_SHEETNAME, self.s.DI_START_INDEX, 'di', tag=True)
+                        self.s.DI_SHEETNAME, self.s.DI_START_INDEX, 'di', TIA_tag=True)
             self.dict_list.append(self.di_dict)
 
         if not self.s.DO_DISABLE:
             self.do_dict = self._obj_data_to_dict(
-                        self.s.DO_SHEETNAME, self.s.DO_START_INDEX, 'do', tag=True)
+                        self.s.DO_SHEETNAME, self.s.DO_START_INDEX, 'do', TIA_tag=True)
             self.dict_list.append(self.do_dict)
 
         if not self.s.VALVE_DISABLE:
@@ -75,12 +75,12 @@ class GenMain:
 
         if not self.s.AI_DISABLE:
             self.ai_dict = self._obj_data_to_dict(
-                self.s.AI_SHEETNAME, self.s.AI_START_INDEX, 'ai', eng_var=True, tag=True)
+                self.s.AI_SHEETNAME, self.s.AI_START_INDEX, 'ai', eng_var=True, TIA_tag=True)
             self.dict_list.append(self.ai_dict)
 
         if not self.s.AO_DISABLE:
             self.ao_dict = self._obj_data_to_dict(
-                    self.s.AO_SHEETNAME, self.s.AO_START_INDEX, 'ao', eng_var=True, tag=True)
+                    self.s.AO_SHEETNAME, self.s.AO_START_INDEX, 'ao', eng_var=True, TIA_tag=True)
             self.dict_list.append(self.ao_dict)
 
         if not self.s.PID_DISABLE:
@@ -107,7 +107,7 @@ class GenMain:
             self.unit_phase_list = self._unit_data_to_list(self.s.UNIT_SHEETNAME)
 
     def _obj_data_to_dict(self, sheet, start_index, type, config=False, eng_var=False, volumeperpulse=False,
-                          generic_alarm=False, asi=False, tag=False):
+                          generic_alarm=False, asi=False, TIA_tag=False):
         """Read all object data to dict"""
 
         # Open excel sheet
@@ -187,9 +187,9 @@ class GenMain:
                 print('\t', 'column_asi_master:', column_asi_master)
 
         # Handle tag offsets        
-        if tag:
-            self.tag_instance_counter += 1
-            if self.tag_instance_counter > 1:
+        if TIA_tag:
+            self.tia_tag_instance_counter += 1
+            if self.tia_tag_instance_counter > 1:
                 self.tia_tag_offset += self.tia_tag_offset_add
             self.create_tia_memory(start_address=self.tia_tag_offset, initialize=True)
             
@@ -252,17 +252,16 @@ class GenMain:
             else:
                 tmp_mem_size = 0
             
-            if tag:
-                obj['tag'] = self.create_tia_memory(memory_size_byte=tmp_mem_size)
+            if TIA_tag:
+                obj['TIA_tag'] = self.create_tia_memory(memory_size_byte=tmp_mem_size)
 
-            if tag and config and obj['type'] == 'valve':
-                valve_attr = Valve.decode_config_tag_attributes(obj['config'])
+            if config and obj['type'] == 'valve':
+                # supply the decode function with the configuration word
+                valve_attr = Valve.decode_config_attributes(obj['config'])
 
                 if valve_attr is not None:
                     for attr in valve_attr:
                         obj[attr] = self.create_tia_memory(memory_size_byte=tmp_mem_size)
-
-
 
             obj_list.append(obj)
             index += 1

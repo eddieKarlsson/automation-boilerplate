@@ -67,7 +67,7 @@ class DO:
 
     def _tia_tag(self):        
         for plc in self.plc_set:
-            data = self.gen.multiple(self.ol, self.cf, self.rl, 'TIA_Tag', plc_name=plc)
+            data = self.gen.multiple(self.ol, self.cf, self.rl, 'TIA_tag', plc_name=plc)
 
             filename = plc + '_' + self.type + '_plctags.sdf'
             outdir = path = os.path.join(self.tia_path, plc, 'tags')

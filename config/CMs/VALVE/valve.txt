@@ -70,3 +70,48 @@ var end
 <TIA_Code_Var>
 "I*@ID" : Bool;
 </TIA_Code_Var>
+
+
+<TIA_IOcopy>
+"DB DI".@ID.In.IO := "@ID";
+</TIA_IOcopy>
+
+<TIA_tag_main_act>
+"@ID_Main","%@TIA_tag_main_act","Bool","True","True","False","@CMT","","True"
+</TIA_tag_main_act>
+
+<TIA_tag_upperseat_act>
+"@ID_Upper","%@TIA_tag_upperseat_act","Bool","True","True","False","@CMT","","True"
+</TIA_tag_upperseat_act>
+
+<TIA_tag_lowerseat_act>
+"@ID_Lower","%@TIA_tag_lowerseat_act","Bool","True","True","False","@CMT","","True"
+</TIA_tag_lowerseat_act>
+
+<TIA_tag_main_act_fb>
+"@ID_ActFb","%@TIA_tag_main_act_fb","Bool","True","True","False","@CMT","","True"
+</TIA_tag_main_act_fb>
+
+<TIA_tag_main_deact_fb>
+"@ID_DeactFb","%@TIA_tag_main_deact_fb","Bool","True","True","False","@CMT","","True"
+</TIA_tag_main_deact_fb>
+
+<TIA_IOcopy_main_act>
+"@ID_Main" := "DB VALVE".@ID.Out.Main;
+</TIA_IOcopy_main_act>
+
+<TIA_IOcopy_upperseat_act>
+"@ID_Upper" := "DB VALVE".@ID.Out.Upper;
+</TIA_IOcopy_upperseat_act>
+
+<TIA_IOcopy_lowerseat_act>
+"@ID_Lower" := "DB VALVE".@ID.Out.Lower;
+</TIA_IOcopy_lowerseat_act>
+
+<TIA_IOcopy_main_act_fb>
+"DB VALVE".@ID.In."Main Active FB" := "@ID_ActFb";
+</TIA_IOcopy_main_act_fb>
+
+<TIA_IOcopy_main_deact_fb>
+"DB VALVE".@ID.In."Main DeActive FB" := "@ID_DeactFb";
+</TIA_IOcopy_main_deact_fb>
