@@ -60,7 +60,7 @@ class DI:
             data = self.gen.multiple(self.ol, self.cf, self.rl, 'TIA_tag', plc_name=plc)
 
             filename = plc + '_' + self.type + '_plctags.sdf'
-            outdir = path = os.path.join(self.tia_path, plc, 'tags')
+            outdir = path = os.path.join(self.tia_path, plc, 'tags', 'subfiles')
             path = os.path.join(outdir, filename)
             if not os.path.exists(outdir):
                 os.makedirs(outdir)
@@ -72,7 +72,7 @@ class DI:
             data = self.gen.multiple(self.ol, self.cf, self.rl, 'TIA_IOcopy', plc_name=plc)
 
             filename = plc + '_' + self.type + '_iocopy.scl'
-            outdir = path = os.path.join(self.tia_path, plc, 'iocopy')
+            outdir = path = os.path.join(self.tia_path, plc, 'iocopy', 'subfiles')
             path = os.path.join(outdir, filename)
             if not os.path.exists(outdir):
                 os.makedirs(outdir)

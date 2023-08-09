@@ -83,7 +83,7 @@ class Valve:
                                                             replace='@' + ref_txt, replace_with=obj[attr])
                             
                 filename = plc + '_' + self.type + '_plctags.sdf'
-                outdir = path = os.path.join(self.tia_path, plc, 'tags')
+                outdir = path = os.path.join(self.tia_path, plc, 'tags', 'subfiles')
                 path = os.path.join(outdir, filename)
                 if not os.path.exists(outdir):
                     os.makedirs(outdir)
@@ -107,7 +107,7 @@ class Valve:
                     data += '\n'    # to separate objects
                             
                 filename = plc + '_' + self.type + '_iocopy.scl'
-                outdir = path = os.path.join(self.tia_path, plc, 'iocopy')
+                outdir = path = os.path.join(self.tia_path, plc, 'iocopy', 'subfiles')
                 path = os.path.join(outdir, filename)
                 if not os.path.exists(outdir):
                     os.makedirs(outdir)

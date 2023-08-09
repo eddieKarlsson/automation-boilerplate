@@ -467,6 +467,22 @@ class GenMain:
                                             continue
                                     wf.write(line)   
 
+    def _combine_tia_files(self, folder, outfile, newline_sep=False):
+            for plc in self.plcinexcel:
+                path_base = os.path.join(self.output_path, 'CMs', self.s.TIA_DIR, plc, folder)
+                subfilespath = os.path.join(path_base, 'subfiles')
+                newfile = f"{plc.upper()}_{outfile}"
+                newfilepath = os.path.join(path_base, newfile)
+                with open(newfilepath, 'w', encoding='cp1252') as wf:
+                    if os.path.isdir(subfilespath):
+                        file_list = [f for f in listdir(subfilespath)
+                            if isfile(join(subfilespath, f))]
+                        for i, subfile in enumerate(file_list):
+                            with open(os.path.join(subfilespath, subfile), 'r', encoding='cp1252') as rf:
+                                if newline_sep and i > 0:
+                                    wf.write('\n')  # add a new line between the contents off files
+                                wf.write(rf.read())  # Read the whole content of read file and write to out file
+
     @staticmethod
     def _parse_s7_db_addr(in_db_addr):
         #  Format expected e.g. DB9001.DBX12.0, DB9001.DBB12, DB9001.DBW12, DB9001.DBD12
@@ -572,6 +588,9 @@ class GenMain:
 
         self._combine_it_files()
         self._combine_sql_files()
+        self._combine_tia_files('tags', 'ALL_PLCTAGS.sdf')
+        self._combine_tia_files('iocopy', 'IO-Copy.scl', newline_sep=True)
+
 
     def create_tia_memory(self, start_address=0, initialize=False, memory_size_byte=2):
         """Returns a memory unique memory address by counting up"""
