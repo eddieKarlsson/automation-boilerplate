@@ -88,7 +88,10 @@ code footer
 </TIA_Code_Footer>
 
 
-<TIA_Symbol>
-TODO - swap to real source txt for AI
-"Q*@ID","%@INDEX.0","REAL","True","True","0,0","@CMT","","True"
-</TIA_Symbol>
+<TIA_IOcopy>
+"DB AI".@ID.In."Raw Input" := "@ID";
+</TIA_IOcopy>
+
+<TIA_tag>
+"@ID","%@TIA_tag","Int","True","True","False","@CMT","","True"
+</TIA_tag>

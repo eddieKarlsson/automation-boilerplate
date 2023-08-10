@@ -94,6 +94,55 @@ class Motor:
         with open(path, 'w', encoding='cp1252') as f:
             f.write(data)
 
+    def _tia_tag(self):
+            all_attr = self.get_all_config_attributes()
+
+            for plc in self.plc_set:
+                data = ''
+                for obj in self.ol:
+                    if obj['plc'] != plc:
+                        continue
+
+                    for attr in all_attr:
+                        if obj.get(attr) is not None:
+                            ref_txt = 'TIA_tag_' + attr
+                            data += self.gen.single_replace(self.cf, self.rl, ref_txt, obj, 
+                                                            replace='@' + ref_txt, replace_with=obj[attr])
+                            
+                filename = plc + '_' + self.type + '_plctags.sdf'
+                outdir = path = os.path.join(self.tia_path, plc, 'tags', 'subfiles')
+                path = os.path.join(outdir, filename)
+                if not os.path.exists(outdir):
+                    os.makedirs(outdir)
+                with open(path, 'w', encoding='cp1252') as f:
+                    f.write(data)
+
+    def _tia_iocopy(self):
+            all_attr = self.get_all_config_attributes()
+
+            for plc in self.plc_set:
+                data = f"REGION {self.type.upper()}\n"
+                for obj in self.ol:
+                    if obj['plc'] != plc:
+                        continue
+                    
+                    for attr in all_attr:
+                        if obj.get(attr) is not None:
+                            ref_txt = 'TIA_IOcopy_' + attr
+                            data += self.gen.single_replace(self.cf, self.rl, ref_txt, obj, 
+                                                            replace=ref_txt, replace_with=obj[attr])
+                    data += '\n'    # to separate objects
+                    
+                data += f"END_REGION\n"
+                filename = plc + '_' + self.type + '_iocopy.scl'
+                outdir = path = os.path.join(self.tia_path, plc, 'iocopy', 'subfiles')
+                path = os.path.join(outdir, filename)
+                if not os.path.exists(outdir):
+                    os.makedirs(outdir)
+                with open(path, 'w', encoding='cp1252') as f:
+                    f.write(data)
+
+
     def _intouch(self):
         data = self.gen.single(self.cf, self.rl, 'Intouch_Header')
         data += self.gen.multiple(self.ol, self.cf, self.rl, 'Intouch_Tag')
@@ -120,7 +169,45 @@ class Motor:
             self._find_plcs()
             self._tia_db_multiple_plc()
             #self._tia_symbol()
+            self._tia_tag()
+            self._tia_iocopy()
             #self._tia_code()
             self._intouch()
             self._sql()
             self.gen.result(self.rl, type=self.type.upper())
+
+    @staticmethod
+    def decode_config_attributes(config):
+        """ 
+        Decode the configuration word and returns a list of attributes in string format
+        TIA Config:
+            #MTR.Config.Forward := #MTR.Config.UI_Config.%X0;
+            #MTR.Config.Reverse := #MTR.Config.UI_Config.%X1;
+            #MTR.Config."Forward FB" := #MTR.Config.UI_Config.%X2;
+            #MTR.Config."Reverse FB" := #MTR.Config.UI_Config.%X3;
+            #MTR.Config."Circuit Breaker" := #MTR.Config.UI_Config.%X6;
+        """
+        attributes = []
+
+        val = int(config)
+
+        if val & 0b1:
+            attributes.append('forward_act')    
+        if val & 0b10:
+            attributes.append('reverse_act')    
+        if val & 0b100:
+            attributes.append('forward_fb')
+        if val & 0b1000:
+            attributes.append('reverse_fb')
+        if val & 0b1000000:
+            attributes.append('circuit_breaker_fb')
+
+        # If list is empty return None
+        if attributes:
+            return attributes
+        else:
+            return None
+
+    def get_all_config_attributes(self):
+        # Returns a list of all tag attributes
+        return self.decode_config_attributes(0xFFFF)

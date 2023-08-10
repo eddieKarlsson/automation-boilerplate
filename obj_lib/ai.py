@@ -69,16 +69,32 @@ class AI:
             with open(path, 'w', encoding='cp1252') as f:
                 f.write(data)
 
-    def _tia_symbol(self):
-        data = self.gen.multiple(self.ol, self.cf, self.rl,
-                                 'TIA_Symbol')
 
-        filename = self.type + '_symbols.sdf'
-        path = os.path.join(self.tia_path, filename)
-        if not os.path.exists(self.tia_path):
-            os.makedirs(self.tia_path)
-        with open(path, 'w', encoding='cp1252') as f:
-            f.write(data)
+    def _tia_tag(self):        
+        for plc in self.plc_set:
+            data = self.gen.multiple(self.ol, self.cf, self.rl, 'TIA_tag', plc_name=plc)
+
+            filename = plc + '_' + self.type + '_plctags.sdf'
+            outdir = path = os.path.join(self.tia_path, plc, 'tags', 'subfiles')
+            path = os.path.join(outdir, filename)
+            if not os.path.exists(outdir):
+                os.makedirs(outdir)
+            with open(path, 'w', encoding='cp1252') as f:
+                f.write(data)
+
+    def _tia_iocopy(self):        
+        for plc in self.plc_set:
+            data = f"REGION {self.type.upper()}\n"
+            data += self.gen.multiple(self.ol, self.cf, self.rl, 'TIA_IOcopy', plc_name=plc)
+            data += f"END_REGION\n"
+            filename = plc + '_' + self.type + '_iocopy.scl'
+            outdir = path = os.path.join(self.tia_path, plc, 'iocopy', 'subfiles')
+            path = os.path.join(outdir, filename)
+            if not os.path.exists(outdir):
+                os.makedirs(outdir)
+            with open(path, 'w', encoding='cp1252') as f:
+                f.write(data)
+
 
     def _tia_code(self):
         data = self.gen.single(self.cf, self.rl, 'TIA_Code_Header')
@@ -119,7 +135,8 @@ class AI:
         if self.ol:
             self._find_plcs()
             self._tia_db_multiple_plc()
-            #self._tia_symbol()
+            self._tia_tag()
+            self._tia_iocopy()
             #self._tia_code()
             self._intouch()
             self._sql()

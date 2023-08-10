@@ -35,8 +35,9 @@ class GenMain:
         self.plcinexcel = set()
         self.s = Settings()
         self.dict_list = []
-        self.tag_instance_counter = 0
+        self.tia_tag_instance_counter = 0
         self.tia_tag_offset = 1000
+        self.tia_tag_offset_add = 1000
         self.generate()
 
     def _open_gen_excel(self):
@@ -56,12 +57,12 @@ class GenMain:
         # Create all dictionaries, if enabled in settings
         if not self.s.DI_DISABLE:
             self.di_dict = self._obj_data_to_dict(
-                self.s.DI_SHEETNAME, self.s.DI_START_INDEX, 'di', tag=True)
+                self.s.DI_SHEETNAME, self.s.DI_START_INDEX, 'di', TIA_tag=True)
             self.dict_list.append(self.di_dict)
 
         if not self.s.DO_DISABLE:
             self.do_dict = self._obj_data_to_dict(
-                self.s.DO_SHEETNAME, self.s.DO_START_INDEX, 'do', tag=True)
+                self.s.DO_SHEETNAME, self.s.DO_START_INDEX, 'do', TIA_tag=True)
             self.dict_list.append(self.do_dict)
 
         if not self.s.VALVE_DISABLE:
@@ -76,12 +77,12 @@ class GenMain:
 
         if not self.s.AI_DISABLE:
             self.ai_dict = self._obj_data_to_dict(
-                self.s.AI_SHEETNAME, self.s.AI_START_INDEX, 'ai', eng_var=True)
+                self.s.AI_SHEETNAME, self.s.AI_START_INDEX, 'ai', eng_var=True, TIA_tag=True)
             self.dict_list.append(self.ai_dict)
 
         if not self.s.AO_DISABLE:
             self.ao_dict = self._obj_data_to_dict(
-                self.s.AO_SHEETNAME, self.s.AO_START_INDEX, 'ao', eng_var=True)
+                self.s.AO_SHEETNAME, self.s.AO_START_INDEX, 'ao', eng_var=True, TIA_tag=True)
             self.dict_list.append(self.ao_dict)
 
         if not self.s.PID_DISABLE:
@@ -109,7 +110,7 @@ class GenMain:
                 self.s.UNIT_SHEETNAME)
 
     def _obj_data_to_dict(self, sheet, start_index, type, config=False, eng_var=False, volumeperpulse=False,
-                          generic_alarm=False, asi=False, tag=False):
+                          generic_alarm=False, asi=False, TIA_tag=False):
         """Read all object data to dict"""
 
         # Open excel sheet
@@ -189,10 +190,10 @@ class GenMain:
                 print('\t', 'column_asi_master:', column_asi_master)
 
         # Handle tag offsets
-        if tag:
-            self.tag_instance_counter += 1
-            if self.tag_instance_counter > 1:
-                self.tia_tag_offset += self.tia_tag_offset
+        if TIA_tag:
+            self.tia_tag_instance_counter += 1
+            if self.tia_tag_instance_counter > 1:
+                self.tia_tag_offset += self.tia_tag_offset_add
             self.create_tia_memory(
                 start_address=self.tia_tag_offset, initialize=True)
 
@@ -250,9 +251,32 @@ class GenMain:
                 cell_asi_master = ws.cell(row=i, column=column_asi_master)
                 obj['asi_master'] = cell_asi_master.value
 
-            bit_tag = obj['type'] == 'di' or obj['type'] == 'do'
+            if obj['type'] == 'ai' or obj['type'] == 'ao' or obj['type'] == 'sum':
+                tmp_mem_size = 2
+            else:
+                tmp_mem_size = 0
 
-            obj['tag'] = self.create_tia_memory(bit=bit_tag)
+            if TIA_tag:
+                obj['TIA_tag'] = self.create_tia_memory(
+                    memory_size_byte=tmp_mem_size)
+
+            if config and obj['type'] == 'valve':
+                # supply the decode function with the configuration word
+                valve_attr = Valve.decode_config_attributes(obj['config'])
+
+                if valve_attr is not None:
+                    for attr in valve_attr:
+                        obj[attr] = self.create_tia_memory(
+                            memory_size_byte=tmp_mem_size)
+
+            if config and obj['type'] == 'motor':
+                # supply the decode function with the configuration word
+                motor_attr = Motor.decode_config_attributes(obj['config'])
+
+                if motor_attr is not None:
+                    for attr in motor_attr:
+                        obj[attr] = self.create_tia_memory(
+                            memory_size_byte=tmp_mem_size)
 
             obj_list.append(obj)
             index += 1
@@ -458,6 +482,44 @@ class GenMain:
                                     continue
                                 wf.write(line)
 
+    def _combine_tia_files(self, folder, outfile, newline_sep=False, header=None, footer=None):
+        for plc in self.plcinexcel:
+            path_base = os.path.join(
+                self.output_path, 'CMs', self.s.TIA_DIR, plc, folder)
+            subfilespath = os.path.join(path_base, 'subfiles')
+            newfile = f"{plc.upper()}_{outfile}"
+            newfilepath = os.path.join(path_base, newfile)
+            with open(newfilepath, 'w', encoding='cp1252') as wf:
+                if header is not None:
+                    wf.write(header)
+
+                if os.path.isdir(subfilespath):
+                    file_list = [f for f in listdir(subfilespath)
+                                 if isfile(join(subfilespath, f))]
+                    for i, subfile in enumerate(file_list):
+                        with open(os.path.join(subfilespath, subfile), 'r', encoding='cp1252') as rf:
+                            if newline_sep and i > 0:
+                                # add a new line between the contents off files
+                                wf.write('\n')
+                            # Read the whole content of read file and write to out file
+                            wf.write(rf.read())
+
+                if footer is not None:
+                    wf.write(footer)
+
+    def _create_and_combine_iocopy_fc(self):
+        head = """FUNCTION "IO-Copy" : Void
+{ S7_Optimized_Access := 'TRUE' }
+VERSION : 0.1
+
+BEGIN
+"""
+        foot = """	
+END_FUNCTION
+"""
+        self._combine_tia_files('iocopy', 'IO-Copy.scl',
+                                newline_sep=True, header=head, footer=foot)
+
     @staticmethod
     def _parse_s7_db_addr(in_db_addr):
         #  Format expected e.g. DB9001.DBX12.0, DB9001.DBB12, DB9001.DBW12, DB9001.DBD12
@@ -563,22 +625,25 @@ class GenMain:
 
         self._combine_it_files()
         self._combine_sql_files()
+        self._combine_tia_files('tags', 'ALL_PLCTAGS.sdf')
+        self._create_and_combine_iocopy_fc()
 
-    def create_tia_memory(self, start_address=0, initialize=False, bit=False):
+    def create_tia_memory(self, start_address=0, initialize=False, memory_size_byte=2):
         """Returns a memory unique memory address by counting up"""
         if initialize:
             self.tia_bit = -1
             self.tia_byte = start_address
-            initialize = False
             return
 
-        if bit:
+        if memory_size_byte == 0:  # bit
             self.tia_bit += 1
             if self.tia_bit > 7:
                 self.tia_bit = 0
                 self.tia_byte += 1
             return f"M{self.tia_byte}.{self.tia_bit}"
-
-        # If not bit create a int
-        self.tia_byte += 2
-        return f"MW{self.tia_byte}"
+        elif memory_size_byte == 4:  # Dword
+            self.tia_byte += memory_size_byte
+            return f"MD{self.tia_byte}"
+        else:  # If not bit or Dword always presume its a 2 byte Int
+            self.tia_byte += 2  # Word
+            return f"MW{self.tia_byte}"

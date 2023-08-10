@@ -99,6 +99,6 @@ END_FUNCTION
 "DB DI".@ID.In.IO := "@ID";
 </TIA_IOcopy>
 
-<TIA_Tag>
-"@ID","%@TAG","Bool","True","True","False","@CMT","","True"
-</TIA_Tag>
+<TIA_tag>
+"@ID","%@TIA_tag","Bool","True","True","False","@CMT","","True"
+</TIA_tag>
