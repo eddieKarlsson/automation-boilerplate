@@ -87,3 +87,27 @@ var end
 <TIA_tag_reverse_fb>
 "@ID_ReverseFb","%@TIA_tag_reverse_fb","Bool","True","True","False","@CMT","","True"
 </TIA_tag_reverse_fb>
+
+<TIA_tag_circuit_breaker_fb>
+"@ID_CircuitBreakerFb","%@TIA_tag_circuit_breaker_fb","Bool","True","True","False","@CMT","","True"
+</TIA_tag_circuit_breaker_fb>
+
+<TIA_IOcopy_forward_act>
+"@ID_Forward" := "DB MOTOR".@ID.Out.Forward;
+</TIA_IOcopy_forward_act>
+
+<TIA_IOcopy_reverse_act>
+"@ID_Reverse" := "DB MOTOR".@ID.Out.Reverse;
+</TIA_IOcopy_reverse_act>
+
+<TIA_IOcopy_forward_fb>
+"DB MOTOR".@ID.In.Forward := "@ID_ForwardFb";
+</TIA_IOcopy_forward_fb>
+
+<TIA_IOcopy_reverse_fb>
+"DB MOTOR".@ID.In.Reverse := "@ID_ReverseFb";
+</TIA_IOcopy_reverse_fb>
+
+<TIA_IOcopy_circuit_breaker_fb>
+"DB MOTOR".@ID.In."Circuit Breaker" := "@ID_CircuitBreakerFb";
+</TIA_IOcopy_circuit_breaker_fb>
