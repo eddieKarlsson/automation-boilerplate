@@ -445,7 +445,10 @@ class GenMain:
             if os.path.exists(path):
                 file_list = [f for f in listdir(path)
                              if isfile(join(path, f))]
-
+                
+                if len(file_list) <= 1:
+                    return
+            
                 with open(outfile, 'w', encoding='cp1252') as wf:
                     for file_index, file in enumerate(file_list):
                         with open(os.path.join(path, file), 'r', encoding='cp1252') as rf:
