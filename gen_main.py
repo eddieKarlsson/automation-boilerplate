@@ -18,6 +18,7 @@ from obj_lib.alarm import Alarm
 from obj_lib.asi import ASi
 from unit_lib.unit_types import UnitTypes
 from unit_lib.units_phases import UnitsPhases
+from types import NoneType
 
 
 class GenMain:
@@ -282,7 +283,8 @@ class GenMain:
             index += 1
 
         for obj in obj_list:
-            self.plcinexcel.add(obj['plc'])
+            if obj['plc'] is not None and not isinstance(obj['plc'], NoneType):
+                self.plcinexcel.add(obj['plc'])
 
         return obj_list
 
@@ -475,8 +477,8 @@ class GenMain:
             if os.path.exists(path):
                 file_list = [f for f in listdir(path)
                              if isfile(join(path, f))]
-
                 with open(outfile, 'w', encoding='cp1252') as wf:
+                    wf.write("[USE MCSCADA]\n")
                     for file_index, file in enumerate(file_list):
                         with open(os.path.join(path, file), 'r', encoding='cp1252') as rf:
                             for line_index, line in enumerate(rf):
@@ -487,6 +489,8 @@ class GenMain:
 
     def _combine_tia_files(self, folder, outfile, newline_sep=False, header=None, footer=None):
         for plc in self.plcinexcel:
+            print("PLC=", plc)
+
             path_base = os.path.join(
                 self.output_path, 'CMs', self.s.TIA_DIR, plc, folder)
             subfilespath = os.path.join(path_base, 'subfiles')

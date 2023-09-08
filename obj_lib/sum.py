@@ -52,6 +52,7 @@ class SUM:
         for obj in self.ol:
             self.plc_set.add(obj['plc'])
 
+
     def _tia_db_multiple_plc(self):
         for plc in self.plc_set:
             data = self.gen.single(self.cf, self.rl, 'TIA_DB_Header')
