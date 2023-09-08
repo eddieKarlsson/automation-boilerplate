@@ -447,7 +447,7 @@ class GenMain:
                              if isfile(join(path, f))]
                 
                 if len(file_list) <= 1:
-                    return
+                    continue
             
                 with open(outfile, 'w', encoding='cp1252') as wf:
                     for file_index, file in enumerate(file_list):
