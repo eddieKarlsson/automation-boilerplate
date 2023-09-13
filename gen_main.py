@@ -478,7 +478,7 @@ class GenMain:
                 file_list = [f for f in listdir(path)
                              if isfile(join(path, f))]
                 with open(outfile, 'w', encoding='cp1252') as wf:
-                    wf.write("[USE MCSCADA]\n")
+                    wf.write("USE [MCSCADA]\n")
                     for file_index, file in enumerate(file_list):
                         with open(os.path.join(path, file), 'r', encoding='cp1252') as rf:
                             for line_index, line in enumerate(rf):
