@@ -467,7 +467,7 @@ class GenMain:
         """
 
         for folder in listdir(self.output_path):
-            filename = "ALL_" + folder + "_SQL.csv"
+            filename = "ALL_" + folder + "_SQL.sql"
             path = os.path.join(self.output_path, folder, self.s.SQL_DIR)
             outfile = os.path.join(path, filename)
 
@@ -482,14 +482,10 @@ class GenMain:
                     for file_index, file in enumerate(file_list):
                         with open(os.path.join(path, file), 'r', encoding='cp1252') as rf:
                             for line_index, line in enumerate(rf):
-                                # Skip first line header if it's not the first file
-                                if file_index > 0 and line_index <= 0:
-                                    continue
                                 wf.write(line)
 
     def _combine_tia_files(self, folder, outfile, newline_sep=False, header=None, footer=None):
         for plc in self.plcinexcel:
-            print("PLC=", plc)
 
             path_base = os.path.join(
                 self.output_path, 'CMs', self.s.TIA_DIR, plc, folder)

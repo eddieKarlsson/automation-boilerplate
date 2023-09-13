@@ -119,7 +119,7 @@ class DO:
     def _sql(self):
         data = self.gen.multiple(self.ol, self.cf, self.rl, 'SQLProcedure')
 
-        filename = self.type + '_sql.csv'
+        filename = self.type + '_sql.sql'
         path = os.path.join(self.sql_path, filename)
         if not os.path.exists(self.sql_path):
             os.makedirs(self.sql_path)

@@ -26,3 +26,6 @@ All notable changes to this project will be documented in this file.
 
 ## [V2.33] - 2023-08-09
 - Add functionality for io-copy and tia tag tabel for IO
+
+## [V2.34] - 2023-09-13
+- Bugfixes
