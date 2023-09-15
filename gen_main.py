@@ -209,8 +209,15 @@ class GenMain:
             cell_alarmgroup = ws.cell(row=i, column=column_alarmgroup)
             cell_plc = ws.cell(row=i, column=column_plc)
 
+            #  print("cell_plc.value=",cell_plc.value, "cell_id.value=",cell_id.value)
+
             if cell_id.value is None:
                 break
+
+            if cell_plc.value is None:
+                print(f'WARNING! {cell_id.value} on on sheet "{sheet}" row {i} is missing data on cell for PLC, will skip.')
+                continue
+
 
             # Always insert these key-value pairs
             obj = {

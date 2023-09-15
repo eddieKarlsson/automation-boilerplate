@@ -46,7 +46,7 @@ class GenUnitFunc:
         if offset and offset_end in line:
             start_char_index = line.find(offset)  # find char offset
         else:
-            print(f'WARNING replace offset fault identifier {offset} or {offset_end} was not found')
+            print(f'WARNING! replace offset fault identifier {offset} or {offset_end} was not found')
             return line  # if not found just return line unchanged
 
         not_found_whole_string = True
@@ -190,7 +190,7 @@ class GenUnitFunc:
                 result_bad_cnt += 1
         if result_ok_cnt > 0:
             tmp_text = "Succesfully processed"
-            print(f"\t {tmp_text} {result_ok_cnt} objects: {good_results}")
+            #  print(f"\t {tmp_text} {result_ok_cnt} objects: {good_results}")
 
         if result_bad_cnt > 0:
             print("\n")
