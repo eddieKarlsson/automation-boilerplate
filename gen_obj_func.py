@@ -1,6 +1,5 @@
 import os
 import os.path
-from types import NoneType
 
 class GenObjFunc:
     """Multiple functions to interact with worbook and sub-classes in obj_lib,
@@ -359,16 +358,3 @@ class GenObjFunc:
 
         if result_ok_cnt == 0 and result_bad_cnt == 0:
             print("\t Nothing processed")
-
-    @staticmethod
-    def plc_set_is_none(zet):
-        if len(zet) == 0:
-            return True
-    
-        if len(zet) == 1:
-            x = next(iter(zet))  # get the first and only element of the set
-
-            if x is None or isinstance(x, NoneType):
-                return True
-            
-        return False
