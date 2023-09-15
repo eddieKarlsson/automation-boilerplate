@@ -29,3 +29,6 @@ All notable changes to this project will be documented in this file.
 
 ## [V2.34] - 2023-09-13
 - Bugfixes
+
+## [V2.35] - 2023-09-15
+- Improved usability

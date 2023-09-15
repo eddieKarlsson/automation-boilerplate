@@ -218,11 +218,18 @@ class GenMain:
                 print(f'WARNING! {cell_id.value} on on sheet "{sheet}" row {i} is missing data on cell for PLC, will skip.')
                 continue
 
+            obj_id = cell_id.value
+            
+            if type == 'sum':
+                x = obj_id.upper()
+                if not x.endswith("_SUM") and not x.endswith("SUM"):
+                    obj_id = obj_id + "_Sum"
+                    print(obj_id)
 
             # Always insert these key-value pairs
             obj = {
                 'type': type,
-                'id': cell_id.value,
+                'id': obj_id,
                 'comment': cell_comment.value,
                 'index': index,
                 'alarmgroup': cell_alarmgroup.value,
