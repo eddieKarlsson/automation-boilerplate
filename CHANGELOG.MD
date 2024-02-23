@@ -32,3 +32,7 @@ All notable changes to this project will be documented in this file.
 
 ## [V2.35] - 2023-09-15
 - Improved usability
+
+## [V2.36] - 2024-02-23
+- Excel row 1 removed - all row references shifted -1
+- Change .\create-exec.ps1 script to fit windows 11 python environment

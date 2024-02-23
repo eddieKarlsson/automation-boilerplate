@@ -7,17 +7,16 @@ class Settings:
     """A class to store all settings, user-data in JSON format."""
 
     def __init__(self):
-        self.version = 2.35
+        self.version = 2.36
 
         """Settings"""
-        self.HEADER_ROW = 3  # Excel header
-        self.UNIT_HEADER_ROW = 4  # Excel header in unit sheet     
-        self.ROW = 6  # Excel start row of data
-        self.UNIT_ROW = 5  # Excel start row of data in unit sheet
+        self.HEADER_ROW = 2  # Excel header
+        self.UNIT_HEADER_ROW = 3  # Excel header in unit sheet
+        self.ROW = 5  # Excel start row of data
+        self.UNIT_ROW = 4  # Excel start row of data in unit sheet
 
         self.INDEX_REPLACE = '@INDEX'  # string to be replaced in config file
         self.TAG_REPLACE = '@TIA_tag'  # string to be replaced in config file
-
 
         self.COL_ID_NAME = 'ID'
         self.ID_REPLACE = '@ID'  # string to be replaced in config file
@@ -53,7 +52,8 @@ class Settings:
         self.PLC_REPLACE = '@PLC'  # string to be replaced in config file
 
         self.COL_VolumePerPulse_Name = 'Volume Per Pulse'  # Used in Intouch
-        self.VolumePerPulse_REPLACE = '@VolumePerPulse'  # string to be replaced in config file
+        # string to be replaced in config file
+        self.VolumePerPulse_REPLACE = '@VolumePerPulse'
 
         self.COL_ASI_ADDR_NAME = 'ASI Addr'  # Used in TIA
         self.ASI_ADDR_REPLACE = '@NODEADDR'  # string to be replaced in config file
@@ -179,4 +179,3 @@ class Settings:
 
         if disable_unit:
             self.UNIT_DISABLE = True
-
